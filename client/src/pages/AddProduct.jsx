@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 
 function AddProduct(){
@@ -50,7 +50,7 @@ function AddProduct(){
     if(!conId && !localStorage.getItem("conId")){
       checkConId();
     }
-  }, [conId])
+  }, []);
   
 
   
@@ -138,14 +138,6 @@ function AddProduct(){
     <Header/>
     <div className="p-3">
       <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2">
-        {/* {!conId &&(
-           <input 
-           type="text"
-           placeholder="ExampleCon..."
-           value={conTitle}
-           onChange={(e) => setConTitle(e.target.value)}
-           className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500" />
-        )} */}
         {!conId ? (
          <input 
         type="text"
