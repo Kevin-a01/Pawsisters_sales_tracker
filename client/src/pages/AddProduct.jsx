@@ -1,16 +1,59 @@
 import Header from "../components/Header";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 function AddProduct(){
-  const [products, setProducts] = useState([])
-  const [form, setForm] = useState({
 
+  const navigate = useNavigate();
+
+  const [products, setProducts] = useState([]);
+  const [conTitle, setConTitle] = useState("");
+  const [conId, setConId] = useState(() => localStorage.getItem("conId")|| null);
+  const [form, setForm] = useState({
+    title: "",
     product: "",
     price: "",
     payment: {Swish: false, Kort: false, Kontant: false},
 
   });
-  const [sales, setSales] = useState({});
+
+  useEffect(() => {
+    if(conId){
+      localStorage.setItem("conId", conId);
+
+    }else{
+      localStorage.removeItem("conId");
+    }
+  }, [conId]);
+
+  useEffect(() => {
+    const checkConId = async() => {
+      try{
+        const respone = await fetch("http://localhost:5000/api/cons/latest");
+        const data = await respone.json();
+        
+        if(data.conId){
+          setConId(data.conId);
+          setConTitle(data.title);
+          localStorage.setItem("conId", data.conId);
+        } else{
+          setConId(null);
+          setConTitle("");
+          localStorage.removeItem("conId");
+        } 
+
+      }catch(error){
+        console.error("Error checking conventions: ",error);
+        
+      }
+    };
+    if(!conId && !localStorage.getItem("conId")){
+      checkConId();
+    }
+  }, [conId])
+  
+
+  
 
   const handleChange = (e) => {
 
@@ -23,7 +66,7 @@ function AddProduct(){
     setForm({...form, payment:{...form.payment, [e.target.name]: e.target.checked},});
   };
   
-  const addProduct = (e) => {
+  const addProduct = async (e) => {
 
     e.preventDefault();
     const selectedPayments = Object.keys(form.payment).filter(
@@ -34,22 +77,59 @@ function AddProduct(){
 
       alert('Please fill all fields and select at least one payment method.');
       return;
+      
     }
-    setProducts([
-      ...products,
-      {
-        id: Date.now(),
-        product: form.product,
-        price: form.price,
-        payment: selectedPayments.join(", ")
-      }
-    ]);
+    try{
+      let currentConId = conId;
+      if(!conId && conTitle.trim() !== ""){
+        const respone = await fetch ("http://localhost:5000/api/cons", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({title: conTitle}),
 
-    setForm({
-      product: "",
-      price: "",
-      payment: {Swish: false, Kort: false, Kontant: false},
-    });
+        });
+
+        const data = await respone.json();
+        currentConId = data.conId;
+        setConId(currentConId);
+        localStorage.setItem("conId", currentConId);
+
+      }
+      await fetch("http://localhost:5000/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({
+          product: form.product,
+          price: parseFloat(form.price),
+          payment: selectedPayments.join(", "),
+          conId: currentConId,
+        }),
+      }) 
+      setProducts(preProducts => [
+        ...preProducts,
+        {
+          id: Date.now(),
+          product: form.product,
+          price: form.price,
+          payment: selectedPayments.join(", ")
+        }
+      ]);
+
+      setForm({
+        ...form,
+        product:"",
+        price: "",
+        payment: { Swish: false, Kort: false, Kontant: false}
+      });
+
+      alert("Product added!")
+
+      navigate("/");
+      
+    }catch(error){
+      console.error("Error adding product:", error);
+      alert("Failed to add product");
+    }
   };
 
 
@@ -57,14 +137,83 @@ function AddProduct(){
     <>
     <Header/>
     <div className="p-3">
-      <form onSubmit={addProduct} className="space-y-4">
-        <input 
+      <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2">
+        {/* {!conId &&(
+           <input 
+           type="text"
+           placeholder="ExampleCon..."
+           value={conTitle}
+           onChange={(e) => setConTitle(e.target.value)}
+           className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500" />
+        )} */}
+        {!conId ? (
+         <input 
         type="text"
-        name="product"
-        placeholder="Produkt Namn..."
-        value={form.product}
-        onChange={handleChange}
-        className="w-full p-2 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500" />
+        placeholder="ExampleCon..."
+        value={conTitle}
+        onChange={(e) => setConTitle(e.target.value)}
+        className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500" 
+      />
+      ) : (
+      <h2 className="text-xl font-bold text-pink-700">{conTitle}</h2> 
+      )}
+          <>
+          <input 
+          type="text"
+          name="product"
+          placeholder="Produkt Namn..."
+          value={form.product}
+          onChange={handleChange}
+          className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500" />
+
+          <input 
+          type="text"
+          name="price"
+          placeholder="Pris (SEK)"
+          value={form.price}
+          onChange={handleChange}
+          className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500" />
+
+          <div className="grid grid-cols-1 gap-3 place-items-start w-full ml-11">
+            <lable className="text-lg flex items-center gap-2 ">
+            <input 
+            type="checkbox" 
+            name="Swish" 
+            checked={form.payment.Swish}
+            onChange={handleCheckbox}
+            className="" />
+            Swish
+            
+            </lable>
+            
+            <lable className="text-lg flex items-center gap-2">
+            <input 
+            type="checkbox" 
+            name="Kort" 
+            checked={form.payment.Kort}
+            onChange={handleCheckbox} />
+            Kort
+
+            </lable>
+
+            <lable className="text-lg flex items-center gap-2 ">
+            <input 
+            type="checkbox" 
+            name="Kontant" 
+            checked={form.payment.Kontant}
+            onChange={handleCheckbox} />
+            Kontant
+            </lable>
+          </div>
+
+          <button type="submit" className="border border-pink-400 text-2xl cursor-pointer p-2 bg-pink-500 text-white rounded-xl shadow-2xl hover:scale-125 duration-300 ease-in">
+            Add Product
+          </button>
+
+
+        </>
+        
+        
       
 
 

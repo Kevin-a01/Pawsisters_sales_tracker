@@ -1,9 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {BrowserRouter as Router , Routes, Route} from "react-router-dom";
 import AddProduct from "./pages/AddProduct";
+import HomePage from "./HomePage";
 
 function App() {
-  const saveSalesForToday = () => {
+  /* const saveSalesForToday = () => {
 
     const date = new Date().toISOString().split("T")[0];
 
@@ -21,11 +22,13 @@ function App() {
     setProducts([]);
     alert("Sales saved for " + date);
 
-  }
+  } */
+    
 
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<HomePage/>}/>
         <Route path="/add-product" element={<AddProduct/>}/>
       </Routes>
     </Router>
