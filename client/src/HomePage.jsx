@@ -6,6 +6,8 @@ function HomePage(){
 
     const [products, setProducts] = useState([]);
     const [conTitle, setConTitle] = useState("");
+    const [conId, setConId] = useState(null);
+    const [isStoring, setIsStoring] = useState(false);
 
     useEffect(() => {
       fetch("http://localhost:5000/api/products")
@@ -14,39 +16,113 @@ function HomePage(){
       .catch((err) => console.error("Error fetching products", err));
 
 
-    }, [])
-
+    }, []);
+      
     useEffect(() => {
         fetch("http://localhost:5000/api/cons/latest")
         .then((res) => res.json())
-        .then((data) => setConTitle(data.title))
+        .then((data) => {
+            setConTitle(data.title);
+            setConId(data.conId);
+            localStorage.setItem("conId", data.conId);
+
+        })
         .catch((err) => console.error("Error fetching conventions", err));
-    }, [])
+    }, []);
+
+    const storedProducts = async () => {
+        console.log("Storing products with conId:", conId);
+        console.log("Products to store:", products);
+
+        if(!conId) {
+            alert("There is not active con to store products for!");
+            return;
+        }
+
+        if(products.length === 0) {
+
+            alert("No products to store!");
+            return;
+
+        }
+
+        setIsStoring(true);
+
+        
+
+        try{
+            console.log("Storing product:");
+
+            const response = await fetch("http://localhost:5000/api/stored_products/store", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    conId,
+                    title: conTitle,
+                    date: new Date().toISOString(),
+                    products: products.map(p => ({productId: p.id, 
+                    price: p.price,
+                    payment: p.payment
+                    }))
+
+                })
+
+                });
+
+
+                if(!response.ok){
+                    alert(`Failed to store products: ${product.product} (ID: ${product.id}`);
+                    
+                }
+                alert("All products stored successfully!"),
+
+                setProducts([]);
+
+                setConTitle("");
+
+                setConId(null);
+                localStorage.removeItem("conId")
+                
+                    
+                
+            
+            
+             }catch(error){
+            console.error("Error storing products", error);
+            alert("An error occured");
+             }finally{
+                setIsStoring(false);
+             }
+    };
 
 return(
     <>
     <Header/>
     <div className="p-2">
 
-        <div className="flex justify-end items-center pb-8">
+        <div className="flex justify-between items-center pb-8">
+            <button className="border border-pink-400 p-2 bg-pink-400 text-white rounded-xl shadow-2xl cursor-pointer" onClick={storedProducts}>
+                Store Products
+            </button>
             <Link to="/add-product" className="border border-pink-400 p-2 bg-pink-400 text-white rounded-xl shadow-2xl" >
-                Add New Product
+                Lägg till produkt
             </Link>
+            
         </div>
         <h1 className="text-center text-3xl font-bold mb-3" >{conTitle}</h1>
-        <h2 className="text-center text-2xl font-bold">Today's Sales</h2>
+        <h2 className="text-center text-2xl font-bold">Dagens försäljning.</h2>
         <table className="w-full border-collapse border border-pink-400 mt-5">
             <thead className="">
                 <tr>
-                    <th className="border-2 border-pink-400 p-2 text-xl">Product</th>
-                    <th className="border-2 border-pink-400 p-2 text-xl">Price</th>
-                    <th className="border-2 border-pink-400 p-2 text-xl">Payment</th>
+                    <th className="border-2 border-pink-400 p-2 text-xl">Produkt</th>
+                    <th className="border-2 border-pink-400 p-2 text-xl">Pris</th>
+                    <th className="border-2 border-pink-400 p-2 text-xl w-fit">Betalning</th>
                 </tr>
             </thead>
             <tbody>
                 {products.length > 0 ? (
                     products.map((product) =>(
-                        <tr>
+                        <tr key={product.id}>
                             <td className="border-2 border-pink-400 p-2 text-center text-md font-medium">
                                 {product.product}
                             </td>

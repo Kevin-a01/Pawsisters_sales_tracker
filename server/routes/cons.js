@@ -5,9 +5,11 @@ const path = require('path');
 const { title } = require('process');
 
 const db = new Database(path.join(__dirname, '../db/pawsisters-saletracker.db'));
+db.pragma('foreign_keys = ON');
+
 
 router.post('/', (req, res) => {
-    try{
+    try {
         const { title } = req.body;
         const date = new Date().toISOString().split('T')[0];
 
@@ -18,36 +20,55 @@ router.post('/', (req, res) => {
             `);
         const result = stmt.run(title, date);
 
-        res.status(201).json({conId: result.lastInsertRowid});
+        res.status(201).json({ conId: result.lastInsertRowid });
 
-    }catch(error){
+    } catch (error) {
 
         console.error('Error creating convention:', error);
-        res.status(500).json({error: 'Failed to create convention'});  
+        res.status(500).json({ error: 'Failed to create convention' });
     }
 });
 
-router.get('/latest',(req, res) => {
-    try{
+router.get('/latest', (req, res) => {
+    try {
+        const row = db.prepare("SELECT id, title FROM cons WHERE isActive = 1 ORDER BY id DESC LIMIT 1").get();
+        if (row) {
+            res.json({ conId: row.id, title: row.title });
 
-        console.log("Fetching latest convention...");
-        
-
-        const row = db.prepare("SELECT title FROM cons ORDER BY id DESC LIMIT 1").get();
-        if(row){
-            res.json({conId: row.id, title: row.title});
-
-        }else {
-            res.json({conId: null, title: null});
+        } else {
+            res.json({ conId: null, title: null });
 
         }
 
-    }catch(error){
+    } catch (error) {
         console.error("Error fetching latest convention", error);
-        res.status(500).json({error: "Failed to fetch latest conventions"})
-        
+        res.status(500).json({ error: "Failed to fetch latest conventions" })
+
 
     }
+
+    router.post('/new', (req, res) => {
+        try {
+            const { title } = req.body;
+            const date = new Date().toISOString().split('T')[0];
+
+            db.prepare("UPDATE cons SET isActive = 0").run();
+
+
+            const stmt = db.prepare("INSERT INTO cons (title, date, isActive) VALUES (?, ?, 1)");
+
+            const result = stmt.run(title, date);
+
+            res.status(201).json({ conId: result.lastInsertRowid });
+        } catch (error) {
+            console.error('Error creating convention:', error);
+            res.status(500).json({ error: 'Failed creating convention' })
+
+
+
+        }
+
+    })
 
 
 })
