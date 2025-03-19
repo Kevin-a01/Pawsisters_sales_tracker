@@ -11,7 +11,7 @@ function SalesDetail() {
     useEffect(() => {
         const fetchSales = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/stored_products/${conId}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stored_products/${conId}`);
                 if(!response.ok){
                     throw new Error("Failed to fetch sales data");
 

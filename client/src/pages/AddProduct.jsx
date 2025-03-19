@@ -25,11 +25,12 @@ function AddProduct(){
     }
   },[]);
 
+  
   useEffect(() => {
     const checkConId = async() => {
       console.log('conId after fetch:', conId);
       try{
-        const respone = await fetch("http://localhost:5000/api/cons/latest");
+        const respone = await fetch(`${import.meta.env.VITE_API_URL}/api/cons/latest`);
         const data = await respone.json();
         
         if(data.conId){
@@ -80,10 +81,13 @@ function AddProduct(){
       return;
       
     }
+    
+
+   
     try{
       let currentConId = conId;
       if(!conId && conTitle.trim() !== ""){
-        const respone = await fetch ("http://localhost:5000/api/cons", {
+        const respone = await fetch (` ${import.meta.env.VITE_API_URL}/api/cons`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({title: conTitle}),
@@ -98,7 +102,8 @@ function AddProduct(){
         localStorage.setItem("conId", currentConId);
 
       }
-      const productResponse = await fetch("http://localhost:5000/api/products", {
+      
+      const productResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({
@@ -119,26 +124,6 @@ function AddProduct(){
         return;
       }
       
-
-      /* await fetch("http://localhost:5000/api/stored_products", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            conId:currentConId,
-            products: 
-            [{ productId: productId,
-              product: form.product,
-              price: parseFloat(form.price),
-              payment: selectedPayments.join(", "),
-
-             }],
-            title: conTitle,
-            date: new Date().toISOString(),
-        }),
-      }); */
-
-
-
       setProducts(prevProducts => [
         ...prevProducts,
         {
