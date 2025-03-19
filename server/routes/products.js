@@ -4,8 +4,10 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const { error } = require('console');
 
-const db = new Database(path.join(__dirname, '../db/pawsisters-saletracker.db'));
-db.pragma('foreign_keys = ON');
+const dbPath = path.resolve(__dirname, '../db/pawsisters-saletracker.db');
+console.log("Using database:", dbPath);
+
+const db = new Database(dbPath);
 
 
 
