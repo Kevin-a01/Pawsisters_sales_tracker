@@ -41,7 +41,7 @@ function HomePage(){
 
         if(!window.confirm("Vill du verkligen ta bort dennna produkt?")) return;
         try{
-            const API_URL ="http://localhost:5000";
+            const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
             console.log("Using API URL:", API_URL);
             const response = await fetch(`${API_URL}/api/products/${id}`, {method: "DELETE"});
 
