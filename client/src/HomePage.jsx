@@ -12,7 +12,8 @@ function HomePage(){
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     useEffect(() => {
-      fetch(`${import.meta.env.VITE_API_URL}/api/products`)
+        const API_URL = process.env.REACT_APP_API_URL;
+      fetch(`${API_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products", err));
@@ -22,7 +23,8 @@ function HomePage(){
     
       
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/cons/latest`)
+        const API_URL = process.env.REACT_APP_API_URL;
+        fetch(`${API_URL}/api/cons/latest`)
         .then((res) => res.json())
         .then((data) => {
             setConTitle(data.title);
@@ -55,8 +57,8 @@ function HomePage(){
 
         try{
             console.log("Storing product:");
-
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stored_products/store`, {
+            const API_URL = process.env.REACT_APP_API_URL;
+            const response = await fetch(`${API_URL}/api/stored_products/store`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

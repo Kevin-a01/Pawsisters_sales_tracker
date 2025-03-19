@@ -30,7 +30,8 @@ function AddProduct(){
     const checkConId = async() => {
       console.log('conId after fetch:', conId);
       try{
-        const respone = await fetch(`${import.meta.env.VITE_API_URL}/api/cons/latest`);
+        const API_URL = process.env.REACT_APP_API_URL;
+        const respone = await fetch(`${API_URL}/api/cons/latest`);
         const data = await respone.json();
         
         if(data.conId){
@@ -87,7 +88,8 @@ function AddProduct(){
     try{
       let currentConId = conId;
       if(!conId && conTitle.trim() !== ""){
-        const respone = await fetch (` ${import.meta.env.VITE_API_URL}/api/cons`, {
+        const API_URL = process.env.REACT_APP_API_URL;
+        const respone = await fetch (` ${API_URL}/api/cons`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({title: conTitle}),
@@ -102,8 +104,8 @@ function AddProduct(){
         localStorage.setItem("conId", currentConId);
 
       }
-      
-      const productResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/products`, {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const productResponse = await fetch(`${API_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({
