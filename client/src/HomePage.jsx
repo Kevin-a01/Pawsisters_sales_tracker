@@ -35,6 +35,32 @@ function HomePage(){
         .catch((err) => console.error("Error fetching conventions", err));
     }, []);
 
+    const deleteProduct = async (id) => {
+
+        console.log("Attempting to delete product with ID:", id); // DEBUG
+
+        if(!window.confirm("Vill du verkligen ta bort dennna produkt?")) return;
+        try{
+            const API_URL ="http://localhost:5000";
+            console.log("Using API URL:", API_URL);
+            const response = await fetch(`${API_URL}/api/products/${id}`, {method: "DELETE"});
+
+            if(!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to delete product: ${errorText}`)
+
+            }
+
+            setProducts(products.filter((product) => product.id !== id));
+            alert("Product deleted successfully");
+
+        }catch(error){
+            console.error("Error deleting product:");
+            alert("Error deleting product.")
+        }
+
+    };
+
     const storedProducts = async () => {
         console.log("Storing products with conId:", conId);
         console.log("Products to store:", products);
@@ -124,6 +150,7 @@ return(
                     <th className="border-2 border-pink-300 p-2 text-xl">Produkt</th>
                     <th className="border-2 border-pink-300 p-2 text-xl">Pris</th>
                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Betalning</th>
+                    <th className="border-2 border-pink-300 p-2 text-xl w-fit">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -140,6 +167,14 @@ return(
 
                             <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
                                 {product.payment}
+                            </td>
+
+                            <td className="border-2 border-pink-300 black p-2 text-center text-md font-medium bg-red-500">
+                                <button className="cursor-pointer" onClick={() => {
+                                    console.log("Delete button clicked for ID:", product.id);
+                                    deleteProduct(product.id)}}>
+                                    Ta bort
+                                </button>
                             </td>
                         </tr>
 

@@ -112,6 +112,25 @@ router.get("/:conId", (req, res) => {
   }
 });
 
+router.delete("/:conId", (req, res) => {
+  try {
+    const { conId } = req.params;
+    const stmt = db.prepare("DELETE FROM stored_products WHERE conId = ?")
+    const result = stmt.run(conId);
+
+    if (result.changes === 0) {
+      return res.status(404).json({ error: "No sales data found for this con!" })
+    }
+    res.json({ message: "All sales data has been deleted successfully!" });
+  } catch (error) {
+    console.error("Error deleting sales data:", error);
+    res.status(500).json({ error: "Failed to delete sales data." })
+
+  }
+
+
+})
+
 router.get("/", (req, res) => {
   try {
     const stmt = db.prepare("SELECT * FROM stored_products");
