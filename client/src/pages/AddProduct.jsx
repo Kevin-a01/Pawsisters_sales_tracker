@@ -30,7 +30,7 @@ function AddProduct(){
     const checkConId = async() => {
       console.log('conId after fetch:', conId);
       try{
-        const API_URL = process.env.REACT_APP_API_URL;
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000" ;
         const respone = await fetch(`${API_URL}/api/cons/latest`);
         const data = await respone.json();
         
@@ -88,7 +88,7 @@ function AddProduct(){
     try{
       let currentConId = conId;
       if(!conId && conTitle.trim() !== ""){
-        const API_URL = process.env.REACT_APP_API_URL;
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
         const respone = await fetch (` ${API_URL}/api/cons`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
@@ -104,7 +104,7 @@ function AddProduct(){
         localStorage.setItem("conId", currentConId);
 
       }
-      const API_URL = process.env.REACT_APP_API_URL;
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
       const productResponse = await fetch(`${API_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},

@@ -12,7 +12,7 @@ function HomePage(){
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     useEffect(() => {
-        const API_URL = process.env.REACT_APP_API_URL;
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
       fetch(`${API_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
@@ -23,7 +23,7 @@ function HomePage(){
     
       
     useEffect(() => {
-        const API_URL = process.env.REACT_APP_API_URL;
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
         fetch(`${API_URL}/api/cons/latest`)
         .then((res) => res.json())
         .then((data) => {
@@ -57,7 +57,7 @@ function HomePage(){
 
         try{
             console.log("Storing product:");
-            const API_URL = process.env.REACT_APP_API_URL;
+            const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
             const response = await fetch(`${API_URL}/api/stored_products/store`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
