@@ -3,6 +3,9 @@ const cors = require("cors");
 const productRoutes = require('./routes/products');
 const salesRoutes = require('./routes/sales');
 const consRoutes = require('./routes/cons')
+require("dotenv").config();
+
+
 
 const app = express();
 const storedProductsRoutes = require("./routes/stored_products");
@@ -17,8 +20,8 @@ app.use('/api/sales', salesRoutes);
 app.use('/api/cons', consRoutes)
 app.use('/api/stored_products', storedProductsRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on ${PORT}`);
 })
 
 
