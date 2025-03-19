@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import Header from "../components/Header";
 
 function SalesDetail() {
     const {conId} = useParams();
+    const navigate = useNavigate();
     const [conTitle, setConTitle] = useState("");
     const [sales, setSales] = useState([]);
     const [totalRevenue, setTotalRevenue] = useState(0);
@@ -32,6 +35,30 @@ function SalesDetail() {
 
         fetchSales();
     }, [conId])
+
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm("Är du säker att du vill ta bort all försäljningsdata?");
+        if (!confirmDelete) return;
+
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+            const response = await fetch(`${API_URL}/api/stored_products/${conId}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete sales data");
+            }
+
+            alert("Försäljningsdata borttagen!");
+            setSales([]); // Clear the UI
+            setTotalRevenue(0);
+            navigate("/"); // Navigate back after deletion (optional)
+        } catch (error) {
+            console.error("Error deleting sales data:", error);
+            alert("Misslyckades att ta bort försäljningsdata.");
+        }
+    };
 
     
 
@@ -77,9 +104,21 @@ function SalesDetail() {
 
 
         )}
+        <div className="flex justify-between">
         <h2 className="text-lg font-bold mt-4">
             Totalen för dagen: {totalRevenue} KR
         </h2>
+
+        {sales.length > 0 && (
+
+            <button className="text-md font-bold mt-3 border p-1 rounded-xl bg-red-500" onClick={handleDelete}>
+                Ta bort Detalj Data
+            </button>
+
+        )}
+
+        </div>
+        
 
 
         </div>
