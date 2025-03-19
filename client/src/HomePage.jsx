@@ -12,16 +12,17 @@ function HomePage(){
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     useEffect(() => {
-      fetch("http://localhost:5000/api/products")
+      fetch(`${import.meta.env.VITE_API_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products", err));
 
 
     }, []);
+    
       
     useEffect(() => {
-        fetch("http://localhost:5000/api/cons/latest")
+        fetch(`${import.meta.env.VITE_API_URL}/api/cons/latest`)
         .then((res) => res.json())
         .then((data) => {
             setConTitle(data.title);
@@ -55,7 +56,7 @@ function HomePage(){
         try{
             console.log("Storing product:");
 
-            const response = await fetch("http://localhost:5000/api/stored_products/store", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stored_products/store`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
