@@ -1,18 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Header from "../components/Header";
 
 function SalesDetail() {
     const {conId} = useParams();
     const [conTitle, setConTitle] = useState("");
     const [sales, setSales] = useState([]);
+    const [totalRevenue, setTotalRevenue] = useState(0);
 
     useEffect(() => {
         const fetchSales = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/cons/${conId}`);
+                const response = await fetch(`http://localhost:5000/api/stored_products/${conId}`);
+                if(!response.ok){
+                    throw new Error("Failed to fetch sales data");
+
+                }
                 const data = await response.json();
+
                 setConTitle(data.title);
                 setSales(data.products);
+
+                const total = data.products.reduce((sum, sale) => sum + sale.price, 0);
+                setTotalRevenue(total);
+
             }catch(error){
                 console.error("Error fetching sales data", error);
             }
@@ -21,25 +32,57 @@ function SalesDetail() {
         fetchSales();
     }, [conId])
 
-    const totalRevenue = sales.reduce((sum, sale) => sum + sale.price, 0);
+    
 
     return(
+        <>
+        <Header/>
         <div className="p-3">
-        <h1 className="text-xl text-center font-bold">Sales for {conTitle}</h1>
-        <ul>
-            {sales.map((sale) =>(
-                <li key={sale.id} className="border p-2 my-2">
-                    {sale.product} - {sale.price} SEK ({sale.payment})
-                </li>
-            ))}
+        <h1 className="text-xl text-center font-bold">Försäljning för {conTitle}</h1>
+        {sales.length === 0 ? (
+            <p className="text-center text-2xl">No sales data available for this Con! </p>
+        ): (
+            <>
+                <table className="w-full border-collapse mt-4">
+                    <thead>
+                        <tr>
+                            <th className=" border-2 border-pink-300 p-2">
+                                Produkt
+                            </th>
+
+                            <th className="border-2 border-pink-300 p-2"> 
+                                Pris 
+                            </th>
+                                
+                            <th className="border-2 border-pink-300 p-2">
+                                Betalning
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sales.map((sale) =>(
+                            <tr key={sale.productId}>
+                                <td className="border-2 border-pink-300 p-2 text-center">{sale.product}</td>
+                                <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
+                                <td className="border-2 border-pink-300 p-2 text-center">{sale.payment}</td>
+                            </tr>
+
+
+                        ))}
+                    </tbody>
+                </table>
             
-        </ul>
+            </>
+
+
+        )}
         <h2 className="text-lg font-bold mt-4">
-            Total Revenue: {totalRevenue} SEK
+            Totalen för dagen: {totalRevenue} KR
         </h2>
 
 
         </div>
+        </>
     )
 
 

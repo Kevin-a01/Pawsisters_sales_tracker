@@ -3,6 +3,7 @@ const router = express.Router();
 const Database = require('better-sqlite3');
 const path = require('path');
 const { error } = require('console');
+const { title } = require('process');
 
 const db = new Database(path.join(__dirname, '../db/pawsisters-saletracker.db'));
 db.pragma('foreign_keys = ON');
@@ -80,17 +81,33 @@ router.get("/:conId", (req, res) => {
     const { conId } = req.params;
 
     if (!conId) {
-      return res.status(400).json({ error: "Missing conId" });
+      return res.status(400).json({ error: "Missing conid" });
     }
 
-    const stmt = db.prepare("SELECT * FROM stored_products WHERE conId = ?")
-    const storedProducts = stmt.all(conId);
+    const stmt = db.prepare("SELECT DISTINCT title FROM stored_products WHERE conId = ? ")
+    const conDetails = stmt.get(conId);
 
-    res.json(storedProducts);
+    if (!conDetails) {
+      return res.status(404).json({ error: "Con not found for the given conId" })
+
+    }
+
+    const storedStmt = db.prepare("SELECT product, price, payment FROM stored_products WHERE conId = ?")
+
+    const storedProducts = storedStmt.all(conId);
+
+    res.json({
+      title: conDetails.title,
+      products: storedProducts
+
+    })
+
 
   } catch (error) {
+
     console.error("Error fetching stored products:", error);
     res.status(500).json({ error: "Internal Server Error" });
+
 
   }
 });

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { Link } from "react-router-dom";
+import DetailCard from "./components/DetailCard";
 
 function HomePage(){
 
@@ -8,6 +9,7 @@ function HomePage(){
     const [conTitle, setConTitle] = useState("");
     const [conId, setConId] = useState(null);
     const [isStoring, setIsStoring] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     useEffect(() => {
       fetch("http://localhost:5000/api/products")
@@ -76,6 +78,8 @@ function HomePage(){
                 }
                 alert("All products stored successfully!"),
 
+                setRefreshTrigger((prev) => prev + 1);
+
                 setProducts([]);
 
                 setConTitle("");
@@ -101,37 +105,37 @@ return(
     <div className="p-2">
 
         <div className="flex justify-between items-center pb-8">
-            <button className="border border-pink-400 p-2 bg-pink-400 text-white rounded-xl shadow-2xl cursor-pointer" onClick={storedProducts}>
+            <button className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl cursor-pointer" onClick={storedProducts}>
                 Store Products
             </button>
-            <Link to="/add-product" className="border border-pink-400 p-2 bg-pink-400 text-white rounded-xl shadow-2xl" >
+            <Link to="/add-product" className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl " >
                 Lägg till produkt
             </Link>
             
         </div>
         <h1 className="text-center text-3xl font-bold mb-3" >{conTitle}</h1>
         <h2 className="text-center text-2xl font-bold">Dagens försäljning.</h2>
-        <table className="w-full border-collapse border border-pink-400 mt-5">
+        <table className="w-full border-collapse border border-pink-300 mt-5">
             <thead className="">
                 <tr>
-                    <th className="border-2 border-pink-400 p-2 text-xl">Produkt</th>
-                    <th className="border-2 border-pink-400 p-2 text-xl">Pris</th>
-                    <th className="border-2 border-pink-400 p-2 text-xl w-fit">Betalning</th>
+                    <th className="border-2 border-pink-300 p-2 text-xl">Produkt</th>
+                    <th className="border-2 border-pink-300 p-2 text-xl">Pris</th>
+                    <th className="border-2 border-pink-300 p-2 text-xl w-fit">Betalning</th>
                 </tr>
             </thead>
             <tbody>
                 {products.length > 0 ? (
                     products.map((product) =>(
                         <tr key={product.id}>
-                            <td className="border-2 border-pink-400 p-2 text-center text-md font-medium">
+                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
                                 {product.product}
                             </td>
 
-                            <td className="border-2 border-pink-400 p-2 text-center text-md font-medium">
+                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
                                 {product.price}kr
                             </td>
 
-                            <td className="border-2 border-pink-400 p-2 text-center text-md font-medium">
+                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
                                 {product.payment}
                             </td>
                         </tr>
@@ -140,7 +144,7 @@ return(
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="3" className="border-2 border-pink-400 p-2 text-center">
+                        <td colSpan="3" className="border-2 border-pink-300 p-2 text-center">
                         No sales yet.
                         </td>
                     </tr>
@@ -149,7 +153,7 @@ return(
         </table>
 
     </div>
-
+        <DetailCard refreshTrigger={refreshTrigger}/>
     </>
 )
 }

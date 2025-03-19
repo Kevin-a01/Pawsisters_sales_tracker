@@ -181,7 +181,7 @@ function AddProduct(){
                 placeholder="ExampleCon..."
                 value={conTitle}
                 onChange={(e) => setConTitle(e.target.value)}
-                className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500"
+                className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
               />
             ) : (
               <h2 className="text-xl font-bold text-pink-700">{conTitle}</h2>
@@ -193,7 +193,7 @@ function AddProduct(){
               placeholder="Produkt Namn..."
               value={form.product}
               onChange={handleChange}
-              className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500"
+              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
             />
   
             <input
@@ -202,7 +202,7 @@ function AddProduct(){
               placeholder="Pris (SEK)"
               value={form.price}
               onChange={handleChange}
-              className="p-2 w-11/12 border border-pink-600 focus:outline-none rounded-xl focus:border-purple-500"
+              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
             />
   
             <div className="grid grid-cols-1 gap-3 place-items-start w-full ml-11">
@@ -239,7 +239,7 @@ function AddProduct(){
   
             <button
               type="submit"
-              className="border border-pink-400 text-2xl cursor-pointer p-2 bg-pink-500 text-white rounded-xl shadow-2xl"
+              className="border border-transparent text-2xl cursor-pointer p-3 bg-pink-300 rounded-xl shadow-2xl"
             >
               Lägg till produkt
             </button>
