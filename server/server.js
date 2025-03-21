@@ -19,9 +19,10 @@ if (!fs.existsSync(dbDir)) {
 
 const dbPath = path.join(dbDir, "pawsisters-saletracker.db")
 console.log(`Using database: ${dbPath}`);
+let db;
 
 try {
-  const db = new Database(dbPath, { verbose: console.log });
+  db = new Database(dbPath, { verbose: console.log });
   module.exports = db;
 } catch (error) {
   console.error("Error opening database:", error);
