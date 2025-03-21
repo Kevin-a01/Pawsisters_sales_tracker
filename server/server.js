@@ -7,14 +7,17 @@ const path = require("path");
 const Database = require("better-sqlite3");
 
 
-const isProduction = process.env.NODE_ENV === "production";
-const dbPath = isProduction
-  ? "/app/db/pawsisters-saletracker.db" // Railway path
-  : path.join(__dirname, "./db/pawsisters-saletracker.db"); // Local path
-const db = new Database(dbPath);
+const dbDir = process.env.RAILWAY_ENVIROMENT ? "/data/db" : path.join(__dirname, "db");
+
+
+const dbPath = path.join(dbDir, "pawsisters-saletracker.db")
+
+const db = new Database(dbPath, { verbose: console.log });
+
 
 const app = express();
 const storedProductsRoutes = require("./routes/stored_products");
+const { verbose } = require("sqlite3");
 const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
