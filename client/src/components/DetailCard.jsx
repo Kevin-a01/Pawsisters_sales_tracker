@@ -10,8 +10,8 @@ function DetailCard( {refreshTrigger}){
   useEffect(() => {
     const fetchStoredCons = async () => {
       try{
-        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        const response = await fetch(`${API_URL}/api/stored_products`)
+        
+        const response = await fetch(`/api/stored_products`)
 
         if(!response){
           throw new Error("Failed to fetch stored Con title and date.")

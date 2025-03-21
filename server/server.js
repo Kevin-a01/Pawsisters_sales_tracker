@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const productRoutes = require('./routes/products');
 const salesRoutes = require('./routes/sales');
 const consRoutes = require('./routes/cons')
@@ -17,14 +16,6 @@ const db = new Database(dbPath);
 const app = express();
 const storedProductsRoutes = require("./routes/stored_products");
 const PORT = process.env.PORT || 5000;
-
-app.use(cors({
-
-  origin: "https://pawsisters-sales-production.up.railway.app",
-  methods: ["POST", "GET", "PUT", "DELETE"],
-  allowedHeaders: "Content-Type"
-
-}));
 app.use(express.json());
 
 

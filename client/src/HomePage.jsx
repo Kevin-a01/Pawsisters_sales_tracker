@@ -12,8 +12,8 @@ function HomePage(){
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     useEffect(() => {
-        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-      fetch(`${API_URL}/api/products`)
+       
+      fetch(`/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products", err));
@@ -23,8 +23,8 @@ function HomePage(){
     
       
     useEffect(() => {
-        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        fetch(`${API_URL}/api/cons/latest`)
+      
+        fetch(`/api/cons/latest`)
         .then((res) => res.json())
         .then((data) => {
             setConTitle(data.title);
@@ -41,9 +41,9 @@ function HomePage(){
 
         if(!window.confirm("Vill du verkligen ta bort denna produkt?")) return;
         try{
-            const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-            console.log("Using API URL:", API_URL);
-            const response = await fetch(`${API_URL}/api/products/${id}`, {method: "DELETE"});
+           
+            
+            const response = await fetch(`/api/products/${id}`, {method: "DELETE"});
 
             if(!response.ok) {
                 const errorText = await response.text();
@@ -83,8 +83,8 @@ function HomePage(){
 
         try{
             console.log("Storing product:");
-            const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-            const response = await fetch(`${API_URL}/api/stored_products/store`, {
+           
+            const response = await fetch(`/api/stored_products/store`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

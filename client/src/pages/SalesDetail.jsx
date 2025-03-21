@@ -15,8 +15,8 @@ function SalesDetail() {
     useEffect(() => {
         const fetchSales = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-                const response = await fetch(`${API_URL}/api/stored_products/${conId}`);
+               
+                const response = await fetch(`/api/stored_products/${conId}`);
                 if(!response.ok){
                     throw new Error("Failed to fetch sales data");
 
@@ -42,8 +42,8 @@ function SalesDetail() {
         if (!confirmDelete) return;
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-            const response = await fetch(`${API_URL}/api/stored_products/${conId}`, {
+            
+            const response = await fetch(`/api/stored_products/${conId}`, {
                 method: "DELETE",
             });
 
