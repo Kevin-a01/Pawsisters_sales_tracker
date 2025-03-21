@@ -10,6 +10,13 @@ const Database = require("better-sqlite3");
 const dbDir = process.env.RAILWAY_ENVIRONMENT ? "/data/db" : path.join(__dirname, "db");
 
 
+if (!fstat.existsSync(dbDir)) {
+
+  fs.mkdirSync(dbDir, { rescursive: true });
+
+}
+
+
 const dbPath = path.join(dbDir, "pawsisters-saletracker.db")
 
 const db = new Database(dbPath, { verbose: console.log });
