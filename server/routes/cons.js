@@ -7,6 +7,10 @@ const { title } = require('process');
 const db = new Database(path.join(__dirname, '../db/pawsisters-saletracker.db'));
 db.pragma('foreign_keys = ON');
 
+router.get("/", (req, res => {
+    res.json({ message: "Cons API is WORKING!!" })
+}));
+
 
 router.post('/', (req, res) => {
     try {
@@ -47,31 +51,33 @@ router.get('/latest', (req, res) => {
 
     }
 
-    router.post('/new', (req, res) => {
-        try {
-            const { title } = req.body;
-            const date = new Date().toISOString().split('T')[0];
-
-            db.prepare("UPDATE cons SET isActive = 0").run();
-
-
-            const stmt = db.prepare("INSERT INTO cons (title, date, isActive) VALUES (?, ?, 1)");
-
-            const result = stmt.run(title, date);
-
-            res.status(201).json({ conId: result.lastInsertRowid });
-        } catch (error) {
-            console.error('Error creating convention:', error);
-            res.status(500).json({ error: 'Failed creating convention' })
 
 
 
-        }
+});
 
-    })
+router.post('/new', (req, res) => {
+    try {
+        const { title } = req.body;
+        const date = new Date().toISOString().split('T')[0];
+
+        db.prepare("UPDATE cons SET isActive = 0").run();
 
 
-})
+        const stmt = db.prepare("INSERT INTO cons (title, date, isActive) VALUES (?, ?, 1)");
+
+        const result = stmt.run(title, date);
+
+        res.status(201).json({ conId: result.lastInsertRowid });
+    } catch (error) {
+        console.error('Error creating convention:', error);
+        res.status(500).json({ error: 'Failed creating convention' })
+
+
+
+    }
+
+});
 
 
 module.exports = router;
