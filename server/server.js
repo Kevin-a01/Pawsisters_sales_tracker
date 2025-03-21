@@ -18,7 +18,11 @@ const app = express();
 const storedProductsRoutes = require("./routes/stored_products");
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+
+  origin: "https://pawsisters-sales-production.up.railway.app/"
+
+}));
 app.use(express.json());
 
 
