@@ -13,7 +13,7 @@ const dbDir = isRailway ? "/data/db" : path.join(__dirname, "db");
 
 if (!isRailway && !fs.existsSync(dbDir)) {
 
-  fs.mkdirSync(dbDir, { rescursive: true });
+  fs.mkdirSync(dbDir, { recursive: true });
 
 }
 
