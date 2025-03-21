@@ -3,6 +3,7 @@ const productRoutes = require('./routes/products');
 const salesRoutes = require('./routes/sales');
 const consRoutes = require('./routes/cons')
 require("dotenv").config();
+const fs = require("fs")
 const path = require("path");
 const Database = require("better-sqlite3");
 
