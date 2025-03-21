@@ -20,7 +20,9 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors({
 
-  origin: "https://pawsisters-sales-production.up.railway.app/"
+  origin: "https://pawsisters-sales-production.up.railway.app",
+  methods: ["POST", "GET", "PUT", "DELETE"],
+  allowedHeaders: "Content-Type"
 
 }));
 app.use(express.json());
