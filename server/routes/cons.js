@@ -7,9 +7,9 @@ const { title } = require('process');
 const db = new Database(path.join(__dirname, '../db/pawsisters-saletracker.db'));
 db.pragma('foreign_keys = ON');
 
-router.get("/", (req, res => {
+router.get("/", (req, res) => {
     res.json({ message: "Cons API is WORKING!!" })
-}));
+});
 
 
 router.post('/', (req, res) => {
