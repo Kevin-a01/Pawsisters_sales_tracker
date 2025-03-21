@@ -10,6 +10,7 @@ function SalesDetail() {
     const [conTitle, setConTitle] = useState("");
     const [sales, setSales] = useState([]);
     const [totalRevenue, setTotalRevenue] = useState(0);
+    const [filterPayment, setFilterPayment] = useState("");
 
     useEffect(() => {
         const fetchSales = async () => {
@@ -60,16 +61,37 @@ function SalesDetail() {
         }
     };
 
+        const filteredSales = filterPayment
+            ? sales.filter(sale => sale.payment.toLowerCase() === filterPayment.toLowerCase())
+            : sales;
+
     
 
     return(
         <>
         <Header/>
         <div className="p-3">
-        <h1 className="text-xl text-center font-bold">Försäljning för {conTitle}</h1>
-        {sales.length === 0 ? (
-            <p className="text-center text-2xl">No sales data available for this Con! </p>
+        <h1 className="text-xl text-center font-bold font-mono">Försäljning för {conTitle}</h1>
+        <div className="flex justify-center mt-4">
+            <label className="mr-2 font-bold mt-1 text-xl">Filtrera efter betalning.</label>
+            <select 
+            className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300"
+            value={filterPayment}
+            onChange={(e) => setFilterPayment(e.target.value)}
+            >
+                <option value="" >Alla betalningar</option>
+                <option value="Swish"  >Swish</option>
+                <option value="Kort"  >Kort</option>
+                <option value="Kontant"  >Kontant</option>
+            </select>
+        </div>
+        {filteredSales.length === 0 ? (
+            <p className="text-xl text-center py-5">
+                Inga produkter matchar!
+            </p>
+
         ): (
+
             <>
                 <table className="w-full border-collapse mt-4">
                     <thead>
@@ -88,7 +110,7 @@ function SalesDetail() {
                         </tr>
                     </thead>
                     <tbody>
-                        {sales.map((sale) =>(
+                        {filteredSales.map((sale) =>(
                             <tr key={sale.productId}>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.product}</td>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
@@ -103,15 +125,19 @@ function SalesDetail() {
             </>
 
 
+
+            
         )}
-        <div className="flex justify-between">
-        <h2 className="text-lg font-bold mt-4">
-            Totalen för dagen: {totalRevenue} KR
+
+        
+        <div className="flex flex-col">
+        <h2 className="text-lg font-medium mt-4">
+            Totalen för dagen: {filteredSales.reduce((sum, sale) => sum + sale.price, 0)} KR
         </h2>
 
         {sales.length > 0 && (
 
-            <button className="text-md font-bold mt-3 border p-1 rounded-xl bg-red-500" onClick={handleDelete}>
+            <button className="text-md w-5/12 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400" onClick={handleDelete}>
                 Ta bort Detalj Data
             </button>
 

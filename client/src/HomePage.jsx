@@ -39,7 +39,7 @@ function HomePage(){
 
         console.log("Attempting to delete product with ID:", id); // DEBUG
 
-        if(!window.confirm("Vill du verkligen ta bort dennna produkt?")) return;
+        if(!window.confirm("Vill du verkligen ta bort denna produkt?")) return;
         try{
             const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
             console.log("Using API URL:", API_URL);
@@ -52,7 +52,7 @@ function HomePage(){
             }
 
             setProducts(products.filter((product) => product.id !== id));
-            alert("Product deleted successfully");
+            alert("Produkt Borttagen!");
 
         }catch(error){
             console.error("Error deleting product:");
@@ -105,7 +105,7 @@ function HomePage(){
                     alert(`Failed to store products: ${product.product} (ID: ${product.id}`);
                     
                 }
-                alert("All products stored successfully!"),
+                alert("Alla produkter är lagrade!"),
 
                 setRefreshTrigger((prev) => prev + 1);
 
@@ -135,7 +135,7 @@ return(
 
         <div className="flex justify-between items-center pb-8">
             <button className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl cursor-pointer" onClick={storedProducts}>
-                Store Products
+                Lagra Produkter
             </button>
             <Link to="/add-product" className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl " >
                 Lägg till produkt
@@ -143,7 +143,7 @@ return(
             
         </div>
         <h1 className="text-center text-3xl font-bold mb-3" >{conTitle}</h1>
-        <h2 className="text-center text-2xl font-bold">Dagens försäljning.</h2>
+        <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
         <table className="w-full border-collapse border border-pink-300 mt-5">
             <thead className="">
                 <tr>
@@ -169,8 +169,8 @@ return(
                                 {product.payment}
                             </td>
 
-                            <td className="border-2 border-pink-300 black p-2 text-center text-md font-medium bg-red-500">
-                                <button className="cursor-pointer" onClick={() => {
+                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium bg-pink-400 ">
+                                <button className="cursor-pointer w-full" onClick={() => {
                                     console.log("Delete button clicked for ID:", product.id);
                                     deleteProduct(product.id)}}>
                                     Ta bort
@@ -183,7 +183,7 @@ return(
                 ) : (
                     <tr>
                         <td colSpan="3" className="border-2 border-pink-300 p-2 text-center">
-                        No sales yet.
+                        Inga sålda produkter.
                         </td>
                     </tr>
                 )}

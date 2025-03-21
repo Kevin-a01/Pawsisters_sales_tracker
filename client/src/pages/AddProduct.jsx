@@ -53,7 +53,7 @@ function AddProduct(){
       }
     };
       checkConId();
-  }, []);
+  }, [conId]);
   
 
   
@@ -143,7 +143,7 @@ function AddProduct(){
         payment: { Swish: false, Kort: false, Kontant: false}
       });
 
-      alert("Product added!")
+      alert("Produkt tillagd!")
 
       navigate("/");
       
@@ -171,17 +171,40 @@ function AddProduct(){
                 className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
               />
             ) : (
-              <h2 className="text-xl font-bold text-pink-700">{conTitle}</h2>
+              <h2 className="text-xl font-black text-pink-300">{conTitle}</h2>
             )}
-  
-            <input
+
+            <select className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 appearance-none"
+            name="product"
+            value={form.product}
+            onChange={handleChange}
+            >
+            <option value="">
+            Välj en produkt...
+            </option>
+            <option value="Mushroom Villager">
+              Mushroom Villager
+            </option>
+            <option value="Keychain">
+              Keychain
+            </option>
+            <option value="Stickers">
+              Stickers
+            </option>
+
+            
+
+            </select>
+
+
+            {/* <input
               type="text"
               name="product"
               placeholder="Produkt Namn..."
               value={form.product}
               onChange={handleChange}
               className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
-            />
+            /> */}
   
             <input
               type="text"
