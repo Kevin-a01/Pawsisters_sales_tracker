@@ -30,10 +30,14 @@ function AddProduct(){
     const checkConId = async() => {
       console.log('conId after fetch:', conId);
       try{
-        const respone = await fetch(`/api/cons/latest`);
-        const data = await respone.json();
+        const response = await fetch(`/api/cons/latest`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
         
-        if(data.conId){
+        if(data?.conId){
           setConId(data.conId);
           setConTitle(data.title);
           localStorage.setItem("conId", data.conId);
@@ -51,7 +55,8 @@ function AddProduct(){
 
       }
     };
-      checkConId();
+      checkConId(null);
+      setConTitle("");
   }, [conId]);
   
 
@@ -103,7 +108,7 @@ function AddProduct(){
         localStorage.setItem("conId", currentConId);
 
       }
-      
+      ;
       const productResponse = await fetch(`/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
