@@ -111,7 +111,7 @@ function SalesDetail() {
                     </thead>
                     <tbody>
                         {filteredSales.map((sale) =>(
-                            <tr key={sale.productId}>
+                            <tr key={`${sale.product}`}>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.product}</td>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.payment}</td>
