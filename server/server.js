@@ -11,7 +11,7 @@ const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
 const dbDir = isRailway ? "/data/db" : path.join(__dirname, "db");
 
 
-if (!fs.existsSync(dbDir)) {
+if (!isRailway && !fs.existsSync(dbDir)) {
 
   fs.mkdirSync(dbDir, { rescursive: true });
 
