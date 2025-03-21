@@ -7,7 +7,7 @@ const path = require("path");
 const Database = require("better-sqlite3");
 
 
-const dbDir = process.env.RAILWAY_ENVIROMENT ? "/data/db" : path.join(__dirname, "db");
+const dbDir = process.env.RAILWAY_ENVIRONMENT ? "/data/db" : path.join(__dirname, "db");
 
 
 const dbPath = path.join(dbDir, "pawsisters-saletracker.db")
