@@ -11,17 +11,22 @@ const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
 const dbDir = isRailway ? "/data/db" : path.join(__dirname, "db");
 
 
-if (!isRailway && !fs.existsSync(dbDir)) {
-
+if (!fs.existsSync(dbDir)) {
+  console.log(`Creating database directory: ${dbDir}`);
   fs.mkdirSync(dbDir, { recursive: true });
-
 }
 
 
 const dbPath = path.join(dbDir, "pawsisters-saletracker.db")
+console.log(`Using database: ${dbPath}`);
 
-const db = new Database(dbPath, { verbose: console.log });
-
+try {
+  const db = new Database(dbPath, { verbose: console.log });
+  module.exports = db;
+} catch (error) {
+  console.error("Error opening database:", error);
+  process.exit(1);
+}
 
 const app = express();
 const storedProductsRoutes = require("./routes/stored_products");
