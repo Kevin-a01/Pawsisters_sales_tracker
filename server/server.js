@@ -7,8 +7,8 @@ const fs = require("fs")
 const path = require("path");
 const Database = require("better-sqlite3");
 
-
-const dbDir = process.env.RAILWAY_ENVIRONMENT ? "/data/db" : path.join(__dirname, "db");
+const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
+const dbDir = isRailway ? "/data/db" : path.join(__dirname, "db");
 
 
 if (!fs.existsSync(dbDir)) {
