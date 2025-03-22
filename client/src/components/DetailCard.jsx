@@ -8,7 +8,7 @@ function DetailCard( {refreshTrigger}){
   const [loading, setLoading] = useState(true);
   const API_BASE_URL = import.meta.env.PROD 
   ? "https://pawsisterssalestracker-production-529b.up.railway.app"
-  : "";
+  : "http://localhost:5000";
   useEffect(() => {
     
 
