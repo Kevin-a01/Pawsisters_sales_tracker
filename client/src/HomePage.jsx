@@ -11,9 +11,13 @@ function HomePage(){
     const [isStoring, setIsStoring] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    const API_BASE_URL = import.meta.env.PROD 
+    ? "https://pawsisterssalestracker-production-529b.up.railway.app"
+    : "";
+
     useEffect(() => {
        
-      fetch(`/api/products`)
+      fetch(`${API_BASE_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products", err));
@@ -24,7 +28,7 @@ function HomePage(){
       
     useEffect(() => {
       
-        fetch(`/api/cons/latest`)
+        fetch(`${API_BASE_URL}/api/cons/latest`)
         .then((res) => res.json())
         .then((data) => {
             setConTitle(data.title);
@@ -43,7 +47,7 @@ function HomePage(){
         try{
            
             
-            const response = await fetch(`/api/products/${id}`, {method: "DELETE"});
+            const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {method: "DELETE"});
 
             if(!response.ok) {
                 const errorText = await response.text();
@@ -84,7 +88,7 @@ function HomePage(){
         try{
             console.log("Storing product:");
            
-            const response = await fetch(`/api/stored_products/store`, {
+            const response = await fetch(`${API_BASE_URL}/api/stored_products/store`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

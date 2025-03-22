@@ -12,11 +12,15 @@ function SalesDetail() {
     const [totalRevenue, setTotalRevenue] = useState(0);
     const [filterPayment, setFilterPayment] = useState("");
 
+    const API_BASE_URL = import.meta.env.PROD 
+    ? "https://pawsisterssalestracker-production-529b.up.railway.app"
+    : "";
+
     useEffect(() => {
         const fetchSales = async () => {
             try {
                
-                const response = await fetch(`/api/stored_products/${conId}`);
+                const response = await fetch(`${API_BASE_URL}/api/stored_products/${conId}`);
                 if(!response.ok){
                     throw new Error("Failed to fetch sales data");
 
@@ -42,8 +46,10 @@ function SalesDetail() {
         if (!confirmDelete) return;
 
         try {
+
+           
             
-            const response = await fetch(`/api/stored_products/${conId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/stored_products/${conId}`, {
                 method: "DELETE",
             });
 
@@ -111,7 +117,7 @@ function SalesDetail() {
                     </thead>
                     <tbody>
                         {filteredSales.map((sale) =>(
-                            <tr key={`${sale.product}`}>
+                            <tr key={`${sale.id}`}>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.product}</td>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
                                 <td className="border-2 border-pink-300 p-2 text-center">{sale.payment}</td>

@@ -17,6 +17,10 @@ function AddProduct(){
     payment: {Swish: false, Kort: false, Kontant: false},
   });
 
+  const API_BASE_URL = import.meta.env.PROD 
+    ? "https://pawsisterssalestracker-production-529b.up.railway.app"
+    : "";
+
   useEffect(() => {
     if(!localStorage.getItem("conId")){
       setConId(null);
@@ -30,7 +34,7 @@ function AddProduct(){
     const checkConId = async() => {
       console.log('conId after fetch:', conId);
       try{
-        const response = await fetch(`/api/cons/latest`);
+        const response = await fetch(`${API_BASE_URL}/api/cons/latest`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -93,7 +97,7 @@ function AddProduct(){
       let currentConId = conId;
       if(!conId && conTitle.trim() !== ""){
         
-        const respone = await fetch (`/api/cons`, {
+        const respone = await fetch (`${API_BASE_URL}/api/cons`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({title: conTitle}),
@@ -109,7 +113,7 @@ function AddProduct(){
 
       }
       ;
-      const productResponse = await fetch(`/api/products`, {
+      const productResponse = await fetch(`${API_BASE_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({

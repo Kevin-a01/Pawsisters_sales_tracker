@@ -92,7 +92,7 @@ router.get("/:conId", (req, res) => {
 
     }
 
-    const storedStmt = db.prepare("SELECT product, price, payment FROM stored_products WHERE conId = ?")
+    const storedStmt = db.prepare("SELECT id, product, price, payment FROM stored_products WHERE conId = ?")
 
     const storedProducts = storedStmt.all(conId);
 
