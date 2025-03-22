@@ -6,12 +6,17 @@ function DetailCard( {refreshTrigger}){
 
   const [cons, setCons] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const API_BASE_URL = import.meta.env.PROD 
+  ? "https://pawsisterssalestracker-production-529b.up.railway.app"
+  : "";
   useEffect(() => {
+    
+
+
     const fetchStoredCons = async () => {
       try{
         
-        const response = await fetch(`/api/stored_products`)
+        const response = await fetch(`${API_BASE_URL}/api/stored_products`)
 
         if(!response){
           throw new Error("Failed to fetch stored Con title and date.")
