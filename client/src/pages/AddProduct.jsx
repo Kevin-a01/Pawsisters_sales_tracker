@@ -19,7 +19,7 @@ function AddProduct(){
 
   const API_BASE_URL = import.meta.env.PROD 
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
-    : "";
+    : "http://localhost:5000";
 
   useEffect(() => {
     if(!localStorage.getItem("conId")){
@@ -59,9 +59,9 @@ function AddProduct(){
 
       }
     };
-      checkConId(null);
-      setConTitle("");
-  }, [conId]);
+      checkConId();
+      
+  }, []);
   
 
   

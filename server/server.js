@@ -6,6 +6,7 @@ require("dotenv").config();
 const fs = require("fs")
 const path = require("path");
 const Database = require("better-sqlite3");
+const cors = require('cors');
 
 const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
 const dbDir = isRailway ? "/data/db" : path.join(__dirname, "db");
@@ -34,6 +35,7 @@ const storedProductsRoutes = require("./routes/stored_products");
 const { verbose } = require("sqlite3");
 const PORT = process.env.PORT || 5000;
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 
 app.use('/api/products', productRoutes);
