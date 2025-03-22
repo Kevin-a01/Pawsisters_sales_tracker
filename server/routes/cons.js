@@ -61,10 +61,7 @@ router.post('/new', (req, res) => {
         const { title } = req.body;
         const date = new Date().toISOString().split('T')[0];
 
-        db.prepare("UPDATE cons SET isActive = 0").run();
-
-
-        const stmt = db.prepare("INSERT INTO cons (title, date, isActive) VALUES (?, ?, 1)");
+        const stmt = db.prepare("INSERT INTO cons (title, date) VALUES (?, ?,)");
 
         const result = stmt.run(title, date);
 
