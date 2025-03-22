@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
 
 router.get('/latest', (req, res) => {
     try {
-        const row = db.prepare("SELECT id, title FROM cons WHERE isActive = 1 ORDER BY id DESC LIMIT 1").get();
+        const row = db.prepare("SELECT id, title FROM cons ORDER BY id DESC LIMIT 1").get();
         if (row) {
             res.json({ conId: row.id, title: row.title });
 
