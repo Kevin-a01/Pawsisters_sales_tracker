@@ -70,7 +70,7 @@ function HomePage(){
         console.log("Products to store:", products);
 
         if(!conId) {
-            alert("There is not active con to store products for!");
+            alert("Det finns inga produkter att lagra!");
             return;
         }
 
@@ -111,7 +111,7 @@ function HomePage(){
                 }
                 alert("Alla produkter är lagrade!"),
 
-                setRefreshTrigger((prev) => prev + 1);
+                setRefreshTrigger((prev) => prev + 1 );
 
                 setProducts([]);
 
@@ -147,7 +147,7 @@ return(
             
         </div>
         <h1 className="text-center text-3xl font-bold mb-3" >{conTitle}</h1>
-        <h2 className="text-center text-3xl font-bold font-mono">Dagens försäljning.</h2>
+        <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
         <table className="w-full border-collapse border border-pink-300 mt-5">
             <thead className="">
                 <tr>

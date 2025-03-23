@@ -67,7 +67,7 @@ router.post('/store', (req, res) => {
 
     db.prepare("DELETE FROM cons WHERE id = ?").run(conId);
 
-    res.status(201).json({ message: "Products stored successfully!" });
+    res.status(201).json({ message: "Produkter har lagrats" });
 
   } catch (error) {
     console.error("Error storing products:", error);
@@ -119,9 +119,9 @@ router.delete("/:conId", (req, res) => {
     const result = stmt.run(conId);
 
     if (result.changes === 0) {
-      return res.status(404).json({ error: "No sales data found for this con!" })
+      return res.status(404).json({ error: "Finns ingen data för detta konvent." })
     }
-    res.json({ message: "All sales data has been deleted successfully!" });
+    res.json({ message: "All data har blivit raderad." });
   } catch (error) {
     console.error("Error deleting sales data:", error);
     res.status(500).json({ error: "Failed to delete sales data." })
