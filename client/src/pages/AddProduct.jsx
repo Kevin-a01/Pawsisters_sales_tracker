@@ -151,8 +151,6 @@ function AddProduct(){
         payment: { Swish: false, Kort: false, Kontant: false}
       });
 
-      /* alert("Produkt tillagd!") */
-
       navigate("/");
       
     }catch(error){
