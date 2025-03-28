@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 
 function AddProduct(){
-
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
@@ -69,6 +68,7 @@ function AddProduct(){
   const handleChange = (e) => {
 
     setForm({...form, [e.target.name]: e.target.value});
+    
 
   }
 
@@ -174,13 +174,13 @@ function AddProduct(){
                 placeholder="ExampleCon..."
                 value={conTitle}
                 onChange={(e) => setConTitle(e.target.value)}
-                className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
+                className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 lg:w-1/4"
               />
             ) : (
               <h2 className="text-xl font-black text-pink-300">{conTitle}</h2>
             )}
 
-            <select className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 appearance-none"
+            <select className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 appearance-none lg:w-1/4"
             name="product"
             value={form.product}
             onChange={handleChange}
@@ -194,8 +194,14 @@ function AddProduct(){
             <option value="Keychain">
               Keychain
             </option>
-            <option value="Stickers">
-              Stickers
+            <option value="1 Sticker">
+               1 Sticker
+            </option>
+            <option value="5 Stickers">
+              5 Stickers
+            </option>
+            <option value="Duckling">
+              Duckling
             </option>
 
             
@@ -218,10 +224,10 @@ function AddProduct(){
               placeholder="Pris (SEK)"
               value={form.price}
               onChange={handleChange}
-              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
+              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 lg:w-1/4"
             />
   
-            <div className="grid grid-cols-1 gap-3 place-items-start w-full ml-11">
+            <div className="grid grid-cols-1 gap-3 place-items-start w-full lg:w-128 ml-11">
               <label className="text-lg flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -234,6 +240,7 @@ function AddProduct(){
   
               <label className="text-lg flex items-center gap-2">
                 <input
+                  
                   type="checkbox"
                   name="Kort"
                   checked={form.payment.Kort}

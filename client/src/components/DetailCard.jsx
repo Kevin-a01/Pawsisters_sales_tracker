@@ -49,7 +49,7 @@ function DetailCard( {refreshTrigger}){
             ) : cons.length === 0 ? (
              <p className="text-center text-lg mt-5">❌ Inga tidigare Cons hittades.</p>
             ) : (
-          <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 ">
+          <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto ">
             {cons.map((con) => (
               <div key={con.conId} className="border border-transparent w-full rounded-xl hover:border-purple-500 bg-pink-300">
               <Link to={`/sales-details/${con.conId}`} className="text-lg">

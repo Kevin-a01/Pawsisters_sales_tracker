@@ -77,23 +77,23 @@ function SalesDetail() {
         <>
         <Header/>
         <div className="p-3">
-        <h1 className="text-xl text-center font-bold font-mono">Försäljning för {conTitle}</h1>
+        <h1 className="text-2xl lg:text-3xl text-center font-bold font-mono text-pink-300">Försäljning för {conTitle}</h1>
         <div className="flex justify-center mt-4">
-            <label className="mr-2 font-bold mt-1 text-xl">Filtrera efter betalning.</label>
+            <label className="mr-2 font-medium mt-1 text-xl">Filtrera efter betalning.</label>
             <select 
             className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300"
             value={filterPayment}
             onChange={(e) => setFilterPayment(e.target.value)}
             >
                 <option value="" >Alla betalningar</option>
-                <option value="Swish"  >Swish</option>
-                <option value="Kort"  >Kort</option>
-                <option value="Kontant"  >Kontant</option>
+                <option value="Swish">Swish</option>
+                <option value="Kort">Kort</option>
+                <option value="Kontant">Kontant</option>
             </select>
         </div>
         {filteredSales.length === 0 ? (
-            <p className="text-xl text-center py-5">
-                Inga produkter matchar!
+            <p className="text-xl text-center py-5 font-medium">
+                Ingen betalningsmetod matchar!
             </p>
 
         ): (
@@ -143,7 +143,7 @@ function SalesDetail() {
 
         {sales.length > 0 && (
 
-            <button className="text-md w-5/12 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400" onClick={handleDelete}>
+            <button className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400" onClick={handleDelete}>
                 Ta bort Detalj Data
             </button>
 
