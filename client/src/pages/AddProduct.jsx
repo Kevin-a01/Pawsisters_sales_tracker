@@ -219,7 +219,7 @@ function AddProduct(){
             /> */}
   
             <input
-              type="text"
+              type="number"
               name="price"
               placeholder="Pris (SEK)"
               value={form.price}
