@@ -90,7 +90,7 @@ router.get("/", (req, res) => {
 });
 
 // Här är den nya route `/new` för att skapa en ny "convention"
-router.post('/new', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const { title } = req.body;
         const date = new Date().toISOString().split('T')[0];
