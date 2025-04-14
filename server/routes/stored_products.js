@@ -1,252 +1,125 @@
-/* const express = require('express');
-const router = express.Router();
-const Database = require('better-sqlite3');
-const path = require('path');
-const { error } = require('console');
-const { title } = require('process');
+const express = require('express');
+const router = express.Router(); // Add this line to initialize the router
+const pool = require('../db');  // Import the pool from your database connection file (if needed)
 
-const db = new Database(path.join(__dirname, '../db/pawsisters-saletracker.db'));
-db.pragma('foreign_keys = ON');
-
-
-router.post('/store', (req, res) => {
-
+// Your existing route definition
+router.post('/store', async (req, res) => {
   try {
-    console.log("Incoming request body for storing products:", req.body);
-
     const { conId, products } = req.body;
 
+    // Check if conId or products are missing or empty
     if (!conId || !products || products.length === 0) {
-
-      console.error("❌ Missing required fields:", req.body);
+      console.error('❌ Missing conId or products in request body');
       return res.status(400).json({ error: "Missing conId or products" });
-
     }
 
-    const conStmt = db.prepare("SELECT * FROM cons WHERE id = ?");
-    const conDetails = conStmt.get(conId);
+    // Fetch convention title and date based on conId
+    const conResult = await pool.query("SELECT title, date FROM cons WHERE id = $1", [conId]);
+    if (!conResult.rows.length) {
+      console.error(`❌ Con not found for conId: ${conId}`);
+      return res.status(404).json({ error: "Con not found" });
+    }
 
-    const { title: conTitle, date: conDate } = conDetails;
+    const { title: conTitle, date: conDate } = conResult.rows[0];
+    console.log(`Found convention: ${conTitle}, Date: ${conDate}`);
 
-    const stmt = db.prepare(`
-        INSERT INTO stored_products (productId, conId, title, date, product, price, payment)
-        VALUES(?, ?, ?, ?, ?, ?, ?)
-        
-        `);
+    // Insert query for storing products
+    const insertStmt = `
+      INSERT INTO stored_products ("productId", "conId", title, date, product, price, payment)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `;
 
-    products.forEach((product) => {
+    // Iterate over the products array and store each product
+    for (let product of products) {
       const { productId, price, payment } = product;
 
-      const productStmt = db.prepare("SELECT product FROM products WHERE id = ?");
-      const productDetails = productStmt.get(productId);
+      // Fetch product name by productId
+      const productResult = await pool.query("SELECT product FROM products WHERE id = $1", [productId]);
 
-
-      if (!productDetails) {
+      if (!productResult.rows.length) {
         console.error(`❌ Product not found for ID: ${productId}`);
-        return;
+        return res.status(404).json({ error: `Product not found for ID: ${productId}` });
       }
 
-      const productName = productDetails.product;
+      const productName = productResult.rows[0].product;
 
-
+      // Validate required fields in the product object
       if (!productId || !productName || !price || !payment) {
         console.error("❌ Missing required fields in product:", product);
-        return;
+        return res.status(400).json({ error: "Missing required fields in product" });
       }
 
-      stmt.run(productId, conId, conTitle, conDate, productName, price, payment);
-      console.log(`✅ Product ID ${productId} stored successfully`)
+      // Insert the product into the stored_products table
+      await pool.query(insertStmt, [productId, conId, conTitle, conDate, productName, price, payment]);
+      console.log(`✅ Product ID ${productId} stored successfully`);
+    }
 
-    });
+    // After storing, clean up by deleting the associated products and cons
+    await pool.query("DELETE FROM products WHERE conId = $1", [conId]);
+    await pool.query("DELETE FROM cons WHERE id = $1", [conId]);
 
-
-
-
-
-    db.prepare("DELETE FROM products WHERE conId = ?").run(conId);
-
-    db.prepare("DELETE FROM cons WHERE id = ?").run(conId);
-
+    // Success response
     res.status(201).json({ message: "Produkter har lagrats" });
 
   } catch (error) {
+    // Log the error and return an appropriate response
     console.error("Error storing products:", error);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
-
 });
 
-router.get("/:conId", (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { conId } = req.params;
-
-    if (!conId) {
-      return res.status(400).json({ error: "Missing conid" });
-    }
-
-    const stmt = db.prepare("SELECT DISTINCT title FROM stored_products WHERE conId = ? ")
-    const conDetails = stmt.get(conId);
-
-    if (!conDetails) {
-      return res.status(404).json({ error: "Con not found for the given conId" })
-
-    }
-
-    const storedStmt = db.prepare("SELECT id, product, price, payment FROM stored_products WHERE conId = ?")
-
-    const storedProducts = storedStmt.all(conId);
-
-    res.json({
-      title: conDetails.title,
-      products: storedProducts
-
-    })
-
-
+    const result = await pool.query("SELECT * FROM stored_products ORDER BY date DESC");
+    res.json(result.rows);
   } catch (error) {
-
-    console.error("Error fetching stored products:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error fetching stored products:', error);
+    res.status(500).json({ error: "Internal Server Error" })
 
 
   }
+
+})
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM stored_products WHERE "conId" = $1 ORDER BY date desc',
+      [id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "No stored products found for this con!" })
+    }
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching stored products by conId:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+
 });
 
-router.delete("/:conId", (req, res) => {
-  try {
-    const { conId } = req.params;
-    const stmt = db.prepare("DELETE FROM stored_products WHERE conId = ?")
-    const result = stmt.run(conId);
+router.delete('/:conId', async (req, res) => {
+  const { conId } = req.params;
 
-    if (result.changes === 0) {
-      return res.status(404).json({ error: "Finns ingen data för detta konvent." })
-    }
-    res.json({ message: "All data har blivit raderad." });
-  } catch (error) {
-    console.error("Error deleting sales data:", error);
-    res.status(500).json({ error: "Failed to delete sales data." })
+  try {
+    const result = await pool.query(
+      'DELETE FROM stored_products WHERE "conId" = $1',
+      [conId]
+    );
+
+    res.status(200).json({ message: 'Bortaggning lyckades' });
+
+
+  } catch (err) {
+    console.error('Error deleting stored products:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
 
   }
 
 
 })
 
-router.get("/", (req, res) => {
-  try {
-    const stmt = db.prepare("SELECT * FROM stored_products");
-    const storedProducts = stmt.all();
-
-    res.json(storedProducts);
-  } catch (error) {
-    console.error("Error fetching stored products:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-
-module.exports = router;
- */
-
-
-const express = require('express');
-const router = express.Router();
-const { Pool } = require('pg');
-const pool = require('../db');  // Använd samma pool som vi skapat i db.js
-
-router.post('/store', async (req, res) => {
-  try {
-    const { conId, products } = req.body;
-
-    if (!conId || !products || products.length === 0) {
-      return res.status(400).json({ error: "Missing conId or products" });
-    }
-
-    // Hämtar konventionstiteln och -datum
-    const conResult = await pool.query("SELECT title, date FROM cons WHERE id = $1", [conId]);
-    const { title: conTitle, date: conDate } = conResult.rows[0];
-
-    const insertStmt = `
-            INSERT INTO stored_products (productId, conId, title, date, product, price, payment)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-        `;
-
-    for (let product of products) {
-      const { productId, price, payment } = product;
-
-      // Hämtar produktens namn
-      const productResult = await pool.query("SELECT product FROM products WHERE id = $1", [productId]);
-
-      if (!productResult.rows.length) {
-        console.error(`❌ Product not found for ID: ${productId}`);
-        return;
-      }
-
-      const productName = productResult.rows[0].product;
-
-      if (!productId || !productName || !price || !payment) {
-        console.error("❌ Missing required fields in product:", product);
-        return;
-      }
-
-      await pool.query(insertStmt, [productId, conId, conTitle, conDate, productName, price, payment]);
-      console.log(`✅ Product ID ${productId} stored successfully`);
-    }
-
-    await pool.query("DELETE FROM products WHERE conId = $1", [conId]);
-    await pool.query("DELETE FROM cons WHERE id = $1", [conId]);
-
-    res.status(201).json({ message: "Produkter har lagrats" });
-  } catch (error) {
-    console.error("Error storing products:", error);
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
-  }
-});
-
-router.get("/:conId", async (req, res) => {
-  try {
-    const { conId } = req.params;
-
-    const conResult = await pool.query("SELECT DISTINCT title FROM stored_products WHERE conId = $1", [conId]);
-
-    if (!conResult.rows.length) {
-      return res.status(404).json({ error: "Con not found for the given conId" });
-    }
-
-    const storedProductsResult = await pool.query("SELECT id, product, price, payment FROM stored_products WHERE conId = $1", [conId]);
-
-    res.json({
-      title: conResult.rows[0].title,
-      products: storedProductsResult.rows
-    });
-  } catch (error) {
-    console.error("Error fetching stored products:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-router.delete("/:conId", async (req, res) => {
-  try {
-    const { conId } = req.params;
-    const result = await pool.query("DELETE FROM stored_products WHERE conId = $1", [conId]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Finns ingen data för detta konvent." });
-    }
-    res.json({ message: "All data har blivit raderad." });
-  } catch (error) {
-    console.error("Error deleting sales data:", error);
-    res.status(500).json({ error: "Failed to delete sales data." });
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM stored_products");
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching stored products:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
+// Export the router so it can be used in your main server file
 module.exports = router;

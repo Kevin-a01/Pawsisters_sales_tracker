@@ -106,7 +106,7 @@ function HomePage(){
 
 
                 if(!response.ok){
-                    alert(`Failed to store products: ${product.product} (ID: ${product.id}`);
+                    alert(`Failed to store products`);
                     
                 }
                 alert("Alla produkter är lagrade!"),
