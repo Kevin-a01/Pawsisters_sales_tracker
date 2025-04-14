@@ -219,7 +219,8 @@ function AddProduct(){
             /> */}
   
             <input
-              type="number"
+              type="tel"
+              inputmode="numeric"
               name="price"
               placeholder="Pris (SEK)"
               value={form.price}
