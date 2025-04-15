@@ -179,35 +179,38 @@ function AddProduct(){
             ) : (
               <h2 className="text-xl font-black text-pink-300">{conTitle}</h2>
             )}
+              <input
+              list="productOptions"
+              type="text"
+              name="product"
+              placeholder="Produkt Namn..."
+              value={form.product}
+              onChange={handleChange}
+              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 appearance-none lg:w-1/4"
+            /> 
 
-            <select className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 appearance-none lg:w-1/4"
-            name="product"
-            value={form.product}
-            onChange={handleChange}
-            >
-            <option value="">
-            Välj en produkt...
-            </option>
+            <datalist id="productOptions">
             <option value="Mushroom Villager">
               Mushroom Villager
             </option>
+
             <option value="Keychain">
               Keychain
             </option>
+
             <option value="1 Sticker">
                1 Sticker
             </option>
+
             <option value="5 Stickers">
               5 Stickers
             </option>
+
             <option value="Duckling">
               Duckling
             </option>
-
             
-
-            </select>
-
+            </datalist>
 
             {/* <input
               type="text"
