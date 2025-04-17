@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
 function SalesDetail() {
+     
+
     const { conId } = useParams();
     const navigate = useNavigate();
     const [conTitle, setConTitle] = useState("");
@@ -41,6 +43,11 @@ function SalesDetail() {
 
         fetchSales();
     }, [conId]);
+
+        useEffect(() => {
+            document.title = `Detaljer för ${conTitle}` 
+
+        })
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm("Är du säker att du vill ta bort all försäljningsdata?");
@@ -124,7 +131,7 @@ function SalesDetail() {
                 )}
 
                 <div className="flex flex-col">
-                    <h2 className="text-lg font-medium mt-4">
+                    <h2 className="text-xl font-medium mt-4 mb-1 text-pink-400">
                         Totalen för dagen: {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
                     </h2>
 
