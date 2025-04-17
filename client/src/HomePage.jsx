@@ -39,6 +39,11 @@ function HomePage(){
         .catch((err) => console.error("Error fetching conventions", err));
     }, []);
 
+    useEffect(() => {
+        document.title = "PawSisters Sale Tracker"
+
+    })
+
     const deleteProduct = async (id) => {
 
         console.log("Attempting to delete product with ID:", id); 

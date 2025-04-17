@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 
 function AddProduct(){
+  document.title = "Lägg till produkt"
+  
   const navigate = useNavigate();
+
 
   const [products, setProducts] = useState([]);
   const [conTitle, setConTitle] = useState("");
@@ -267,7 +270,10 @@ function AddProduct(){
     </>
   );
   
+  
+    
 
+  
 }
 
 
