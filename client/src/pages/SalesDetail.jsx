@@ -125,7 +125,7 @@ function SalesDetail() {
 
                 <div className="flex flex-col">
                     <h2 className="text-lg font-medium mt-4">
-                        Totalen för dagen: {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)} KR
+                        Totalen för dagen: {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
                     </h2>
 
                     {sales.length > 0 && (
