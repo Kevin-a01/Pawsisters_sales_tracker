@@ -41,12 +41,10 @@ function HomePage(){
 
     const deleteProduct = async (id) => {
 
-        console.log("Attempting to delete product with ID:", id); // DEBUG
+        console.log("Attempting to delete product with ID:", id); 
 
         if(!window.confirm("Vill du verkligen ta bort denna produkt?")) return;
         try{
-           
-            
             const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {method: "DELETE"});
 
             if(!response.ok) {
@@ -146,13 +144,14 @@ return(
             </Link>
             
         </div>
-        <h1 className="text-center text-4xl font-bold mb-3 text-pink-300" >{conTitle}</h1>
+        <h1 className="text-center text-4xl font-bold mb-4 text-pink-300" >{conTitle}</h1>
         <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
         <table className="w-full border-collapse border border-pink-300 mt-5 lg:w-4/5 lg:mx-auto">
             <thead className="">
                 <tr>
                     <th className="border-2 border-pink-300 p-2 text-xl">Produkt</th>
-                    <th className="border-2 border-pink-300 p-2 text-xl">Pris</th>
+                    <th className="border-2 border-pink-300 p-2 text-xl"
+                    >Pris</th>
                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Betalning</th>
                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Action</th>
                 </tr>

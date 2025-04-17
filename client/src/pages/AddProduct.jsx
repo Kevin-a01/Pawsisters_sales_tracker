@@ -164,7 +164,7 @@ function AddProduct(){
     <>
       <Header />
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-center text-3xl text-pink-300 mt-3 pb-1">Loading...</div>
       ) : (
         <div className="p-3">
           <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2">
@@ -211,15 +211,6 @@ function AddProduct(){
             </option>
             
             </datalist>
-
-            {/* <input
-              type="text"
-              name="product"
-              placeholder="Produkt Namn..."
-              value={form.product}
-              onChange={handleChange}
-              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500"
-            /> */}
   
             <input
               type="tel"
