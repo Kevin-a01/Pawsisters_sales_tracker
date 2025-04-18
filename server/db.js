@@ -11,7 +11,7 @@ const pool = new Pool({
 
 // Kontrollera om anslutningen fungerar och logga resultatet
 pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database');
+  console.log('');
 });
 
 // Exportera poolen så att den kan användas i andra delar av applikationen
