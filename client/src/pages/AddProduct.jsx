@@ -212,6 +212,10 @@ function AddProduct(){
             <option value="Duckling">
               Duckling
             </option>
+
+            <option value="Mystery Bag">
+              Mystery Bag
+            </option>
             
             </datalist>
   
