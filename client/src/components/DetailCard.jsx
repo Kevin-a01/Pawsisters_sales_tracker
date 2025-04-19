@@ -53,8 +53,8 @@ function DetailCard( {refreshTrigger}){
             {cons.map((con) => (
               <div key={con.conId} className="border border-transparent w-full rounded-xl hover:border-purple-500 bg-pink-300">
               <Link to={`/sales-details/${con.conId}`} className="text-lg">
-              <h2 className="text-center font-medium text-2xl">{con.title}</h2>
-              <h2 className="text-center text-xl pb-2">{con.date}</h2>
+              <h2 className="text-center font-medium text-xl">{con.title}</h2>
+              <h2 className="text-center text-lg pb-2">{con.date}</h2>
               </Link>
             </div>
           ))}

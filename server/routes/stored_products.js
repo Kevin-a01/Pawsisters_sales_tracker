@@ -1,13 +1,13 @@
 const express = require('express');
-const router = express.Router(); // Add this line to initialize the router
-const pool = require('../db');  // Import the pool from your database connection file (if needed)
+const router = express.Router(); 
+const pool = require('../db'); 
 
 // Your existing route definition
 router.post('/store', async (req, res) => {
   try {
     const { conId, products } = req.body;
 
-    // Check if conId or products are missing or empty
+    
     if (!conId || !products || products.length === 0) {
       console.error('❌ Missing conId or products in request body');
       return res.status(400).json({ error: "Missing conId or products" });
@@ -25,8 +25,8 @@ router.post('/store', async (req, res) => {
 
     // Insert query for storing products
     const insertStmt = `
-      INSERT INTO stored_products ("productId", "conId", title, date, product, price, payment)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO stored_products ("productId", "conId", title, date, product, price, payment, maker)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
 
     // Iterate over the products array and store each product
@@ -34,7 +34,7 @@ router.post('/store', async (req, res) => {
       const { productId, price, payment } = product;
 
       // Fetch product name by productId
-      const productResult = await pool.query("SELECT product FROM products WHERE id = $1", [productId]);
+      const productResult = await pool.query("SELECT product, maker FROM products WHERE id = $1", [productId]);
 
       if (!productResult.rows.length) {
         console.error(`❌ Product not found for ID: ${productId}`);
@@ -42,15 +42,16 @@ router.post('/store', async (req, res) => {
       }
 
       const productName = productResult.rows[0].product;
+      const maker = productResult.rows[0].maker;
 
       // Validate required fields in the product object
-      if (!productId || !productName || !price || !payment) {
+      if (!productId || !productName || !price || !payment || !maker) {
         console.error("❌ Missing required fields in product:", product);
         return res.status(400).json({ error: "Missing required fields in product" });
       }
 
       // Insert the product into the stored_products table
-      await pool.query(insertStmt, [productId, conId, conTitle, conDate, productName, price, payment]);
+      await pool.query(insertStmt, [productId, conId, conTitle, conDate, productName, price, payment, maker]);
       console.log(`✅ Product ID ${productId} stored successfully`);
     }
 
