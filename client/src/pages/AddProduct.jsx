@@ -206,6 +206,10 @@ function AddProduct(){
               Mushroom Villager
             </option>
 
+            <option value="Keychain">
+              Keychain
+            </option>
+
             <option value="1 Sticker">
                1 Sticker
             </option>
