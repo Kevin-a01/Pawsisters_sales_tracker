@@ -10,6 +10,7 @@ function HomePage(){
     const [conId, setConId] = useState(null);
     const [isStoring, setIsStoring] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [totalSales, setTotalSales] = useState(0);
 
     const API_BASE_URL = import.meta.env.PROD 
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
@@ -44,6 +45,12 @@ function HomePage(){
 
     })
 
+    useEffect(() => {
+        const total = products.reduce((sum, product) => sum + Number(product.price), 0);
+        setTotalSales(total);
+
+    }, [products])
+
     const deleteProduct = async (id) => {
 
         console.log("Attempting to delete product with ID:", id); 
@@ -69,6 +76,8 @@ function HomePage(){
     };
 
     const storedProducts = async () => {
+
+        if(!window.confirm('Vill du verkligen lagra alla produkter?')) return;
         console.log("Storing products with conId:", conId);
         console.log("Products to store:", products);
 
@@ -162,6 +171,9 @@ return(
                     <th className="border-2 border-pink-300 p-1 text-lg w-fit">Action</th>
                 </tr>
             </thead>
+
+            
+            
             <tbody>
                 {products.length > 0 ? (
                     products.map((product) =>(
@@ -191,6 +203,8 @@ return(
                             </td>
                         </tr>
 
+                        
+
 
                     ))
                 ) : (
@@ -202,6 +216,7 @@ return(
                 )}
             </tbody>
         </table>
+        <h2 className="mt-3 font-mono font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
 
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>

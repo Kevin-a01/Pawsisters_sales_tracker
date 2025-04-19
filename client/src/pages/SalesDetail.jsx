@@ -12,6 +12,7 @@ function SalesDetail() {
     const [conTitle, setConTitle] = useState("");
     const [sales, setSales] = useState([]);
     const [totalRevenue, setTotalRevenue] = useState(0);
+    const [filterMaker, setFilterMaker] = useState("");
     const [filterPayment, setFilterPayment] = useState("");
 
     const API_BASE_URL = import.meta.env.PROD
@@ -72,9 +73,16 @@ function SalesDetail() {
         }
     };
 
-    const filteredSales = filterPayment
-        ? sales.filter(sale => sale.payment.toLowerCase() === filterPayment.toLowerCase())
-        : sales;
+    const filteredSales = sales.filter((sale) => {
+        const payMatch = filterPayment
+        ? sale.payment.toLowerCase() === filterPayment.toLowerCase()
+        : true;
+        const makerMatch = filterMaker
+        ? sale.maker.toLowerCase() === filterMaker.toLowerCase()
+        : true
+
+        return payMatch && makerMatch;
+    });
 
     return (
         <>
@@ -95,11 +103,33 @@ function SalesDetail() {
                         <option value="Kort">Kort</option>
                         <option value="Kontant">Kontant</option>
                     </select>
+                    
                 </div>
+
+                <div className="flex justify-center mt-4">
+                    <label className="mr-2 font-medium mt-1 text-xl">Filtrera efter skapare.</label>
+
+                    <select  className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300" 
+                    onChange={(e) => setFilterMaker(e.target.value)}
+                    value={filterMaker}>
+
+                        <option value="">Alla</option>
+                        
+                        <option value="T">T</option>
+                        
+                        <option value="M">M</option>
+
+                        <option value="T-M">T-M</option>
+            
+                    </select>
+
+                </div>
+
+               
 
                 {filteredSales.length === 0 ? (
                     <p className="text-xl text-center py-5 font-medium">
-                        Ingen betalningsmetod matchar!
+                        Ingen matchingar!
                     </p>
                 ) : (
                     <>
@@ -109,6 +139,11 @@ function SalesDetail() {
                                     <th className=" border-2 border-pink-300 p-2">
                                         Produkt
                                     </th>
+
+                                    <th className="border-2 border-pink-300 p-2">
+                                        Maker
+                                    </th>
+
                                     <th className="border-2 border-pink-300 p-2">
                                         Pris
                                     </th>
@@ -121,6 +156,9 @@ function SalesDetail() {
                                 {filteredSales.map((sale) => (
                                     <tr key={`${sale.id}`}>
                                         <td className="border-2 border-pink-300 p-2 text-center">{sale.product}</td>
+
+                                        <td className="border-2 border-pink-300 p-2 text-center">{sale.maker}</td>
+
                                         <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
                                         <td className="border-2 border-pink-300 p-2 text-center">{sale.payment}</td>
                                     </tr>

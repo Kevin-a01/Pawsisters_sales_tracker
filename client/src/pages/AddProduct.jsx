@@ -94,7 +94,7 @@ function AddProduct(){
       (key) => form.payment[key]
     );
 
-    if (!form.product || !form.price || selectedPayments.length === 0){
+    if (!form.product || !form.price || !form.maker || selectedPayments.length === 0){
 
       alert('Var snäll och fyll i alla fält.');
       return;
@@ -159,7 +159,8 @@ function AddProduct(){
         ...form,
         product:"",
         price: "",
-        payment: { Swish: false, Kort: false, Kontant: false}
+        payment: { Swish: false, Kort: false, Kontant: false},
+        maker: "",
       });
 
       navigate("/");
@@ -274,7 +275,7 @@ function AddProduct(){
               </label>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 place-items-start w-full lg:w-128 ml-11">
+            <div className="flex gap-5 place-items-start w-full lg:w-128 ml-11">
 
             <label className="text-lg flex items-center gap-2">
                 <input
@@ -296,6 +297,17 @@ function AddProduct(){
                   onChange={handleMakerChange}
                 />
                 M
+              </label>
+
+              <label className="text-lg flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="maker"
+                  value="T-M"
+                  checked={form.maker === "T-M"}
+                  onChange={handleMakerChange}
+                />
+                T-M
               </label>
 
             </div>
