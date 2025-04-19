@@ -157,6 +157,7 @@ return(
                     <th className="border-2 border-pink-300 p-2 text-xl">Produkt</th>
                     <th className="border-2 border-pink-300 p-2 text-xl"
                     >Pris</th>
+                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Maker</th>
                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Betalning</th>
                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Action</th>
                 </tr>
@@ -171,6 +172,10 @@ return(
 
                             <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
                                 {product.price}kr
+                            </td>
+
+                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
+                                {product.maker}
                             </td>
 
                             <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">

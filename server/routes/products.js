@@ -98,15 +98,15 @@ const pool = require('../db');  // Använd samma pool som vi skapat i db.js
 
 router.post('/', async (req, res) => {
   try {
-    const { product, price, payment, conId } = req.body;
+    const { product, price, payment, conId, maker } = req.body;
 
     if (!product || !price || !payment || !conId) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
     const result = await pool.query(
-      'INSERT INTO products (product, price, payment, conId) VALUES ($1, $2, $3, $4) RETURNING id',
-      [product, price, payment, conId]
+      'INSERT INTO products (product, price, payment, conId , maker) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      [product, price, payment, conId, maker]
     );
 
     console.log("Product inserted, ID:", result.rows[0].id);

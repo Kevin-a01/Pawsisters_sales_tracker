@@ -17,6 +17,7 @@ function AddProduct(){
     product: "",
     price: "",
     payment: {Swish: false, Kort: false, Kontant: false},
+    maker: "",
   });
 
   const API_BASE_URL = import.meta.env.PROD 
@@ -75,6 +76,12 @@ function AddProduct(){
 
   }
 
+  const handleMakerChange = (e) => {
+
+    setForm({...form, maker: e.target.value});
+
+  }
+
   const handleCheckbox = (e) => {
 
     setForm({...form, payment:{...form.payment, [e.target.name]: e.target.checked},});
@@ -124,6 +131,7 @@ function AddProduct(){
           price: parseFloat(form.price),
           payment: selectedPayments.join(", "),
           conId: currentConId,
+          maker: form.maker,
         }),
       });
       const productData = await productResponse.json();
@@ -261,6 +269,33 @@ function AddProduct(){
                 Kontant
               </label>
             </div>
+
+            <div className="grid grid-cols-1 gap-3 place-items-start w-full lg:w-128 ml-11">
+
+            <label className="text-lg flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="maker"
+                  value="T"
+                  checked={form.maker === "T"}
+                  onChange={handleMakerChange}
+                />
+                T
+              </label>
+
+              <label className="text-lg flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="maker"
+                  value="M"
+                  checked={form.maker === "M"}
+                  onChange={handleMakerChange}
+                />
+                M
+              </label>
+
+            </div>
+
   
             <button
               type="submit"
