@@ -153,13 +153,13 @@ return(
         <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
         <table className="w-full border-collapse border border-pink-300 mt-5 lg:w-4/5 lg:mx-auto">
             <thead className="">
-                <tr>
-                    <th className="border-2 border-pink-300 p-2 text-xl">Produkt</th>
-                    <th className="border-2 border-pink-300 p-2 text-xl"
+                <tr className="w-screen">
+                    <th className="border-2 border-pink-300 p-1 text-lg">Produkt</th>
+                    <th className="border-2 border-pink-300 p-1 text-lg"
                     >Pris</th>
-                     <th className="border-2 border-pink-300 p-2 text-xl w-fit">Maker</th>
-                    <th className="border-2 border-pink-300 p-2 text-xl w-fit">Betalning</th>
-                    <th className="border-2 border-pink-300 p-2 text-xl w-fit">Action</th>
+                     <th className="border-2 border-pink-300 p-1 text-lg w-fit">Maker</th>
+                    <th className="border-2 border-pink-300 p-1 text-lg w-fit">Betalning</th>
+                    <th className="border-2 border-pink-300 p-1 text-lg w-fit">Action</th>
                 </tr>
             </thead>
             <tbody>
