@@ -58,7 +58,7 @@ function AddProduct(){
         console.error("Error checking conventions: ",error);
         
       }finally{
-          setLoading(false); 
+           setLoading(false);  
 
       }
     };
@@ -176,9 +176,9 @@ function AddProduct(){
     <>
       <Header />
       {loading ? (
-        <div className="flex justify-center items-center mt-3 pb-1 text-2xl text-pink-300 gap-3">
-          🧁 Laddar...
-        <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-pink-300"></div>
+        <div className="flex justify-center items-center mt-3 pb-1 gap-9">
+          <p className="text-2xl text-pink-300 animate-pulse">🧁 Laddar...</p>
+        <div className="animate-spin rounded-full h-9 w-9 border-t-4 border-pink-300"></div>
         </div>
       ) : (
         <div className="p-3">
