@@ -216,7 +216,7 @@ return(
                 )}
             </tbody>
         </table>
-        <h2 className="mt-3 font-mono font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
+        <h2 className="mt-3 text-lg font-mono font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
 
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>
