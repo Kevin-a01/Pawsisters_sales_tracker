@@ -74,11 +74,17 @@ function SalesDetail() {
     };
 
     const filteredSales = sales.filter((sale) => {
+
+        const pay = sale.payment?.toLowerCase() ?? "";
+        const maker = sale.maker?.toLowerCase() ?? "";
+
+
         const payMatch = filterPayment
-        ? sale.payment.toLowerCase() === filterPayment.toLowerCase()
+        ? pay === filterPayment.toLowerCase()
         : true;
+
         const makerMatch = filterMaker
-        ? sale.maker.toLowerCase() === filterMaker.toLowerCase()
+        ? maker === filterMaker.toLowerCase()
         : true
 
         return payMatch && makerMatch;
