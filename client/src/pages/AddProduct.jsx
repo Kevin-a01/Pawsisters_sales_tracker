@@ -58,7 +58,7 @@ function AddProduct(){
         console.error("Error checking conventions: ",error);
         
       }finally{
-        setLoading(false);
+          setLoading(false); 
 
       }
     };
@@ -176,7 +176,10 @@ function AddProduct(){
     <>
       <Header />
       {loading ? (
-        <div className="text-center text-3xl text-pink-300 mt-3 pb-1">Loading...</div>
+        <div className="flex justify-center items-center mt-3 pb-1 text-2xl text-pink-300 gap-3">
+          🧁 Laddar...
+        <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-pink-300"></div>
+        </div>
       ) : (
         <div className="p-3">
           <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2">
