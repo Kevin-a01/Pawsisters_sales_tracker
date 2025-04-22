@@ -1,13 +1,13 @@
 const express = require('express');
-const router = express.Router(); 
-const pool = require('../db'); 
+const router = express.Router();
+const pool = require('../db');
 
-// Your existing route definition
+
 router.post('/store', async (req, res) => {
   try {
     const { conId, products } = req.body;
 
-    
+
     if (!conId || !products || products.length === 0) {
       console.error('❌ Missing conId or products in request body');
       return res.status(400).json({ error: "Missing conId or products" });
