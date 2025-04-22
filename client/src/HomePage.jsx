@@ -147,7 +147,7 @@ function HomePage(){
 return(
     <>
     <Header/>
-    <div className="p-2 lg:flex lg:flex-col lg:justify-center">
+    <div className="p-2 lg:flex lg:flex-col lg:justify-center ">
 
         <div className="flex justify-between items-center pb-8">
             <button className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl cursor-pointer" onClick={storedProducts}>
@@ -160,7 +160,7 @@ return(
         </div>
         <h1 className="text-center text-4xl font-bold mb-4 text-pink-300" >{conTitle}</h1>
         <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
-        <table className="w-full border-collapse border border-pink-300 mt-5 lg:w-4/5 lg:mx-auto">
+        <table className="w-full border-collapse border-2 border-pink-300 mt-5 lg:w-4/5 lg:mx-auto">
             <thead className="">
                 <tr className="w-screen">
                     <th className="border-2 border-pink-300 p-1 text-lg">Produkt</th>
@@ -168,7 +168,7 @@ return(
                     >Pris</th>
                      <th className="border-2 border-pink-300 p-1 text-lg w-fit">Maker</th>
                     <th className="border-2 border-pink-300 p-1 text-lg w-fit">Betalning</th>
-                    <th className="border-2 border-pink-300 p-1 text-lg w-fit">Action</th>
+                    <th className="border-2 border-pink-300 p-1 text-lg w-fit ">Action</th>
                 </tr>
             </thead>
 
@@ -216,7 +216,7 @@ return(
                 )}
             </tbody>
         </table>
-        <h2 className="mt-3 text-center pt-2 text-lg font-mono font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
+        <h2 className="mt-3 text-center pt-2 text-lg font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
 
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>

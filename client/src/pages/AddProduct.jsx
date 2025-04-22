@@ -242,7 +242,7 @@ function AddProduct(){
             />
   
             <div className="grid grid-cols-1 gap-3 place-items-start w-full lg:w-128 ml-11">
-              <label className="text-lg flex items-center gap-2">
+              <label className="text-lg flex items-center gap-2  text-pink-500">
                 <input
                   type="checkbox"
                   name="Swish"
@@ -252,7 +252,7 @@ function AddProduct(){
                 Swish
               </label>
   
-              <label className="text-lg flex items-center gap-2">
+              <label className="text-lg flex items-center gap-2 text-pink-500">
                 <input
                   
                   type="checkbox"
@@ -263,7 +263,7 @@ function AddProduct(){
                 Kort
               </label>
   
-              <label className="text-lg flex items-center gap-2">
+              <label className="text-lg flex items-center gap-2 text-pink-500">
                 <input
                   type="checkbox"
                   name="Kontant"
@@ -276,7 +276,7 @@ function AddProduct(){
 
             <div className="flex gap-5 place-items-start w-full lg:w-128 ml-11">
 
-            <label className="text-lg flex items-center gap-2">
+            <label className="text-lg flex items-center gap-2 text-pink-500 ">
                 <input
                   type="radio"
                   name="maker"
@@ -287,7 +287,7 @@ function AddProduct(){
                 T
               </label>
 
-              <label className="text-lg flex items-center gap-2">
+              <label className="text-lg flex items-center gap-2 text-pink-500 ">
                 <input
                   type="radio"
                   name="maker"
@@ -298,7 +298,7 @@ function AddProduct(){
                 M
               </label>
 
-              <label className="text-lg flex items-center gap-2">
+              <label className="text-lg flex items-center gap-2 text-pink-500">
                 <input
                   type="radio"
                   name="maker"
@@ -314,9 +314,9 @@ function AddProduct(){
   
             <button
               type="submit"
-              className="border border-transparent text-2xl cursor-pointer p-3 bg-pink-300 rounded-xl shadow-2xl"
+              className="border border-transparent text-2xl cursor-pointer p-3 bg-pink-300 rounded-xl shadow-pink-500 shadow-md"
             >
-              Lägg till produkt
+              Lägg till produkt!
             </button>
           </form>
         </div>
