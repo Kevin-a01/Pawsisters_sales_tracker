@@ -209,14 +209,14 @@ return(
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="3" className="border-2 border-pink-300 p-2 text-center">
-                        Inga sålda produkter.
+                        <td colSpan="3" className="border-2 border-pink-300 p-2 text-center text-pink-400 ">
+                        Inga sålda produkter...
                         </td>
                     </tr>
                 )}
             </tbody>
         </table>
-        <h2 className="mt-3 text-lg font-mono font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
+        <h2 className="mt-3 text-center pt-2 text-lg font-mono font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
 
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>
