@@ -51,6 +51,14 @@ function SalesDetail() {
         })
 
     const handleDelete = async () => {
+        const password = prompt("Ange lösenord för att ta bort försäljningsdata:");
+
+        if(!password) {
+            alert("Lösenord krävs.")
+            return;
+        }
+
+
         const confirmDelete = window.confirm("Är du säker att du vill ta bort all försäljningsdata?");
         if (!confirmDelete) return;
 
@@ -109,13 +117,16 @@ function SalesDetail() {
                         <option value="Kort">Kort</option>
                         <option value="Kontant">Kontant</option>
                     </select>
+
                     
                 </div>
+
+                
 
                 <div className="flex justify-center mt-4">
                     <label className="mr-2 font-medium mt-1 text-xl">Filtrera efter skapare.</label>
 
-                    <select  className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300" 
+                    <select  className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300 " 
                     onChange={(e) => setFilterMaker(e.target.value)}
                     value={filterMaker}>
 
@@ -130,6 +141,10 @@ function SalesDetail() {
                     </select>
 
                 </div>
+
+                <h2 className="text-2xl font-medium mt-4 mb-1 text-pink-400">
+                        Totalen för dagen: {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
+                    </h2>
 
                
 
@@ -174,11 +189,7 @@ function SalesDetail() {
                     </>
                 )}
 
-                <div className="flex flex-col">
-                    <h2 className="text-xl font-medium mt-4 mb-1 text-pink-400">
-                        Totalen för dagen: {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
-                    </h2>
-
+                <div className="flex flex-col">                   
                     {sales.length > 0 && (
                         <button
                             className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400"
