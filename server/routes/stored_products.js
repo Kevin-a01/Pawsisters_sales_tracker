@@ -103,14 +103,14 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:conId', async (req, res) => {
   const { conId } = req.params;
-  const { password } = req.body;
-
-  const DELETE_PASSWORD = process.env.DELETE_PASSWORD;
-
-  if (!password || password !== DELETE_PASSWORD) {
-    return res.status(401).json({ error: "Fel lösenord" });
-
-  }
+  /*  const { password } = req.body;
+ 
+   const DELETE_PASSWORD = process.env.DELETE_PASSWORD;
+ 
+   if (!password || password !== DELETE_PASSWORD) {
+     return res.status(401).json({ error: "Fel lösenord" });
+ 
+   } */
 
 
   try {

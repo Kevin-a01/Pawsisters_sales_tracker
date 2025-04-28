@@ -51,12 +51,12 @@ function SalesDetail() {
         })
 
     const handleDelete = async () => {
-        const password = prompt("Ange lösenord för att ta bort försäljningsdata:");
+        /* const password = prompt("Ange lösenord för att ta bort försäljningsdata:");
 
         if(!password) {
             alert("Lösenord krävs.")
             return;
-        }
+        } */
 
 
         const confirmDelete = window.confirm("Är du säker att du vill ta bort all försäljningsdata?");
@@ -69,7 +69,7 @@ function SalesDetail() {
                     "Content-Type": "application/json",
 
                 },
-                body: JSON.stringify({password}),
+                /* body: JSON.stringify({password}), */
             });
 
             if (!response.ok) {
