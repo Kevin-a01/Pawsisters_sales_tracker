@@ -65,6 +65,11 @@ function SalesDetail() {
         try {
             const response = await fetch(`${API_BASE_URL}/api/stored_products/${conId}`, {
                 method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+
+                },
+                body: JSON.stringify({password}),
             });
 
             if (!response.ok) {
