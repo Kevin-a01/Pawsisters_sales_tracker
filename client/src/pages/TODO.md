@@ -1,0 +1,1 @@
+Lägg till en Kommande Cons sida som användaren kan lägga till flera olika cons och det blir ett konvent kort som man kan gå in på och göra en TODO som man kan lägga till saker och ta bort eller checka av när man är klar med de.
