@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import DetailCard from "./components/DetailCard";
 import BurgerMenu from "./components/BurgerMenu";
 
-function HomePage(){
+function SalesTracker(){
 
     const [products, setProducts] = useState([]);
     const [conTitle, setConTitle] = useState("");
@@ -225,4 +225,4 @@ return(
 )
 }
 
-export default HomePage;
+export default SalesTracker;
