@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
+import BurgerMenu from "../components/BurgerMenu";
 
 function SalesDetail() {
      
@@ -79,7 +80,7 @@ function SalesDetail() {
             alert("Försäljningsdata borttagen!");
             setSales([]);
             setTotalRevenue(0);
-            navigate("/");
+            navigate("/sales-tracker");
         } catch (error) {
             console.error("Error deleting sales data:", error);
             alert("Misslyckades att ta bort försäljningsdata.");
@@ -105,7 +106,7 @@ function SalesDetail() {
 
     return (
         <>
-            <Header />
+            <BurgerMenu/>
             <div className="p-3">
                 <h1 className="text-2xl lg:text-3xl text-center font-bold font-mono text-pink-300">
                     Försäljning för {conTitle}
