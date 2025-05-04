@@ -85,9 +85,15 @@ router.post('/store', async (req, res) => {
     }
 
     // Attempt to delete from products where conId is provided
-    console.log(`Attempting to delete from products where conId = ${conId}`);
+    /* console.log(`Attempting to delete from products where conId = ${conId}`);
     const deleteProductsResult = await pool.query("DELETE FROM products WHERE conId = $1", [conId]);
-    console.log(`Deleted ${deleteProductsResult.rowCount} rows from products`);
+    console.log(`Deleted ${deleteProductsResult.rowCount} rows from products`); */
+
+    const deleteAllResult = await pool.query("DELETE FROM products");
+    console.log(`Deleted ${deleteAllResult.rowCount} rows from products`);
+    
+
+    
 
     // Delete the con from the cons table based on the provided conId
     console.log(`Cleaning up: deleting con with conId = ${conId}`);
