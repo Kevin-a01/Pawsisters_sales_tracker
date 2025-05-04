@@ -58,16 +58,20 @@ function SalesTracker(){
     useEffect(() => {
         const fetchProducts = async () => {
 
-            if(!conId || conId === 'none') {
-                setProducts([]);
-                setLoading(false)
-                return;
-            }
             setLoading(true);
+
             try{
-                console.log('Fetching products for conId:', conId);
-                
-                const response = await fetch(`${API_BASE_URL}/api/products?conId=${conId}`);
+
+                let url = `${API_BASE_URL}/api/products`;
+                if(conId && conId !== 'none'){
+                    url += `?conId=${conId}`;
+                    console.log('Fetching products for conId:', conId);
+                    
+                }else{
+                    console.log('Fetching all products (no conId)');
+                    
+                }
+                const response = await fetch(url);
                 if(!response.ok){
                     throw new Error('Failed to fetch products');
                 }

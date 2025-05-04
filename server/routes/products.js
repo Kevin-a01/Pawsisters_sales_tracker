@@ -43,23 +43,24 @@ router.get('/', async (req, res) => {
   try {
     const { conId } = req.query;
 
-    if (!conId) {
-      console.log("No conId provided in query");
+    let result;
 
-      return res.status(400).json({ error: "conId is required" });
-    }
-
-    const parsedConId = parseInt(conId);
+    if(conId){
+      const parsedConId = parseInt(conId);
     if (isNaN(parsedConId)) {
       console.log('Invalid conId', conId);
       return res.status(400).json({ error: "Invalid conId" })
     }
     console.log('Fetching products for conId:', parsedConId);
-    const result = await pool.query(`
+     result = await pool.query(`
       SELECT * FROM products WHERE conid = $1
       `, [parsedConId]);
-    console.log('Products fetched from DB:', result.rows);
-    res.json(result.rows);
+    }else{
+      console.log("No conId provided - fetching all products");
+      result = await pool.query("SELECT * FROM products")
+    }
+      res.json(result.rows);
+    
 
 
     /* const result = await pool.query("SELECT * FROM products");

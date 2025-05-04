@@ -179,7 +179,7 @@ function AddProduct(){
       payment: selectedPayments.join(", "),
       conId: currentConId,
       maker: form.maker,
-      ...(currentConId && { conId: currentConId })
+      conId: currentConId,
 
      }
 
