@@ -7,7 +7,7 @@ function SalesTracker(){
     const {state} = useLocation();
     const [products, setProducts] = useState([]);
     const [conId, setConId] = useState(state?.conId || localStorage.getItem('conId') || null);
-  const [conTitle, setConTitle] = useState(state?.conTitle || localStorage.getItem('conTitle') || 'Inget konvent valt');
+  const [conTitle, setConTitle] = useState(state?.conTitle || localStorage.getItem('conTitle') || '');
     const [isStoring, setIsStoring] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [totalSales, setTotalSales] = useState(0);
@@ -184,7 +184,7 @@ function SalesTracker(){
         setIsStoring(true);
         try{
             console.log("Storing product:");
-            if(selectedCons.length === 0 && conId && conTitle !== 'Inget konvent valt'){
+            if(selectedCons.length === 0 && conId && conTitle !== ''){
                 console.log('Storing in current con:', conId, conTitle);
                 const response = await fetch(`${API_BASE_URL}/api/stored_products/store`, {
                     method: "POST",
@@ -225,7 +225,7 @@ function SalesTracker(){
                     });
                     if (!response.ok) throw new Error(`Misslyckades att lagra i ${con.title}`);
                 }
-                if(selectedCons.length > 0 && conId){
+                /* if(selectedCons.length > 0 && conId){
                     try{
                         await fetch(`${API_BASE_URL}/api/products/cons/${conId}` , {
                             method: "DELETE"
@@ -242,12 +242,12 @@ function SalesTracker(){
 
                     }
 
-                }
+                } */
                
 
                 setRefreshTrigger((prev) => prev + 1 );
                 setProducts([]);
-                setConTitle("Inget konvent valt");
+                setConTitle("");
                 setConId(null);
                 localStorage.removeItem("conId")
                 localStorage.removeItem("conTitle");
@@ -275,7 +275,7 @@ return(
             </Link>
             
         </div>
-        <h1 className="text-center text-4xl font-bold mb-4 text-pink-300" >{conTitle}</h1>
+        <h1 className="text-center text-4xl font-bold mb-4 text-pink-300" >{conTitle }</h1>
         <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
         {loading ? (
             <div className="flex justify-center items-center mt-3 pb-1 gap-9">
@@ -351,11 +351,11 @@ return(
 
         {showModal && (
             <div className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">
-                    <h3 className="text-xl font-medium mb-4 text-pink-400">Välj konvent att lagra produkterna i</h3>
+                <div className="bg-pink-200 p-6 rounded-xl shadow-lg w-11/12 max-w-md">
+                    <h3 className="text-xl text-center font-medium mb-4 text-pink-400">Välj ett konvent att lagra produkter i</h3>
                     <div className="max-h-60 overflow-y-auto">
-                        {conId && conTitle !== 'Inget konvent valt' && (
-                            <div>
+                        {conId && conTitle !== '' && (
+                            <div className="flex items-center gap-3 mb-2">
                                 <input 
                                 type="checkbox"
                                 id="current-con"
@@ -367,14 +367,14 @@ return(
                                         setSelectedCons([]);
                                     }
                                 }}
-                                className="mr-2" />
+                                className="mt-0.5 h-4.5 w-4.5 border-2 " />
                                 <label htmlFor="current-con" className="text-pink-500">
                                     {conTitle} (Aktuellt konvent)
                                 </label>
                             </div>
                         )}
                         {storedCons.map((con) =>(
-                            <div key={con.id} className="flex items-center mb-2">
+                            <div key={con.id} className="flex items-center gap-3 mb-2">
                                 <input 
                                 type="checkbox" 
                                 id={`con-${con.id}`}
@@ -386,7 +386,7 @@ return(
                                         setSelectedCons(selectedCons.filter((c) => c.id !== con.id));
                                     }
                                 }} 
-                                className="mr-2"/>
+                                className="h-4.5 w-4.5"/>
                                 <label htmlFor={`con-${con.id}`} className="text-pink-500">
                                     {con.title}
                                 </label>
@@ -394,7 +394,7 @@ return(
                         ))}
                     </div>
                     <div className="flex justify-end mt-4 gap-2">
-                        <button className="border border-purple-500 p-2 rounded-lg"
+                        <button className="border border-purple-500 bg-purple-500 p-2 rounded-lg text-white"
                         onClick={() => {
                             setShowModal(false);
                             setSelectedCons([]);
@@ -402,7 +402,7 @@ return(
                             Avbryt
                         </button>
 
-                        <button className="border border-transparent p-2 bg-pink-300 text-white rounded-lg"
+                        <button className="border border-transparent p-2 bg-pink-400 text-white rounded-lg"
                         onClick={storedProducts}
                         disabled={isStoring}>
                             {isStoring ? 'Lagrar...' : 'Lagra'}
