@@ -6,15 +6,27 @@ const pool = require('../db');
 
 router.post('/', async (req, res) => {
   try {
-    const { product, price, payment, conId, maker } = req.body;
+    let { product, price, payment, conId, maker } = req.body;
 
-    if (!product || !price || !payment || !conId || !maker) {
+    if (!product || !price || !payment || !maker) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
+    /* if (!conId) {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const tempConResult = await pool.query(
+        `INSERT INTO cons (title, date) VALUES ($1, $2) RETURNING id`,
+        ['Temp Con' + Date.now(), currentDate]
+      );
+      conId = tempConResult.rows[0].id;
+      console.log(`Created temporary con with conId: ${conId}`);
+
+
+    } */
+
     const result = await pool.query(
       'INSERT INTO products (product, price, payment, conId , maker) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [product, price, payment, conId, maker]
+      [product, price, payment, conId || null, maker]
     );
 
     console.log("Product inserted, ID:", result.rows[0].id);
@@ -29,15 +41,54 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM products");
+    const { conId } = req.query;
+
+    if (!conId) {
+      console.log("No conId provided in query");
+
+      return res.status(400).json({ error: "conId is required" });
+    }
+
+    const parsedConId = parseInt(conId);
+    if (isNaN(parsedConId)) {
+      console.log('Invalid conId', conId);
+      return res.status(400).json({ error: "Invalid conId" })
+    }
+    console.log('Fetching products for conId:', parsedConId);
+    const result = await pool.query(`
+      SELECT * FROM products WHERE conid = $1
+      `, [parsedConId]);
+    console.log('Products fetched from DB:', result.rows);
     res.json(result.rows);
 
+
+    /* const result = await pool.query("SELECT * FROM products");
+    res.json(result.rows);
+ */
   } catch (error) {
 
     console.error("Error fetching products:", error);
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
+
+router.delete('/cons/:conId', async (req, res) => {
+
+  const conId = parseInt(req.params.conId);
+  if (isNaN(conId)) {
+    return res.status(400).json({ error: "Invalid conId" });
+  }
+  try {
+    const result = await pool.query(`DELETE FROM products WHERE conId = $1`, [conId]);
+    res.json({ message: `Deleted ${result.rowCount} products for conId ${conId}` });
+
+  } catch (err) {
+    console.error("Error deleting products by conId", err);
+
+    res.status(500).json({ error: "Failed to delete products for this con." });
+  }
+
+})
 
 router.delete("/:id", async (req, res) => {
   try {
