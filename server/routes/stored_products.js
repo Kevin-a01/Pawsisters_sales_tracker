@@ -91,9 +91,9 @@ router.post('/store', async (req, res) => {
 
     const deleteAllResult = await pool.query("DELETE FROM products");
     console.log(`Deleted ${deleteAllResult.rowCount} rows from products`);
-    
 
-    
+
+
 
     // Delete the con from the cons table based on the provided conId
     console.log(`Cleaning up: deleting con with conId = ${conId}`);
@@ -168,7 +168,6 @@ router.get('/cons', async (req, res) => {
       FROM stored_products
       ORDER BY "conId" DESC
       `);
-    console.log('Stored cons fetched', result.rows);
     res.json(result.rows);
 
   } catch (err) {
