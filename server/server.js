@@ -10,19 +10,13 @@ const fs = require("fs");
 const path = require("path");
 const { Pool } = require("pg");
 const cors = require('cors');
-
-
 const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
-
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
   },
 });
-
-
 pool.connect((err, client, release) => {
   if (err) {
     console.error("Error connecting to PostgreSQL:", err);
@@ -31,12 +25,8 @@ pool.connect((err, client, release) => {
   }
   release();
 });
-
-
 const app = express();
 const storedProductsRoutes = require("./routes/stored_products");
-
-
 const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors({ origin: "*" }));
