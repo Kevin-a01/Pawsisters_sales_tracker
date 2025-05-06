@@ -9,14 +9,15 @@ export default function CalendarDetailPage() {
     : "http://localhost:5000";
 
   const {date} = useParams();
-  const {eventText, setEventText} = useState("");
-  const {successMessage, setSuccessMessage} = useState("");
+  const [eventTitle, setEventTitle] = useState("");
+  const [eventText, setEventText] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try{
-      const result = await (`${API_BASE_URL}/api/calendar/events`, {
+      const result = await fetch(`${API_BASE_URL}/api/calendar/events`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -26,6 +27,7 @@ export default function CalendarDetailPage() {
 
       if(result.ok){
         setSuccessMessage("Event Sparat!");
+        setEventTitle("");
         setEventText("");
       }else{
         console.error("Error saving event.");
@@ -40,24 +42,31 @@ export default function CalendarDetailPage() {
   return(
     <>
     <BurgerMenu/>
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-medium text-center">Detaljer för {date}</h1>
+     <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-medium text-center">Nytt event för: {date}</h1>
 
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-          <label htmlFor="eventText">
-            Nytt event:
-          </label>
           <input type="text"
-            className="border border-purple-500 rounded-xl p-2 focus:outline-none"
+            value={eventTitle}
+            onChange={(e) => setEventTitle(e.target.value)}
+            className="border border-purple-500 rounded-xl p-2 focus:outline-none mt-5"
             placeholder="Event Titel"
           />
 
           <textarea 
-          rows={32}
+          rows={6}
           id="eventText"
           value={eventText}
+          placeholder="Event Beskrivning"
           onChange={(e) => setEventText(e.target.value)}
            className="h-32 border border-purple-500 rounded-xl focus:outline-none p-2" />
+
+          <div className="flex justify-center">
+            <button className="border w-1/2 h-13 rounded-2xl bg-pink-500 border-none shadow-lg text-lg " type="submit">
+              Spara event
+            </button>
+          </div>
+           
 
       </form>
     </div>

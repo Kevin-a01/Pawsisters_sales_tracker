@@ -24,11 +24,6 @@ export default function Calender() {
   const [events, setEvents] = useState([]);
   const [montlyNote, setMonthlyNote] = useState("");
 
-  /* const startOfMonth = currentMonth.startOf("month");
-  const endOfMonth = currentMonth.endOf("month");
-  const startOfCalendar = startOfMonth.startOf("week");
-  const endOfCalendar = endOfMonth.endOf("week"); */
-
   const daysofWeek = Array.from(
     {length: 7}, (_, i) => 
       currentWeekStart.add(i, "day")
