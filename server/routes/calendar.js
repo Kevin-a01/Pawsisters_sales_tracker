@@ -74,7 +74,18 @@ router.post('/monthly-note', async (req, res) => {
   }
 
 
-})
+});
+
+router.post('/events', async (req, res) => {
+  const {date, title, description} = req.body;
+
+  if(!date || !title) {
+    return res.status(400).json({err: "Missing required fields: date and title"});
+
+  }
+
+
+});
 
 
 
