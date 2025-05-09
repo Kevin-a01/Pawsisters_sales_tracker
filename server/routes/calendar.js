@@ -77,10 +77,24 @@ router.post('/monthly-note', async (req, res) => {
 });
 
 router.post('/events', async (req, res) => {
-  const {date, title, description} = req.body;
+  const { date, title, description } = req.body;
 
-  if(!date || !title) {
-    return res.status(400).json({err: "Missing required fields: date and title"});
+  if (!date || !title) {
+    return res.status(400).json({ err: "Missing required fields: date and title" });
+  }
+  try {
+    await pool.query(`
+      INSERT INTO calendar_events (date, title, description) VALUES ($1, $2, $3)`,
+      [date, title, description]
+    );
+    res.status(201).json({ message: "Event created!" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Internal Server Error."
+    });
+
 
   }
 

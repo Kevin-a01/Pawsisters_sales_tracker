@@ -60,23 +60,40 @@ export default function Calender() {
 
   return(
     <>
-    <div className="max-w-4xl mx-auto px-4 py-6">
+    <div className="max-w-4xl mx-auto px-4 py-5">
       <div className="flex items-center justify-between mb-4">
-          <button onClick={() => handleChangeWeek(-1)} className="bg-pink-500 text-white px-3 py-1 rounded-xl hover:bg-pink-600/50">
+          <button onClick={() => handleChangeWeek(-1)} className="bg-[#F4538B] text-white px-3 py-1 rounded-xl hover:bg-pink-600/50">
           <i className="fa-solid fa-arrow-left"></i>
           </button>
           <h2 className="text-2xl font-medium text-center">
             {weekText}
           </h2>
-          <button onClick={() => handleChangeWeek(1)} className="bg-pink-500 text-white px-3 py-1 rounded-xl hover:bg-pink-600/50">
+          <button onClick={() => handleChangeWeek(1)} className="bg-[#F4538B] text-white px-3 py-1 rounded-xl hover:bg-pink-600/50">
           <i className="fa-solid fa-arrow-right"></i>
           </button>
       </div>
     </div>
 
-    <div className="mb-6 p-4 m-3 bg-purple-400 border border-pink-300 rounded-xl shadow-sm shadow-red-500">
-      <h3 className="font-medium text-xl pb-2 ">Månadsnotis</h3>
+    <div className="mb-4 p-4 m-3 bg-[#FCD4DF] border border-pink-300 rounded-xl shadow-sm shadow-[#F4538B]">
+      <div className="flex flex-row-reverse justify-between">
+        <Link to="/add-monthly-note" className="text-2xl -mt-3 -mr-1">
+        <i class="fa-solid fa-pen-to-square"></i>
+        </Link>
+         <h3 className="font-bold text-xl pb-2 ">Månadsnotis</h3>
+      </div>
+      
+     
       <p className="font-medium">{montlyNote || "Ingen notering denna månad."}</p>
+    <ul className="mt-3 list-disc list-inside text-[#F4538B] font-medium">
+      <h3>Cons:</h3>
+      {events.filter((event) => dayjs(event.date).isSame(currentWeekStart, "month"))
+      .map((event) => (
+        <li key={event.id}>
+          {event.title}
+        </li>
+      ))}
+    </ul>
+
     </div>
 
     <div className=" hidden sm:grid grid-cols-7 gap-1 text-md font-medium text-center m-3 bg-pink-300 ">
@@ -97,14 +114,31 @@ export default function Calender() {
 
       return(
         <Link to={`/calendar/${day.format('YYYY-MM-DD')}`}>
-        <div key={day.format("YYYY-MM-DD")} className={`p-2 w-45 shrink-0 border rounded-xl flex flex-row justify-evenly sm:justify-start  cursor-pointer h-36 
-        ${isToday ? "bg-white" : "bg-gray-100 text-gray-400"}
-        ${isEventDay ? "border-blue-500" : "border-gray-200"} hover:bg-blue-50`}>
-          <span className="text-md font-semibold">
+        
+        <div key={day.format("YYYY-MM-DD")} className={`p-2 w-45 shrink-0 border rounded-xl flex flex-col justify-between sm:justify-start  cursor-pointer h-36 realtive
+        ${isToday ? "bg-white" : "bg-gray-200 text-gray-400"}
+        ${isEventDay ? "border-[#F4538B]" : "border-gray-200"} hover:bg-pink-50`}>
+
+          <span className="text-md font-semibold text-center">
             {dayName} - {formattedDate}</span>
-            {isEventDay && (
-              <span className="w-2 h-2 bg-blue-500 rounded-full mt-auto mb-1"></span>
-            )}
+            <div className="">
+            {events
+            .filter((event) => dayjs(event.date).isSame(day, "day"))
+            .map((event) => (
+              <>
+              <div key={event.id} className="text-md">
+                Event: {event.title}
+                <p className="text-sm">
+                  {event.description}
+                </p>
+              </div>
+
+              
+              </>
+
+            ))}
+
+            </div>
         </div>
         </Link>
       )
