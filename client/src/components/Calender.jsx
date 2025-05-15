@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import isoWeek from "dayjs/plugin/isoWeek";
@@ -20,7 +20,7 @@ export default function Calender() {
   ? "https://pawsisterssalestracker-production-529b.up.railway.app"
   : "http://localhost:5000";
 
-  const [currentWeekStart, setCurrentWeekStart] = useState(dayjs().startOf("issoWeek"));
+  const [currentWeekStart, setCurrentWeekStart] = useState(dayjs().startOf("isoWeek"));
   const [events, setEvents] = useState([]);
   const [montlyNote, setMonthlyNote] = useState("");
 
@@ -28,6 +28,16 @@ export default function Calender() {
     {length: 7}, (_, i) => 
       currentWeekStart.add(i, "day")
   );
+
+  const scrollRef = useRef();
+
+  useEffect(() => {
+
+    if(scrollRef.current){
+      scrollRef.current.scrollLeft = 0
+    }
+
+  }, [currentWeekStart]);
 
   useEffect(() => {
     const start = currentWeekStart.format("YYYY-MM-DD");
@@ -102,7 +112,7 @@ export default function Calender() {
       ))}
     </div>
 
-  <div className="overflow-x-auto m-3">
+  <div ref={scrollRef} className="overflow-x-auto m-3">
     <div className="flex gap-2 min-w-[700px]  m-2 p-2">
       {daysofWeek.map((day) => {
         const isToday = day.isSame(dayjs(), "day");
@@ -116,8 +126,8 @@ export default function Calender() {
         <Link to={`/calendar/${day.format('YYYY-MM-DD')}`}>
         
         <div key={day.format("YYYY-MM-DD")} className={`p-2 w-45 shrink-0 border rounded-xl flex flex-col justify-between sm:justify-start  cursor-pointer h-36 realtive
-        ${isToday ? "bg-white" : "bg-gray-200 text-gray-400"}
-        ${isEventDay ? "border-[#F4538B]" : "border-gray-200"} hover:bg-pink-50`}>
+        ${isToday ? "bg-[#F4538B]" : "bg-[#FCD4DF] text-gray-400"}
+        ${isEventDay ? "border-[#F4538B]" : "border-gray-200"}`}>
 
           <span className="text-md font-semibold text-center">
             {dayName} - {formattedDate}</span>
