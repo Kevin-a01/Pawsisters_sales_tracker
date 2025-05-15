@@ -40,6 +40,33 @@ router.get('/monthly-note', async (req, res) => {
   }
 });
 
+router.get('/details', async (req, res) => {
+  const { date } = req.query;
+
+  if (!date) {
+    return res.status(400).json({ err: "Date parameter missing" });
+  }
+
+  try {
+    const result = await pool.query(`
+        SELECT * FROM calendar_events WHERE date = $1
+        
+        `, [date])
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "No events for this date." });
+
+    }
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching event details:", err);
+    res.status(500).json({ err: "Internal server error" })
+
+
+  }
+});
+
 router.post('/monthly-note', async (req, res) => {
   const { year, month, date, note } = req.body;
 
