@@ -47,21 +47,43 @@ export default function CalendarDetailPage() {
   </div>
       {/* Details section */}
     <div>
-      <h1 className="text-2xl text-center">
+      <h1 className="text-2xl text-center mb-5">
         Detaljer för {dayjs(date).format("DD MMMM YYYY")}
       </h1>
       {Array.isArray(details) && details.map((event) => (
         <>
-      <div key={event.id} className="flex flex-col p-5 gap-3 justify-center items-center">
-      <h2 className=" text-xl">
-        Kommande Event:
+      <div key={event.id} className="bg-[#FEF2F6] rounded-xl shadow-md p-4 mx-10 mt-3 flex justify-center items-center flex-col gap-1 text-[#F4538B]">
+      <h2 className="">
+        Event detta datum:
       </h2>
       <p className="text-xl">{event.title}</p>
       </div>
-      <div className="flex justify-center items-center flex-col">
-        <h2 className="text-xl">Beskrivning för: </h2>
+
+      <div className="flex justify-center items-center flex-col text-[#F4548B] bg-[#FEF2F6]  rounded-xl shadow-md p-4  mx-10 mt-5 mb-2">
+        <h2 className="text-xl">Beskrivning för {event.title}: </h2>
         <h3> {event.description} </h3>
       </div>
+
+      <div className="bg-fuchsia-400 rounded-xl  mx-10 mt-10 p-10 relative">
+        <div className="w-full">
+        <Link className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
+            <i class="fa-solid fa-circle-plus"></i>
+        </Link>
+        </div>
+        <div className="flex flex-col">
+          <h2 className="text-lg">Checklista för {event.title}: </h2>
+        <ul className="list-disc list-inside space-y-1">
+
+          <li>
+
+          </li>
+
+        </ul>
+
+        </div>
+        
+      </div>
+
       </>
 
       ))}
