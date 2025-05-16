@@ -13,7 +13,7 @@ export default function BurgerMenu() {
         <nav className="bg-[#FEF2F6]">
             <div className="max-w-7xl">
 
-            <button onClick={() => setIsOpen(true)} className="md:hidden cursor-pointer text-[#F277B2] ">
+            <button onClick={() => setIsOpen(true)} className="md:hidden ml-1 cursor-pointer text-[#F277B2] ">
                 <Menu size={32}/>
                 </button> 
             <div className="flex justify-center md:justify-center">
