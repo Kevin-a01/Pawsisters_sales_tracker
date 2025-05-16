@@ -5,7 +5,7 @@ const pool = require('../db');
 
 router.post('/store', async (req, res) => {
   try {
-    const { conId, products } = req.body;
+    const { conId, products, conTitle, conDate } = req.body;
 
 
     if (!conId || !products || products.length === 0) {
@@ -13,15 +13,44 @@ router.post('/store', async (req, res) => {
       return res.status(400).json({ error: "Missing conId or products" });
     }
 
-    // Fetch convention title and date based on conId
-    const conResult = await pool.query("SELECT title, date FROM cons WHERE id = $1", [conId]);
-    if (!conResult.rows.length) {
-      console.error(`❌ Con not found for conId: ${conId}`);
-      return res.status(404).json({ error: "Con not found" });
+    let title = conTitle;
+
+
+    if (!title) {
+      const storedConResult = await pool.query(`
+        SELECT title FROM stored_products WHERE "conId" = $1 LIMIT 1
+        `, [conId]
+      );
+      if (storedConResult.rows.length > 0) {
+        title = storedConResult.rows[0].title;
+      } else {
+
+        title = "Con..."
+
+      }
+      if (!title) {
+        title = "Con...";
+      }
+
+    }
+    let date;
+    try {
+      date = conDate ? new Date(conDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+    } catch (err) {
+      console.error('Invalid date format for conDate', conDate);
+      date = new Date().toISOString().split('T')[0];
+
+
     }
 
-    const { title: conTitle, date: conDate } = conResult.rows[0];
-    console.log(`Found convention: ${conTitle}, Date: ${conDate}`);
+
+    console.log(`Using convention: ${title}, Date: ${date}`);
+
+
+
+
+
+
 
     // Insert query for storing products
     const insertStmt = `
@@ -51,22 +80,36 @@ router.post('/store', async (req, res) => {
       }
 
       // Insert the product into the stored_products table
-      await pool.query(insertStmt, [productId, conId, conTitle, conDate, productName, price, payment, maker]);
+      await pool.query(insertStmt, [productId, conId, title, conDate, productName, price, payment, maker]);
       console.log(`✅ Product ID ${productId} stored successfully`);
     }
 
-    // After storing, clean up by deleting the associated products and cons
-    await pool.query("DELETE FROM products WHERE conId = $1", [conId]);
-    await pool.query("DELETE FROM cons WHERE id = $1", [conId]);
+    // Attempt to delete from products where conId is provided
+    /* console.log(`Attempting to delete from products where conId = ${conId}`);
+    const deleteProductsResult = await pool.query("DELETE FROM products WHERE conId = $1", [conId]);
+    console.log(`Deleted ${deleteProductsResult.rowCount} rows from products`); */
 
-    // Success response
+    const deleteAllResult = await pool.query("DELETE FROM products");
+    console.log(`Deleted ${deleteAllResult.rowCount} rows from products`);
+    
+
+    
+
+    // Delete the con from the cons table based on the provided conId
+    console.log(`Cleaning up: deleting con with conId = ${conId}`);
+    const deleteConsResult = await pool.query("DELETE FROM cons WHERE id = $1", [conId]);
+    console.log(`Deleted ${deleteConsResult.rowCount} rows from cons`);
+
+    console.log(`Deleted ${deleteConsResult.rowCount} rows from cons`);
+
     res.status(201).json({ message: "Produkter har lagrats" });
-
   } catch (error) {
     // Log the error and return an appropriate response
     console.error("Error storing products:", error);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
+
+
 });
 
 router.get('/', async (req, res) => {
@@ -81,6 +124,60 @@ router.get('/', async (req, res) => {
   }
 
 })
+
+router.get('/top-products/:conId', async (req, res) => {
+  console.log('Fetching top products...');
+  try {
+    const { conId } = req.params
+
+    const parsedConId = parseInt(conId);
+    if (isNaN(parsedConId)) {
+      return res.status(400).json({ err: "Ogiltigt conid" });
+
+    }
+
+    const result = await pool.query(
+      `
+      SELECT product, COUNT(*) AS total_sold
+      FROM stored_products
+      WHERE "conId" = $1
+      GROUP BY product
+      ORDER BY total_sold DESC
+      LIMIT 5;
+      
+      `,
+      [parsedConId]
+    );
+
+
+    console.log('Query result:', result.rows);
+    res.json(result.rows)
+  } catch (err) {
+    console.error("Hämtning av top produkter misslyckades:", err);
+    res.status(500).json({ err: 'Server Error.' });
+
+  }
+
+});
+
+router.get('/cons', async (req, res) => {
+
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT "conId" AS id, title
+      FROM stored_products
+      ORDER BY "conId" DESC
+      `);
+    console.log('Stored cons fetched', result.rows);
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error('Error fetching cons', err);
+    res.status(500).json({ err: 'Failed to fetch stored cons' });
+  }
+});
+
+
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -100,6 +197,8 @@ router.get('/:id', async (req, res) => {
   }
 
 });
+
+
 
 router.delete('/:conId', async (req, res) => {
   const { conId } = req.params;
@@ -129,7 +228,11 @@ router.delete('/:conId', async (req, res) => {
   }
 
 
-})
+});
 
-// Export the router so it can be used in your main server file
+
+
+
+
+
 module.exports = router;
