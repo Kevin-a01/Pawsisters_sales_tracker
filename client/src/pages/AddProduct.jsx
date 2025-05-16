@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
+import BurgerMenu from "../components/BurgerMenu";
 
 function AddProduct(){
   document.title = "Lägg till produkt"
@@ -163,7 +164,7 @@ function AddProduct(){
         maker: "",
       });
 
-      navigate("/");
+      navigate("/sales-tracker");
       
     }catch(error){
       console.error("Error adding product:", error);
@@ -174,7 +175,7 @@ function AddProduct(){
 
   return (
     <>
-      <Header />
+      <BurgerMenu/>
       {loading ? (
         <div className="flex justify-center items-center mt-3 pb-1 gap-9">
           <p className="text-2xl text-pink-300 animate-pulse">🧁 Laddar...</p>
