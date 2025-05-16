@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import {BrowserRouter as Router , Routes, Route} from "react-router-dom";
 import AddProduct from "./pages/AddProduct";
-import HomePage from "./StartPage";
 import SalesDetail from "./pages/SalesDetail";
 import SalesTracker from "./SalesTracker";
 import BurgerMenu from "./components/BurgerMenu";
 import Inventory from "./pages/Inventory";
 import StartPage from "./StartPage";
+
+
 
 
 function App() {    

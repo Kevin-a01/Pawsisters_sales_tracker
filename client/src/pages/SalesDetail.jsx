@@ -198,7 +198,7 @@ function SalesDetail() {
                 <div className="flex flex-col">                   
                     {sales.length > 0 && (
                         <button
-                            className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400"
+                            className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400 hidden"
                             onClick={handleDelete}
                         >
                             Ta bort Detalj Data
