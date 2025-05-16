@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { Link } from "react-router-dom";
 import DetailCard from "./components/DetailCard";
+import BurgerMenu from "./components/BurgerMenu";
 
-function HomePage(){
+function SalesTracker(){
 
     const [products, setProducts] = useState([]);
     const [conTitle, setConTitle] = useState("");
@@ -146,7 +147,7 @@ function HomePage(){
 
 return(
     <>
-    <Header/>
+    <BurgerMenu/>
     <div className="p-2 lg:flex lg:flex-col lg:justify-center ">
 
         <div className="flex justify-between items-center pb-8">
@@ -224,4 +225,4 @@ return(
 )
 }
 
-export default HomePage;
+export default SalesTracker;
