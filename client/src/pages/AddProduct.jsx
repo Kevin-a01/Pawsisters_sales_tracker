@@ -1,7 +1,7 @@
-import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import BurgerMenu from "../components/BurgerMenu";
+
 
 function AddProduct(){
   document.title = "Lägg till produkt"
@@ -13,6 +13,8 @@ function AddProduct(){
   const [conTitle, setConTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [conId, setConId] = useState(() => localStorage.getItem("conId")|| null);
+  const [activeCons, setActiveCons] = useState([]);
+  const [showNewConInput, setShowNewConInput] = useState(false);
   const [form, setForm] = useState({
     title: "",
     product: "",
@@ -20,21 +22,50 @@ function AddProduct(){
     payment: {Swish: false, Kort: false, Kontant: false},
     maker: "",
   });
+  
 
   const API_BASE_URL = import.meta.env.PROD 
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
     : "http://localhost:5000";
 
-  useEffect(() => {
+  /* useEffect(() => {
     if(!localStorage.getItem("conId")){
       setConId(null);
       setConTitle("");
 
     }
-  },[]);
+  },[]); */
+
+  useEffect(() => {
+
+    const fetchActiveCons = async() => {
+      try{
+        const response = await fetch(`${API_BASE_URL}/api/cons/active`)
+      if(!response.ok) {
+      throw new Error('Failed to fetch active conventions')
+      }
+      const data = await response.json()
+      setActiveCons(data)
+
+
+      if(!conId && data.length > 0) {
+        setConId(data[0].id);
+        setConTitle(data[0].title);
+        localStorage.setItem('conId', data[0].id);
+        localStorage.setItem('conTitle',data[0].title);
+
+        }
+    }catch(err) {
+      console.error('Error fetching active cons:', err);
+    }finally{
+      setLoading(false);
+    }
+  }
+    fetchActiveCons();
+  }, [conId])
 
   
-  useEffect(() => {
+  /* useEffect(() => {
     const checkConId = async() => {
       console.log('conId after fetch:', conId);
       try{
@@ -65,7 +96,7 @@ function AddProduct(){
     };
       checkConId();
       
-  }, []);
+  }, []); */
   
 
   
@@ -101,19 +132,23 @@ function AddProduct(){
       return;
       
     }
+
+    /* if(conId === 'new' && !conTitle) {
+      alert('Ange en titel för det nya konventet.')
+      return;
+    } */
     
 
    
     try{
-      let currentConId = conId;
-      if(!conId && conTitle.trim() !== ""){
+      let currentConId = conId === 'none' ? null : conId;
+      let currentConTitle = conTitle;
+      if(conId === 'new' && conTitle){
         
         const respone = await fetch (`${API_BASE_URL}/api/cons`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({title: conTitle}),
-         
-
         });
         
 
@@ -121,19 +156,37 @@ function AddProduct(){
         currentConId = data.conId;
         setConId(currentConId);
         localStorage.setItem("conId", currentConId);
+        localStorage.setItem("conTitle", conTitle);
 
+      }else if(conId && conId !== 'new' && conId !== 'none') {
+        currentConId = conId;
+        const selectedCon = activeCons.find((con) => con.id === parseInt(conId));
+        if(selectedCon){
+          currentConTitle = selectedCon.title;
+          localStorage.setItem('conTitle', currentConTitle)
+  
+        }
       }
-      ;
+      
+      
+      /* if(!currentConId || currentConId === 'new') {
+        alert("Välj ett befintligt convent eller skapa ett nytt med en giltig titel")
+
+      } */
+     const payload = {
+      product: form.product,
+      price: parseFloat(form.price),
+      payment: selectedPayments.join(", "),
+      conId: currentConId,
+      maker: form.maker,
+      conId: currentConId,
+
+     }
+
       const productResponse = await fetch(`${API_BASE_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
-        body: JSON.stringify({
-          product: form.product,
-          price: parseFloat(form.price),
-          payment: selectedPayments.join(", "),
-          conId: currentConId,
-          maker: form.maker,
-        }),
+        body: JSON.stringify(payload),
       });
       const productData = await productResponse.json();
 
@@ -144,6 +197,15 @@ function AddProduct(){
         console.error("Error: productId is missing from the response", productData);
         alert("Failed to create product, missing productId.");
         return;
+      }
+
+      if (productData.conId) {
+        currentConId = productData.conId;
+        currentConTitle = currentConTitle || 'Temp Con ' + Date.now(); 
+        setConId(currentConId);
+        setConTitle(currentConTitle);
+        localStorage.setItem("conId", currentConId);
+        localStorage.setItem("conTitle", currentConTitle);
       }
       
       setProducts(prevProducts => [
@@ -164,7 +226,7 @@ function AddProduct(){
         maker: "",
       });
 
-      navigate("/sales-tracker");
+      navigate('/sales-tracker', {state: {conId: currentConId, conTitle: currentConTitle}});
       
     }catch(error){
       console.error("Error adding product:", error);
@@ -184,7 +246,46 @@ function AddProduct(){
       ) : (
         <div className="p-3">
           <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2">
-            {!conId ? (
+            <div className="w-11/12 lg:w-1/4">
+              <label className="text-lg font-medium text-pink-500 pb-2">Välj eller skapa nytt konvent </label>
+              <select name=""
+               id=""
+               value={conId || ''}
+               onChange={(e) => {
+                const value = e.target.value;
+                setConId(value);
+                localStorage.setItem('conId', value);
+                setShowNewConInput(value === 'new');
+                if(value !== 'new' && value !== 'none') {
+                  localStorage.setItem('conTitle', '')
+                }
+               }}
+               className="p-2 w-full border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500">
+
+                <option value="">Välj ett konvent</option>
+                <option value="none">Ingen con titel</option>
+                {activeCons.map((con) => (
+                  <option key={con.id} value={con.id}>
+                    {con.title}
+                  </option>
+                ))}
+                <option value="new">
+                  Skapa nytt konvent
+                </option>
+              </select>
+            </div>
+            {showNewConInput && (
+              <input 
+              type="text"
+              placeholder="Ange Konventstitle (t.ex. ExampleCon 2025)"
+              value={conTitle}
+              onChange={(e) => setConTitle(e.target.value)}
+              className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 lg:w-1/4"
+              />
+
+            )}
+
+            {/* {!conId ? (
               <input
                 type="text"
                 placeholder="ExampleCon..."
@@ -194,7 +295,7 @@ function AddProduct(){
               />
             ) : (
               <h2 className="text-xl font-black text-pink-300">{conTitle}</h2>
-            )}
+            )} */}
               <input
               list="productOptions"
               type="text"
