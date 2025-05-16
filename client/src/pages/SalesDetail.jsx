@@ -177,6 +177,9 @@ function SalesDetail() {
                                     <th className="border-2 border-pink-300 p-2">
                                         Betalning
                                     </th>
+                                    <th className="border-2 border-pink-300 p-2">
+                                        Datum
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -188,6 +191,7 @@ function SalesDetail() {
 
                                         <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
                                         <td className="border-2 border-pink-300 p-2 text-center">{sale.payment}</td>
+                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.date}</td>
                                     </tr>
                                 ))}
                             </tbody>
