@@ -168,11 +168,6 @@ function AddProduct(){
         }
       }
       
-      
-      /* if(!currentConId || currentConId === 'new') {
-        alert("Välj ett befintligt convent eller skapa ett nytt med en giltig titel")
-
-      } */
      const payload = {
       product: form.product,
       price: parseFloat(form.price),
@@ -245,9 +240,9 @@ function AddProduct(){
         </div>
       ) : (
         <div className="p-3">
-          <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2">
+          <form onSubmit={addProduct} className="space-y-5 flex flex-col justify-center items-center pt-2 pb-2">
             <div className="w-11/12 lg:w-1/4">
-              <label className="text-lg font-medium text-pink-500 pb-2">Välj eller skapa nytt konvent </label>
+              <label className="text-lg font-medium text-pink-500">Lägg till produkt och skapa nytt konvent </label>
               <select name=""
                id=""
                value={conId || ''}
@@ -260,17 +255,17 @@ function AddProduct(){
                   localStorage.setItem('conTitle', '')
                 }
                }}
-               className="p-2 w-full border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500">
+               className="p-2 mt-2 w-full border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500">
 
-                <option value="">Välj ett konvent</option>
-                <option value="none">Ingen con titel</option>
+                <option value="">Välj ett alternativ</option>
+                <option value="none">Lägg till produkt utan con titel</option>
                 {activeCons.map((con) => (
                   <option key={con.id} value={con.id}>
                     {con.title}
                   </option>
                 ))}
                 <option value="new">
-                  Skapa nytt konvent
+                  Skapa Nytt Konvent
                 </option>
               </select>
             </div>
@@ -285,17 +280,6 @@ function AddProduct(){
 
             )}
 
-            {/* {!conId ? (
-              <input
-                type="text"
-                placeholder="ExampleCon..."
-                value={conTitle}
-                onChange={(e) => setConTitle(e.target.value)}
-                className="p-2 w-11/12 border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500 lg:w-1/4"
-              />
-            ) : (
-              <h2 className="text-xl font-black text-pink-300">{conTitle}</h2>
-            )} */}
               <input
               list="productOptions"
               type="text"
