@@ -15,6 +15,7 @@ function SalesTracker(){
     const [storedCons, setStoredCons] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedCons, setSelectedCons] = useState([]);
+    const [activeCon, setActiveCon] = useState(false);
 
     const API_BASE_URL = import.meta.env.PROD 
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
@@ -48,11 +49,16 @@ function SalesTracker(){
             localStorage.setItem('conTitle', state.conTitle);
             setProducts([]);
             
-        }else{
-            /* console.log('No state provided, using exiting conId', conId); */
-            
         }
     }, [state]);
+
+    useEffect(() => {
+
+        if(products){
+            setActiveCon(true)
+        }
+
+    }, []);
 
 
     useEffect(() => {
@@ -260,7 +266,8 @@ function SalesTracker(){
                 setIsStoring(false);
              }
     };
-
+    
+    
 return(
     <>
     <BurgerMenu/>
@@ -275,7 +282,9 @@ return(
             </Link>
             
         </div>
-        <h1 className="text-center text-4xl font-bold mb-4 text-pink-300" >{conTitle }</h1>
+        {activeCon && products.length > 0 ? (
+            <>
+             <h1 className="text-center text-4xl font-bold mb-4 text-pink-300" >{conTitle }</h1>
         <h2 className="text-center text-2xl font-bold font-mono">Dagens försäljning.</h2>
         {loading ? (
             <div className="flex justify-center items-center mt-3 pb-1 gap-9">
@@ -340,11 +349,20 @@ return(
                 )}
             </tbody>
         </table>
+
+         <h2 className="mt-3 text-center pt-2 text-xl font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
             </>
             
         )}
+        </>
+        ): (
+
+            <h1 className="text-center text-2xl p-3"> 💤 Ingen aktiv försäljning pågår just nu.</h1>
+
+        )}
+       
         
-        <h2 className="mt-3 text-center pt-2 text-xl font-medium text-pink-400">Summa för allt sålt: {totalSales}kr</h2>
+       
 
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>

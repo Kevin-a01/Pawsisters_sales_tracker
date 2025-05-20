@@ -28,13 +28,6 @@ function AddProduct(){
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
     : "http://localhost:5000";
 
-  /* useEffect(() => {
-    if(!localStorage.getItem("conId")){
-      setConId(null);
-      setConTitle("");
-
-    }
-  },[]); */
 
   useEffect(() => {
 
@@ -63,43 +56,6 @@ function AddProduct(){
   }
     fetchActiveCons();
   }, [conId])
-
-  
-  /* useEffect(() => {
-    const checkConId = async() => {
-      console.log('conId after fetch:', conId);
-      try{
-        const response = await fetch(`${API_BASE_URL}/api/cons/latest`);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        
-        if(data?.conId){
-          setConId(data.conId);
-          setConTitle(data.title);
-          localStorage.setItem("conId", data.conId);
-        } else{
-          setConId(null);
-          setConTitle("");
-          localStorage.removeItem("conId");
-        } 
-
-      }catch(error){
-        console.error("Error checking conventions: ",error);
-        
-      }finally{
-           setLoading(false);  
-
-      }
-    };
-      checkConId();
-      
-  }, []); */
-  
-
-  
 
   const handleChange = (e) => {
 
@@ -132,13 +88,6 @@ function AddProduct(){
       return;
       
     }
-
-    /* if(conId === 'new' && !conTitle) {
-      alert('Ange en titel för det nya konventet.')
-      return;
-    } */
-    
-
    
     try{
       let currentConId = conId === 'none' ? null : conId;
