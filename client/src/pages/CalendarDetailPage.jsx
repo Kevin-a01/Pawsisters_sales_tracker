@@ -66,12 +66,12 @@ export default function CalendarDetailPage() {
 
       <div className="bg-fuchsia-400 rounded-xl  mx-10 mt-10 p-10 relative">
         <div className="w-full">
-        <Link className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
+        <Link to="/add-task" className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
             <i class="fa-solid fa-circle-plus"></i>
         </Link>
         </div>
         <div className="flex flex-col">
-          <h2 className="text-lg">Checklista för {event.title}: </h2>
+          <h2 className="text-lg">Checklista: </h2>
         <ul className="list-disc list-inside space-y-1">
 
           <li>
