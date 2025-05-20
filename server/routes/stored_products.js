@@ -126,7 +126,6 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/top-products/:conId', async (req, res) => {
-  console.log('Fetching top products...');
   try {
     const { conId } = req.params
 
@@ -150,7 +149,6 @@ router.get('/top-products/:conId', async (req, res) => {
     );
 
 
-    console.log('Query result:', result.rows);
     res.json(result.rows)
   } catch (err) {
     console.error("Hämtning av top produkter misslyckades:", err);

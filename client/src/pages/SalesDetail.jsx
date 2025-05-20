@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Form, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-import Header from "../components/Header";
+import {
+    PieChart,
+    Pie,
+    Cell,
+    Tooltip,
+    Legend,
+    ResponsiveContainer
+} from "recharts"
 import BurgerMenu from "../components/BurgerMenu";
+
 
 function SalesDetail() {
      
@@ -15,6 +22,10 @@ function SalesDetail() {
     const [totalRevenue, setTotalRevenue] = useState(0);
     const [filterMaker, setFilterMaker] = useState("");
     const [filterPayment, setFilterPayment] = useState("");
+    const [topProducts, setTopProducts] = useState([]);
+
+    const COLORS = ["#FF69B4", "#FFB6C1", "#FFC0CB", "#DB7093", "#FF1493"];
+
 
     const API_BASE_URL = import.meta.env.PROD
         ? "https://pawsisterssalestracker-production-529b.up.railway.app"
@@ -45,6 +56,35 @@ function SalesDetail() {
 
         fetchSales();
     }, [conId]);
+
+        useEffect(() => {
+           
+            
+            const fetchTopProducts = async () => {
+                try{
+                    const response = await fetch(`${API_BASE_URL}/api/stored_products/top-products/${conId}`)
+
+                    if(!response.ok){
+                        throw new Error('Error fetching top products')
+                    }
+                    const data = await response.json();
+
+                        const parsed = data.map((item) => ({
+                        ...item,
+                        total_sold: Number(item.total_sold)
+
+                        }))
+                        setTopProducts(parsed)
+
+                }catch(err){
+                    console.error("Error fetching top products", err);
+                }
+            }
+            
+
+            fetchTopProducts();
+        }, [conId]);
+
 
         useEffect(() => {
             document.title = `Detaljer för ${conTitle}` 
@@ -103,6 +143,42 @@ function SalesDetail() {
 
         return payMatch && makerMatch;
     });
+
+    const customLabel = (entry) => {
+        const maxLenght = 15;
+        const name = entry.product.length > maxLenght 
+        ? entry.product.slice(0, maxLenght) + "..."
+        : entry.product;
+        return `${name}`
+    };
+
+    const customProcent = ({percent, cx, cy, midAngle, innerRadius, outerRadius, index}) => {
+        const RADIAN = Math.PI / 180;
+        const radius = innerRadius + (outerRadius - innerRadius) / 2;
+        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+        const procent = (percent * 100).toFixed(0);
+        return (
+            <text
+            x={x}
+            y={y}
+            fill="black"
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={12}
+            >
+                {`${procent}%`}
+            </text>
+        );
+
+    }
+
+
+
+    
+
+    
 
     return (
         <>
@@ -198,6 +274,59 @@ function SalesDetail() {
                         </table>
                     </>
                 )}
+
+                <div className="">
+                    <h3 className="text-2xl text-center mt-5">Topp 5 sålda produkter</h3>
+                    <ResponsiveContainer width="100%" height={325}>
+                        <PieChart className="mt-5 mb-5">
+                            <Pie 
+                            data={topProducts}
+                            dataKey="total_sold"
+                            nameKey="product"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={100}
+                            label={customLabel}
+                            
+                            >
+                                {topProducts.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+                                ))}
+                            </Pie>
+
+                            <Pie 
+                            data={topProducts}
+                            dataKey="total_sold"
+                            nameKey="product"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={100}
+                            label={customProcent}
+                            legendType="none"
+                            labelLine={false}
+                            >
+                                {topProducts.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                            <Legend />
+                        </PieChart>
+                    </ResponsiveContainer>
+
+                </div>
+                {/* {topProducts.map((item) => (
+                    
+                    <div key={item.product}>
+                        <p>
+                            {item.product}: {item.total_sold} sålda
+                        </p>
+                    </div>
+
+
+                ))} */}
+               
+
 
                 <div className="flex flex-col">                   
                     {sales.length > 0 && (

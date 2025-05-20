@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom"
 import BurgerMenu from "../components/BurgerMenu";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddEvent() {
 
@@ -36,6 +37,8 @@ export default function AddEvent() {
     }catch(err){
       console.error(err);
     }
+
+    navigate('/')
 
   }
 

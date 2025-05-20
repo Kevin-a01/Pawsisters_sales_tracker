@@ -5,6 +5,7 @@ import isoWeek from "dayjs/plugin/isoWeek";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { Link } from "react-router-dom";
 
+
 dayjs.extend(weekday);
 dayjs.extend(isoWeek);
 dayjs.extend(localizedFormat);
@@ -106,12 +107,6 @@ export default function Calender() {
 
     </div>
 
-    <div className=" hidden sm:grid grid-cols-7 gap-1 text-md font-medium text-center m-3 bg-pink-300 ">
-      {["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"].map((d) => (
-        <div key={d}>{d}</div>
-      ))}
-    </div>
-
   <div ref={scrollRef} className="overflow-x-auto m-3">
     <div className="flex gap-2 min-w-[700px]  m-2 p-2">
       {daysofWeek.map((day) => {
@@ -144,6 +139,8 @@ export default function Calender() {
               </div>
 
               
+
+              
               </>
 
             ))}
@@ -151,6 +148,7 @@ export default function Calender() {
             </div>
         </div>
         </Link>
+        
       )
 
       })}
