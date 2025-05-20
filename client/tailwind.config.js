@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        pinklight: '#FFEAF1',
+        pawpink: "#F4538B"
       },
     },
   },
