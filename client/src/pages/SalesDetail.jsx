@@ -234,7 +234,8 @@ function SalesDetail() {
                     </p>
                 ) : (
                     <>
-                    <div className="">
+                <div className="flex justify-center overflow-x-auto mt-4">
+                    <div className="w-full max-w-4xl lg:max-w-full">
                         <table className="w-full border-collapse mt-4">
                             <thead>
                                 <tr>
@@ -272,6 +273,8 @@ function SalesDetail() {
                             </tbody>
                         </table>
                     </div>
+                </div>
+                    
                     </>
                 )}
 
