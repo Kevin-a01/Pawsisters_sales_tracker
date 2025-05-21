@@ -58,8 +58,6 @@ function SalesDetail() {
     }, [conId]);
 
         useEffect(() => {
-           
-            
             const fetchTopProducts = async () => {
                 try{
                     const response = await fetch(`${API_BASE_URL}/api/stored_products/top-products/${conId}`)
@@ -145,7 +143,7 @@ function SalesDetail() {
     });
 
     const customLabel = (entry) => {
-        const maxLenght = 15;
+        const maxLenght = 10;
         const name = entry.product.length > maxLenght 
         ? entry.product.slice(0, maxLenght) + "..."
         : entry.product;
@@ -236,24 +234,25 @@ function SalesDetail() {
                     </p>
                 ) : (
                     <>
+                    <div className="">
                         <table className="w-full border-collapse mt-4">
                             <thead>
                                 <tr>
-                                    <th className=" border-2 border-pink-300 p-2">
+                                    <th className=" border-2  border-pink-300 p-2">
                                         Produkt
                                     </th>
 
-                                    <th className="border-2 border-pink-300 p-2">
+                                    <th className="border-2  border-pink-300 p-2">
                                         Maker
                                     </th>
 
-                                    <th className="border-2 border-pink-300 p-2">
+                                    <th className="border-2  border-pink-300 p-2">
                                         Pris
                                     </th>
-                                    <th className="border-2 border-pink-300 p-2">
+                                    <th className="border-2  border-pink-300 p-2">
                                         Betalning
                                     </th>
-                                    <th className="border-2 border-pink-300 p-2">
+                                    <th className="border-2  border-pink-300 p-2">
                                         Datum
                                     </th>
                                 </tr>
@@ -261,23 +260,24 @@ function SalesDetail() {
                             <tbody>
                                 {filteredSales.map((sale) => (
                                     <tr key={`${sale.id}`}>
-                                        <td className="border-2 border-pink-300 p-2 text-center">{sale.product}</td>
+                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.product}</td>
 
-                                        <td className="border-2 border-pink-300 p-2 text-center">{sale.maker}</td>
+                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.maker}</td>
 
-                                        <td className="border-2 border-pink-300 p-2 text-center">{sale.price} kr</td>
-                                        <td className="border-2 border-pink-300 p-2 text-center">{sale.payment}</td>
-                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.date}</td>
+                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.price} kr</td>
+                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.payment}</td>
+                                        <td className="border-2 text-sm  border-pink-300 p-2 text-center">{sale.date}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+                    </div>
                     </>
                 )}
 
-                <div className="">
+                <div className="recharts-no-outline">
                     <h3 className="text-2xl text-center mt-5">Topp 5 sålda produkter</h3>
-                    <ResponsiveContainer width="100%" height={325}>
+                    <ResponsiveContainer width="100%" height={315}>
                         <PieChart className="mt-5 mb-5">
                             <Pie 
                             data={topProducts}
@@ -285,7 +285,7 @@ function SalesDetail() {
                             nameKey="product"
                             cx="50%"
                             cy="50%"
-                            outerRadius={100}
+                            outerRadius={90}
                             label={customLabel}
                             
                             >
@@ -300,7 +300,7 @@ function SalesDetail() {
                             nameKey="product"
                             cx="50%"
                             cy="50%"
-                            outerRadius={100}
+                            outerRadius={90}
                             label={customProcent}
                             legendType="none"
                             labelLine={false}

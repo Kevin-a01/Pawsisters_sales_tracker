@@ -5,3 +5,9 @@ body, html{
   overflow-x: hidden;
 
 }
+
+@layer utilities {
+  .recharts-no-outline :focus {
+    outline: none;
+  }
+}
