@@ -274,10 +274,10 @@ return(
     <div className="p-2 lg:flex lg:flex-col lg:justify-center ">
 
         <div className="flex justify-between items-center pb-8">
-            <button className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl cursor-pointer" onClick={handleStoreClick} disabled={isStoring}>
+            <button className="border border-transparent p-2 bg-[#FCD4DF] font-medium rounded-xl shadow-2xl cursor-pointer" onClick={handleStoreClick} disabled={isStoring}>
                 {isStoring ? 'Lagrar...' : 'Lagra Produkter'}
             </button>
-            <Link to="/add-product" className="border border-transparent p-2 bg-pink-300 font-medium rounded-xl shadow-2xl " >
+            <Link to="/add-product" className="border border-transparent p-2 bg-[#FCD4DF] font-medium rounded-xl shadow-2xl " >
                 Lägg till produkt
             </Link>
             

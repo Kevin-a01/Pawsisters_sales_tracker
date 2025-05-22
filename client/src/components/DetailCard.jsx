@@ -52,7 +52,7 @@ function DetailCard( {refreshTrigger}){
             ) : (
           <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto ">
             {cons.map((con) => (
-              <div key={con.conId} className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-pink-300">
+              <div key={con.conId} className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-[#FCD4DF]">
               <Link to={`/sales-details/${con.conId}`} className="text-lg overflow-hidden w-full h-full flex flex-col">
               <h2 className="text-center font-medium text-lg">{con.title}</h2>
               <h2 className="text-center text-lg pb-2">{con.date}</h2>
