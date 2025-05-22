@@ -349,7 +349,7 @@ function AddProduct(){
   
             <button
               type="submit"
-              className="border border-transparent text-2xl cursor-pointer p-3 bg-pink-300 rounded-xl shadow-pink-500 shadow-md"
+              className="border border-transparent text-2xl cursor-pointer p-3 bg-[#F4538B] rounded-xl shadow-pink-800 shadow-md text-white"
             >
               Lägg till produkt!
             </button>

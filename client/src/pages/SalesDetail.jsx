@@ -142,6 +142,16 @@ function SalesDetail() {
         return payMatch && makerMatch;
     });
 
+    const groupedSales = filteredSales.reduce((acc, sale) => {
+        const date = sale.date;
+        if(!acc[date]){
+            acc[date] = [];
+        }
+
+        acc[date].push(sale);
+        return acc;
+    }, {});
+
     const customLabel = (entry) => {
         const maxLenght = 10;
         const name = entry.product.length > maxLenght 
@@ -170,7 +180,19 @@ function SalesDetail() {
             </text>
         );
 
-    }
+    };
+
+    /* const groupedByDate = sales.reduce((acc, sale) => {
+
+        const date = sale.date;
+
+        if(!acc[date]) {
+            acc[date] = [];
+
+        }
+        acc[date].push(sale);
+        return acc;
+    }); */
 
 
 
@@ -234,49 +256,40 @@ function SalesDetail() {
                     </p>
                 ) : (
                     <>
-                <div className="flex justify-center mt-4">
-                    <div className="w-full max-w-4xl lg:max-w-full">
-                        <table className="w-full border-collapse mt-4">
-                            <thead>
-                                <tr>
-                                    <th className=" border-2  border-pink-300 p-2">
-                                        Produkt
-                                    </th>
-
-                                    <th className="border-2  border-pink-300 p-2">
-                                        Maker
-                                    </th>
-
-                                    <th className="border-2  border-pink-300 p-2">
-                                        Pris
-                                    </th>
-                                    <th className="border-2  border-pink-300 p-2">
-                                        Betalning
-                                    </th>
-                                    <th className="border-2  border-pink-300 p-2">
-                                        Datum
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredSales.map((sale) => (
-                                    <tr key={`${sale.id}`}>
-                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.product}</td>
-
-                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.maker}</td>
-
-                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.price} kr</td>
-                                        <td className="border-2 text-sm border-pink-300 p-2 text-center">{sale.payment}</td>
-                                        <td className="border-2 text-sm  border-pink-300 p-2 text-center">{sale.date}</td>
+                    {Object.entries(groupedSales).map(([date, salesDate]) => (
+                        <div key={date} className="mb-6 mt-5">
+                            <h3 className="text-xl text-pink-400">Sales för: {date}</h3>
+                            <table className="w-full border-collapse mt-4">
+                                <thead>
+                                    <tr className="text-center font-medium text-lg">
+                                        <td className=" border  border-pink-300 p-2">Produkt</td>
+                                        
+                                        <td className=" border border-pink-300 p-2">Maker</td>
+                                        
+                                        <td className=" border  border-pink-300 p-2">Pris</td>
+                                        
+                                        <td className=" border  border-pink-300 p-2">Betalning</td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                    
-                    </>
-                )}
+                                </thead>
+                                <tbody>
+                                    {salesDate.map(sale => (
+                                        <tr key={sale.id}>
+                                            <td className="border text-sm border-pink-300 p-2 text-center" >{sale.product}</td>
+                                            
+                                            <td className="border text-sm border-pink-300 p-2 text-center">{sale.maker}</td>
+                                            
+                                            <td className="border text-sm border-pink-300 p-2 text-center">{sale.price} kr</td>
+                                           
+                                            <td className="border text-sm border-pink-300 p-2 text-center">{sale.payment}</td>
+                                        </tr>
+
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ))}
+                </>
+            )}
 
                 <div className="recharts-no-outline">
                     <h3 className="text-2xl text-center mt-5">Topp 5 sålda produkter</h3>
@@ -334,7 +347,7 @@ function SalesDetail() {
                 <div className="flex flex-col">                   
                     {sales.length > 0 && (
                         <button
-                            className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400 hidden"
+                            className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400"
                             onClick={handleDelete}
                         >
                             Ta bort Detalj Data
