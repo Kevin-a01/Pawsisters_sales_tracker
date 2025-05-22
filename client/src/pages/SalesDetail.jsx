@@ -181,25 +181,7 @@ function SalesDetail() {
         );
 
     };
-
-    /* const groupedByDate = sales.reduce((acc, sale) => {
-
-        const date = sale.date;
-
-        if(!acc[date]) {
-            acc[date] = [];
-
-        }
-        acc[date].push(sale);
-        return acc;
-    }); */
-
-
-
     
-
-    
-
     return (
         <>
             <BurgerMenu/>
@@ -331,23 +313,10 @@ function SalesDetail() {
                     </ResponsiveContainer>
 
                 </div>
-                {/* {topProducts.map((item) => (
-                    
-                    <div key={item.product}>
-                        <p>
-                            {item.product}: {item.total_sold} sålda
-                        </p>
-                    </div>
-
-
-                ))} */}
-               
-
-
                 <div className="flex flex-col">                   
                     {sales.length > 0 && (
                         <button
-                            className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400"
+                            className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400 hidden"
                             onClick={handleDelete}
                         >
                             Ta bort Detalj Data
