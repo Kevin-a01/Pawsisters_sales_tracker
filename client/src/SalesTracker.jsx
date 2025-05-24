@@ -29,7 +29,6 @@ function SalesTracker(){
                     throw new err('Failed to fetch stored cons');
                 }
                 const data = await response.json();
-                /* console.log('Stored cons fetched', data); */
                 setStoredCons(data);
             }catch(err) {
                 console.error('Error fetching stored cons', err);
@@ -96,30 +95,6 @@ function SalesTracker(){
         fetchProducts();
     }, [conId, refreshTrigger]);
 
-    /* useEffect(() => {
-       
-      fetch(`${API_BASE_URL}/api/products`)
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error("Error fetching products", err));
-
-
-    }, []);
-    
-      
-    useEffect(() => {
-      
-        fetch(`${API_BASE_URL}/api/cons/latest`)
-        .then((res) => res.json())
-        .then((data) => {
-            setConTitle(data.title);
-            setConId(data.conId);
-            localStorage.setItem("conId", data.conId);
-
-        })
-        .catch((err) => console.error("Error fetching conventions", err));
-    }, []); */
-
     useEffect(() => {
         document.title = "PawSisters Sale Tracker"
 
@@ -171,21 +146,6 @@ function SalesTracker(){
             return;
           }
 
-        /* if(!window.confirm('Vill du verkligen lagra alla produkter?')) return;
-        console.log("Storing products with conId:", conId);
-        console.log("Products to store:", products);
-
-        if(!conId) {
-            alert("Det finns inga produkter att lagra!");
-            return;
-        }
-
-        if(products.length === 0) {
-
-            alert("No products to store!");
-            return;
-
-        } */
 
         setIsStoring(true);
         try{
@@ -293,15 +253,16 @@ return(
           </div>
         ):(
             <>
-            <table className="w-full border-collapse border-2 border-pink-300 mt-5 lg:w-4/5 lg:mx-auto">
+            <table className="w-full border-collapse border-pink-300 mt-5 lg:w-4/5 lg:mx-auto ">
+
             <thead className="">
                 <tr className="w-screen">
-                    <th className="border-2 border-pink-300 p-1 text-lg">Produkt</th>
-                    <th className="border-2 border-pink-300 p-1 text-lg"
+                    <th className="border border-pink-300  text-md">Produkt</th>
+                    <th className="border border-pink-300 p-1 text-md"
                     >Pris</th>
-                     <th className="border-2 border-pink-300 p-1 text-lg w-fit">Maker</th>
-                    <th className="border-2 border-pink-300 p-1 text-lg w-fit">Betalning</th>
-                    <th className="border-2 border-pink-300 p-1 text-lg w-fit ">Action</th>
+                     <th className="border border-pink-300 p-1 text-md w-fit">Maker</th>
+                    <th className="border border-pink-300 p-1 text-md w-fit">Betalning</th>
+                    {/* <th className="border border-pink-300 p-1 text-md w-fit ">Action</th> */}
                 </tr>
             </thead>
 
@@ -311,27 +272,27 @@ return(
                 {products.length > 0 ? (
                     products.map((product) =>(
                         <tr key={product.id}>
-                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
+                            <td className="border border-pink-300 p-2 text-center text-sm font-medium">
                                 {product.product}
                             </td>
 
-                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
+                            <td className="border border-pink-300 p-2 text-center text-sm font-medium">
                                 {product.price}kr
                             </td>
 
-                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
+                            <td className="border border-pink-300 p-2 text-center text-sm font-medium">
                                 {product.maker}
                             </td>
 
-                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium">
+                            <td className="border border-pink-300 p-2 text-center text-sm font-medium">
                                 {product.payment}
                             </td>
 
-                            <td className="border-2 border-pink-300 p-2 text-center text-md font-medium bg-pink-400 ">
-                                <button className="cursor-pointer w-full" onClick={() => {
+                            <td className="border border-pink-300 p-2 text-center text-sm font-medium bg-[#FCD4DF] ">
+                                <button className="cursor-pointer w-full text-lg" onClick={() => {
                                     console.log("Delete button clicked for ID:", product.id);
                                     deleteProduct(product.id)}}>
-                                    Ta bort
+                                    <i className="fa-solid fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
