@@ -265,9 +265,6 @@ return(
                     {/* <th className="border border-pink-300 p-1 text-md w-fit ">Action</th> */}
                 </tr>
             </thead>
-
-            
-            
             <tbody>
                 {products.length > 0 ? (
                     products.map((product) =>(
@@ -321,17 +318,13 @@ return(
             <h1 className="text-center text-2xl p-3"> 💤 Ingen aktiv försäljning pågår just nu.</h1>
 
         )}
-       
-        
-       
-
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>
 
         {showModal && (
             <div className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
-                <div className="bg-pink-200 p-6 rounded-xl shadow-lg w-11/12 max-w-md">
-                    <h3 className="text-xl text-center font-medium mb-4 text-pink-400">Välj ett konvent att lagra produkter i</h3>
+                <div className="bg-[#FCD4DF] p-6 rounded-xl shadow-lg w-11/12 max-w-md">
+                    <h3 className="text-2xl text-center font-medium mb-4 text-[#F4538B]">Välj ett konvent att lagra produkter i</h3>
                     <div className="max-h-60 overflow-y-auto">
                         {conId && conTitle !== '' && (
                             <div className="flex items-center gap-3 mb-2">
@@ -347,7 +340,7 @@ return(
                                     }
                                 }}
                                 className="mt-0.5 h-4.5 w-4.5 border-2 " />
-                                <label htmlFor="current-con" className="text-pink-500">
+                                <label htmlFor="current-con" className="text-[#F4538B] font-medium">
                                     {conTitle} (Aktuellt konvent)
                                 </label>
                             </div>
@@ -365,15 +358,15 @@ return(
                                         setSelectedCons(selectedCons.filter((c) => c.id !== con.id));
                                     }
                                 }} 
-                                className="h-4.5 w-4.5"/>
-                                <label htmlFor={`con-${con.id}`} className="text-pink-500">
+                                className="h-4.5 w-4.5 "/>
+                                <label htmlFor={`con-${con.id}`} className="text-[#F4538B] font-medium">
                                     {con.title}
                                 </label>
                             </div>
                         ))}
                     </div>
                     <div className="flex justify-end mt-4 gap-2">
-                        <button className="border border-purple-500 bg-purple-500 p-2 rounded-lg text-white"
+                        <button className="border-none bg-white p-2 rounded-lg text-[#F4538B]"
                         onClick={() => {
                             setShowModal(false);
                             setSelectedCons([]);
@@ -381,7 +374,7 @@ return(
                             Avbryt
                         </button>
 
-                        <button className="border border-transparent p-2 bg-pink-400 text-white rounded-lg"
+                        <button className="border border-transparent p-2 bg-[#F4538B] text-white rounded-lg"
                         onClick={storedProducts}
                         disabled={isStoring}>
                             {isStoring ? 'Lagrar...' : 'Lagra'}
