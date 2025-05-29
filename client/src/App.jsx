@@ -10,6 +10,7 @@ import CalendarDetailPage from "./pages/CalendarDetailPage";
 import AddMonthlyNotes from "./pages/AddMonthlyNotes";
 import AddEvent from "./pages/AddEvent";
 import AddTask from "./pages/AddTask";
+import AddInvItem from "./pages/AddInvItem";
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/add-monthly-note" element={<AddMonthlyNotes/>} />
         <Route path="/calendar/:date/add-event" element= {<AddEvent/>}/>
         <Route path="/add-task" element= {<AddTask/>} />
+        <Route path="/add-new-item" element={<AddInvItem/>}/>
       </Routes>
     </Router>
     </>

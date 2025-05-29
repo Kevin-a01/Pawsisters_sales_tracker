@@ -5,6 +5,7 @@ const consRoutes = require('./routes/cons');
 const calendarEventsRoutes = require('./routes/calendar');
 const monthlyNotesRoutes = require('./routes/monthly_notes');
 const monthlyNotesEntriesRoutes = require('./routes/monthly_note_entries');
+const inventoryRoutes = require('./routes/inventory');
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
@@ -39,6 +40,7 @@ app.use('/api/stored_products', storedProductsRoutes);
 app.use('/api/calendar', calendarEventsRoutes);
 app.use('/api/monthly_notes', monthlyNotesRoutes);
 app.use('/api/monthly_notes_entries', monthlyNotesEntriesRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 
 app.listen(PORT, "0.0.0.0", () => {
