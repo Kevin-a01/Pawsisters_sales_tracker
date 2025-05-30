@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
       UPDATE inventory
       SET quantity = quantity - 1
       WHERE name = $1 AND quantity > 0
-      `, [product]);
+      `, [product.name]);
 
     console.log("Product inserted, ID:", result.rows[0].id);
     res.status(201).json({ productId: result.rows[0].id });
