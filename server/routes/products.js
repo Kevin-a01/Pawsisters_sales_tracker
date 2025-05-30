@@ -17,11 +17,13 @@ router.post('/', async (req, res) => {
       [product, price, payment, conId || null, maker]
     );
 
+    const procutName = typeof product === 'string' ? product : product.name
+
     await pool.query(`
       UPDATE inventory
       SET quantity = quantity - 1
       WHERE name = $1 AND quantity > 0
-      `, [product.name]);
+      `, [procutName]);
 
     console.log("Product inserted, ID:", result.rows[0].id);
     res.status(201).json({ productId: result.rows[0].id });
