@@ -46,6 +46,28 @@ export default function Inventory () {
       return matchesCategory && matchesSearch;
 
     });
+
+    const handleDelete = async (id) => {
+
+      try{
+        const res = await fetch(`${API_BASE_URL}/api/inventory/${id}`, {
+          method: "DELETE",
+        })
+
+        if(!res.ok){
+          const err = await res.json();
+          throw new Error ("Failed to delete product: ", err);
+        }
+
+        setProducts(prev => prev.filter(p => p.id !== id));
+
+        alert("Inventerings Föremål Borttagen!");
+
+      }catch(err){
+        console.error("Error deleting inventory product");
+      }
+
+    }
   
   return(
    
@@ -85,6 +107,16 @@ export default function Inventory () {
         ) : (
           filteredProducts.map((product) => (
             <div key={product.product_code} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col items-start">
+
+                <div className="flex justify-between w-full mb-3">
+                  <button onClick={() => handleDelete(product.id)} className="text-xl">
+                    <i className="fa-solid fa-trash"></i>
+                  </button>
+                  <button className="text-xl mr-1 hidden">
+                    <i className="fa-solid fa-pen"></i>
+                  </button>
+                </div>
+
               
                 <h2 className="text-2xl p-1 leading-snug font-medium ">
                   {product.name}
@@ -95,7 +127,7 @@ export default function Inventory () {
                 </p>
 
 
-                <img className="w-15 mx-4 ml-auto -mt-20" src={product.image} alt={product.name} /> 
+                <img className="w-15 mx-2 ml-auto -mt-20 " src={product.image} alt={product.name} /> 
               
               
             </div>
