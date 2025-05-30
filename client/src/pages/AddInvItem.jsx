@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function(){
 
   const [formData, setFormData] = useState({
-    product_code: "",
+   /*  product_code: "", */
     name: "",
     quantity: "",
     category: "",
@@ -33,12 +33,16 @@ export default function(){
     e.preventDefault();
 
     const data = new FormData();
-
-    data.append("product_code", formData.product_code);
     data.append("name", formData.name)
     data.append("quantity", formData.quantity)
     data.append("image", formData.image)
     data.append("category", formData.category)
+
+    if(!formData.name || !formData.quantity || !formData.image || !formData.category){
+      alert("Var snäll och fyll i alla fält!");
+      return
+
+    }
 
     try{
       const res = await fetch(`${API_BASE_URL}/api/inventory`, {
@@ -51,7 +55,6 @@ export default function(){
         alert("Error:" + err.error)
       }else{
         setFormData({
-          product_code: "",
           name: "",
           quantity: "",
           category: "",
@@ -59,6 +62,7 @@ export default function(){
         });
 
       }
+
 
     }catch(err){
       console.error("Något gick fel:", err);
@@ -96,11 +100,6 @@ export default function(){
         <label htmlFor="available-quantity" className="">Tillänglig kvantitet<span className="text-red-500"> *</span></label>
 
         <input type="text" name="quantity" value={formData.quantity} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} />
-      </div>
-
-      <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
-        <label htmlFor="product_code" className="">Produkt Kod<span className="text-red-500"> *</span></label>
-        <input type="text" name="product_code" value={formData.product_code} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} placeholder="Produkt-100" />
       </div>
 
       <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
