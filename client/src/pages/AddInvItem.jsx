@@ -105,7 +105,18 @@ export default function(){
 
       <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
         <label htmlFor="product_image" className="">Produkt Bild<span className="text-red-500"> *</span></label>
-        <input type="file" name="image" className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} placeholder="Produkt-100" />
+        <input type="file" id="product_image" name="image" className="hidden" onChange={handleChange} placeholder="Produkt-100" />
+
+        <label htmlFor="product_image" className="cursor-pointer px-4 py-2 bg-pink-300  text-white rounded-lg w-fit text-center">Välj Bild</label>
+
+        {formData.image && (
+          <span className="text-md mt-1 text-black">
+            Fil vald: {formData.image.name}
+          </span>
+
+        )}
+
+
       </div>
 
 
