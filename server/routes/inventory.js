@@ -34,9 +34,9 @@ router.post('/', upload.single("image"), async (req, res) => {
 
     const result = await pool.query(
       `
-      INSERT INTO inventory (product_code, name, quantity, category, image)
-      VALUES($1, $2, $3, $4, $5) RETURNING *
-      `, [product_code, name, quantity, category, imageUrl]
+      INSERT INTO inventory ( name, quantity, category, image)
+      VALUES($1, $2, $3, $4) RETURNING *
+      `, [name, quantity, category, imageUrl]
     )
     res.status(201).json({ message: "Produkt är sparad", product: result.rows[0], image: imageUrl });
 
@@ -45,6 +45,24 @@ router.post('/', upload.single("image"), async (req, res) => {
     res.status(500).json({ err: "Kunde inte lägga till produkt i inventering." });
   }
 
-})
+});
+
+
+router.delete('/:id', async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      "DELETE FROM inventory WHERE id = $1", [id]
+    )
+
+
+    res.status(200).json({ message: "Borttagning lyckades!" })
+  } catch (err) {
+    console.error("Misslyckades att ta bort inventerings produkt", err);
+    res.status(500).json({ err: "Internal Server Error." });
+  }
+});
 
 module.exports = router;
