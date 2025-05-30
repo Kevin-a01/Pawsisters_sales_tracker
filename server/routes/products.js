@@ -12,22 +12,16 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    /* if (!conId) {
-      const currentDate = new Date().toISOString().split('T')[0];
-      const tempConResult = await pool.query(
-        `INSERT INTO cons (title, date) VALUES ($1, $2) RETURNING id`,
-        ['Temp Con' + Date.now(), currentDate]
-      );
-      conId = tempConResult.rows[0].id;
-      console.log(`Created temporary con with conId: ${conId}`);
-
-
-    } */
-
     const result = await pool.query(
       'INSERT INTO products (product, price, payment, conId , maker) VALUES ($1, $2, $3, $4, $5) RETURNING id',
       [product, price, payment, conId || null, maker]
     );
+
+    await pool.query(`
+      UPDATE inventory
+      SET quantity = quantity - 1
+      WHERE name = $1 AND quantity > 0
+      `, [product]);
 
     console.log("Product inserted, ID:", result.rows[0].id);
     res.status(201).json({ productId: result.rows[0].id });

@@ -23,12 +23,14 @@ router.get('/', async (req, res) => {
 router.post('/', upload.single("image"), async (req, res) => {
 
   try {
-    const { product_code, name, quantity, category } = req.body;
-    const imageUrl = req.file.path;
+    const { name, quantity, category } = req.body;
+    const file = req.file;
 
-    if (!product_code || !name || !quantity || !category) {
-      return res.status(400).json({ error: "Missing required fields" }, error);
+    if (!name || !quantity || !category || !file) {
+      return res.status(400).json({ error: " Missing required fields" });
     }
+
+    const imageUrl = file.path
 
     const result = await pool.query(
       `
@@ -40,7 +42,7 @@ router.post('/', upload.single("image"), async (req, res) => {
 
   } catch (err) {
     console.error('Error adding to inventory', err);
-    res.status(500).json({ error: "Kunde inte lägga till produkt i inventering." });
+    res.status(500).json({ err: "Kunde inte lägga till produkt i inventering." });
   }
 
 })

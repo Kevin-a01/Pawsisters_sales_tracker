@@ -63,7 +63,7 @@ export default function Inventory () {
     </div>
 
     <div className="py-3 pl-3 flex justify-between w-full ">
-    <input className="border w-45 pl-1 rounded-xl focus:outline-none border-purple-500" type="text" placeholder="Sök Produkt..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+    <input className="border w-45 pl-1 rounded-xl h-9 focus:outline-none border-purple-500" type="text" placeholder="Sök Produkt..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
       <div className="p-2 relative w-22 mr-1">
         <Listbox value={selected} onChange={setSelected}>
