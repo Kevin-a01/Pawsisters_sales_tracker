@@ -38,7 +38,7 @@ export default function(){
     data.append("image", formData.image)
     data.append("category", formData.category)
 
-    if(!formData.name || !formData.quantity || !formData.image || !formData.category){
+    if(!formData.name || !formData.quantity || !formData.category || !formData.image){
       alert("Var snäll och fyll i alla fält!");
       return
 

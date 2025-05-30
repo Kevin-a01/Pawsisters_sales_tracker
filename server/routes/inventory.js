@@ -47,6 +47,34 @@ router.post('/', upload.single("image"), async (req, res) => {
 
 });
 
+router.put('/:id', async (req, res) => {
+
+  const { id } = req.params;
+  const { quantity } = req.body;
+
+
+  if (quantity === undefined) {
+    return res.status(400).json({ error: "Missing quantity parameters" });
+  }
+
+  try {
+    const result = await pool.query(
+      "UPDATE inventory SET quantity = $1 WHERE id = $2 RETURNING *",
+      [quantity, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(400).json({ error: "Produkt hittades inte." })
+    }
+    res.status(200).json({ product: result.rows[0] });
+
+  } catch (err) {
+    console.error("Error updating quantity", err);
+    res.status(500).json({ error: "Serverfel vid uppdaterande." })
+  }
+
+});
+
 
 router.delete('/:id', async (req, res) => {
 
