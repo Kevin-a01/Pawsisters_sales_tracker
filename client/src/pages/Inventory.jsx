@@ -11,6 +11,8 @@ export default function Inventory () {
   const [selected, setSelected] = useState(options[0])
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [newQuantity, setNewQuantity] = useState("");
+  const [editingProductId, setEditingProductId] = useState(null);
 
   const API_BASE_URL = import.meta.env.PROD 
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
@@ -67,6 +69,45 @@ export default function Inventory () {
         console.error("Error deleting inventory product");
       }
 
+    };
+
+    const handleSaveQuantity = async (id) => {
+
+      const paresedQuantity = parseInt(newQuantity);
+
+      if(isNaN(paresedQuantity)){
+        alert("Skriv in ett giltigt antal");
+        return
+      }
+
+      try{
+        const res = await fetch(`${API_BASE_URL}/api/inventory/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type" : "application/json",
+          },
+          body: JSON.stringify({quantity: Number(paresedQuantity)}),
+        });
+        if(!res.ok) throw new Error("Misslyckades att uppdatera antalet");
+
+        const updated = await res.json();
+
+        if(!updated.product){
+          throw new Error("Produktdata saknas i svaret");
+        }
+
+        setProducts((prev) => 
+        prev.map((p) => (p.id === id ? {...p, quantity: updated.product.quantity} : p)));
+
+        setEditingProductId(null);
+        alert("Antal uppdaterat.");
+
+
+      }catch(err){
+        console.error(err);
+        alert("Kunde inte uppdatera produktens antal");
+      }
+
     }
   
   return(
@@ -112,7 +153,10 @@ export default function Inventory () {
                   <button onClick={() => handleDelete(product.id)} className="text-xl">
                     <i className="fa-solid fa-trash"></i>
                   </button>
-                  <button className="text-xl mr-1 hidden">
+                  <button className="text-xl mr-1" onClick={() => {
+                    setEditingProductId(product.id);
+                    setNewQuantity(product.quantity);
+                  }}>
                     <i className="fa-solid fa-pen"></i>
                   </button>
                 </div>
@@ -121,10 +165,33 @@ export default function Inventory () {
                 <h2 className="text-2xl p-1 leading-snug font-medium ">
                   {product.name}
                 </h2>
-
-                <p className="text-lg p-1 font-medium ">
+                {editingProductId === product.id ? (
+                  <div className="flex items-center  gap-2">
+                    <input 
+                    type="tel" 
+                    inputMode="numeric" 
+                    min="0"
+                    value={newQuantity}
+                    onChange={(e) => setNewQuantity(e.target.value)}
+                    className="w-20 border-pink-400 border focus:outline-none rounded p-1 text-center"
+                     />
+                     <button
+                     onClick={() => handleSaveQuantity(product.id)}
+                     className="bg-green-500 text-white px-2 py-0.5 mt-1 rounded">
+                      Spara
+                     </button>
+                     <button onClick={() => setEditingProductId(null)}
+                     className="bg-red-500 text-white px-2 py-0.5 mt-1 rounded">
+                      Avbryt
+                     </button>
+                  </div>
+                ) : (
+                  <p className="text-lg p-1 font-medium ">
                   Antal: {product.quantity}
-                </p>
+                  </p>
+                )}
+
+                
 
 
                 <img className="w-15 mx-2 ml-auto -mt-20 " src={product.image} alt={product.name} /> 
