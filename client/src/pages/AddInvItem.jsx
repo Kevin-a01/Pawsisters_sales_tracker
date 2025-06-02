@@ -9,9 +9,11 @@ export default function(){
     name: "",
     quantity: "",
     category: "",
-    image: ""
+    image: "",
+    maker: "",
+    price: ""
 
-  })
+  });
 
   const navigate = useNavigate();
 
@@ -33,12 +35,14 @@ export default function(){
     e.preventDefault();
 
     const data = new FormData();
-    data.append("name", formData.name)
-    data.append("quantity", formData.quantity)
-    data.append("image", formData.image)
-    data.append("category", formData.category)
+    data.append("name", formData.name);
+    data.append("quantity", formData.quantity);
+    data.append("image", formData.image);
+    data.append("category", formData.category);
+    data.append("maker", formData.maker);
+    data.append("price", formData.price);
 
-    if(!formData.name || !formData.quantity || !formData.category || !formData.image){
+    if(!formData.name || !formData.quantity || !formData.category || !formData.image || !formData.maker || !formData.price){
       alert("Var snäll och fyll i alla fält!");
       return
 
@@ -58,19 +62,21 @@ export default function(){
           name: "",
           quantity: "",
           category: "",
-          image: ""
+          image: "",
+          maker: "",
+          price: ""
         });
 
       }
-
-
     }catch(err){
       console.error("Något gick fel:", err);
-      
-
     }
     navigate('/inventory')
   }
+
+  const handleMakerChange = (e) => {
+      setFormData({...formData, maker: e.target.value})
+    };
 
   return(
     <>
@@ -103,6 +109,12 @@ export default function(){
       </div>
 
       <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
+        <label htmlFor="product_price" className="">Pris för produkt<span className="text-red-500"> *</span></label>
+
+        <input type="text" name="price" value={formData.price} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} />
+      </div>
+
+      <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
         <label htmlFor="product_image" className="">Produkt Bild<span className="text-red-500"> *</span></label>
         <input type="file" id="product_image" name="image" className="hidden" onChange={handleChange} placeholder="Produkt-100" />
 
@@ -112,10 +124,32 @@ export default function(){
           <span className="text-md mt-1 text-black">
             Fil vald: {formData.image.name}
           </span>
-
         )}
+      </div>
 
+       <div className="flex flex-col mx-auto w-full items-center gap-1 mt-4 ">
+        <label htmlFor="product_maker" className="">Skapare<span className="text-red-500"> *</span></label>
 
+        <div className="flex gap-2 flex-col place-items-center w-full">
+          <label className="flex items-center text-lg gap-2" htmlFor="product_maker">
+            T
+           <input type="radio" name="maker" value="T" checked={formData.maker === "T"} onChange={handleMakerChange} />
+          </label>
+       
+
+        <label className="flex items-center gap-2 text-lg mr-1.5" htmlFor="product_maker">
+          M
+         <input type="radio" name="maker" value="M" checked={formData.maker === "M"} onChange={handleMakerChange} />
+        </label>
+
+        <label className="flex items-center text-lg gap-2 mr-7" htmlFor="product_maker">
+          T+M
+         <input type="radio" name="maker" value="T+M" checked={formData.maker === "T+M"} onChange={handleMakerChange} />
+        </label>
+        
+        </div>
+
+        
       </div>
 
 

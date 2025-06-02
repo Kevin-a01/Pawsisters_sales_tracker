@@ -12,6 +12,7 @@ export default function Inventory () {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [newQuantity, setNewQuantity] = useState("");
+  const [newPrice, setNewPrice] = useState("");
   const [editingProductId, setEditingProductId] = useState(null);
 
   const API_BASE_URL = import.meta.env.PROD 
@@ -71,7 +72,7 @@ export default function Inventory () {
 
     };
 
-    const handleSaveQuantity = async (id) => {
+    /* const handleSaveQuantity = async (id) => {
 
       const paresedQuantity = parseInt(newQuantity);
 
@@ -108,7 +109,50 @@ export default function Inventory () {
         alert("Kunde inte uppdatera produktens antal");
       }
 
+    }; */
+
+    const handleSave = async ( id ) => {
+
+      const parsedPrice = parseFloat(newPrice);
+      const paresedQuantity = parseInt(newQuantity);
+
+
+      if(isNaN(parsedPrice || isNaN(paresedQuantity))) {
+        alert("Skriv in ett giltigt antal och pris!")
+        return;
+      }
+
+      try{
+        const res = await fetch(`${API_BASE_URL}/api/inventory/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type" : "application/json",
+          },
+          body: JSON.stringify({price: parsedPrice, quantity:paresedQuantity}),
+        });
+
+        if(!res.ok) throw new Error("Misslyckades att uppdatera pris");
+
+        const updated = await res.json();
+
+        if(!updated.product) {
+          throw new Error("Produktdata saknas i svaret");
+        }
+        setProducts((prev) => 
+        prev.map((p) => 
+        p.id === id ? {...p, price: updated.product.price, quantity: updated.product.quantity} : p
+      )
+    );
+    setEditingProductId(null)
+
+    }catch(err){
+      console.error(err);
+      alert("Kunde inte uppdatera produkten.")
     }
+
+  };
+
+    const totalQuantity = filteredProducts.reduce((sum, item) => sum + item.quantity, 0);
   
   return(
    
@@ -133,7 +177,7 @@ export default function Inventory () {
         <ListboxButton className="w-full bg-pink-700 text-white  rounded-lg shadow hover:bg-pink-800 transition focus:outline-none p-1">{selected}</ListboxButton>
         <ListboxOptions anchor="bottom" className="absolute mt-1 bg-white w-20 text-center rounded-xl font-medium">
         {options.map((option) => (
-          <ListboxOption value={option} className="data-focus:bg-[#FCD4DF] cursor-pointer border-none">
+          <ListboxOption key={option} value={option} className="data-focus:bg-[#FCD4DF] cursor-pointer border-none">
             {option}
           </ListboxOption>
         ))}
@@ -141,13 +185,17 @@ export default function Inventory () {
         </Listbox>
       </div>
     </div>
+    
+    <h2 className="bg-pink-300 w-fit ml-4 p-2 text-lg font-medium rounded-xl">
+      Lagersaldo: {totalQuantity}
+    </h2>
 
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-7">
         {filteredProducts.length === 0 ? (
           <p className="text-center text-xl">😭 Inga produkter hittades!</p>
         ) : (
           filteredProducts.map((product) => (
-            <div key={product.product_code} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col items-start">
+            <div key={product.id} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col items-start">
 
                 <div className="flex justify-between w-full mb-3">
                   <button onClick={() => handleDelete(product.id)} className="text-xl">
@@ -156,17 +204,33 @@ export default function Inventory () {
                   <button className="text-xl mr-1" onClick={() => {
                     setEditingProductId(product.id);
                     setNewQuantity(product.quantity);
+                    setNewPrice(product.price);
                   }}>
                     <i className="fa-solid fa-pen"></i>
                   </button>
                 </div>
-
-              
+                  <div className="p-1  rounded-full">
+                  <h3 className="text-lg -mt-1.5 text-center">{product.maker}</h3>
+                  </div>
+                  
                 <h2 className="text-2xl p-1 leading-snug font-medium ">
                   {product.name}
                 </h2>
+
                 {editingProductId === product.id ? (
-                  <div className="flex items-center  gap-2">
+                <div className="flex flex-col gap-2 ">
+
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm">Pris:</label>
+                    <input type="tel"
+                    inputMode="numeric"
+                    value={newPrice}
+                    onChange={(e) => setNewPrice(e.target.value)}
+                    className="w-20 ml-2.5 border-pink-400 border focus:outline-none rounded p-1 text-center"/>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm" >Antal:</label>
                     <input 
                     type="tel" 
                     inputMode="numeric" 
@@ -175,8 +239,12 @@ export default function Inventory () {
                     onChange={(e) => setNewQuantity(e.target.value)}
                     className="w-20 border-pink-400 border focus:outline-none rounded p-1 text-center"
                      />
+                  </div>
+
+                  
+                     
                      <button
-                     onClick={() => handleSaveQuantity(product.id)}
+                     onClick={() => handleSave(product.id)}
                      className="bg-green-500 text-white px-2 py-0.5 mt-1 rounded">
                       Spara
                      </button>
@@ -184,19 +252,19 @@ export default function Inventory () {
                      className="bg-red-500 text-white px-2 py-0.5 mt-1 rounded">
                       Avbryt
                      </button>
-                  </div>
+                  
+                </div>
+                 
                 ) : (
-                  <p className="text-lg p-1 font-medium ">
+                  <>
+                  <h3 className="p-1 font-medium text-lg">Pris: {product.price}kr</h3>
+                   <p className="text-md p-1 font-sans ">
                   Antal: {product.quantity}
                   </p>
+                  </>
+                 
                 )}
-
-                
-
-
                 <img className="w-15 mx-2 ml-auto -mt-20 " src={product.image} alt={product.name} /> 
-              
-              
             </div>
 
             

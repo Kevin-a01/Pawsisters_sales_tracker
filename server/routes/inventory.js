@@ -23,10 +23,10 @@ router.get('/', async (req, res) => {
 router.post('/', upload.single("image"), async (req, res) => {
 
   try {
-    const { name, quantity, category } = req.body;
+    const { name, quantity, category, maker, price } = req.body;
     const file = req.file;
 
-    if (!name || !quantity || !category || !file) {
+    if (!name || !quantity || !category || !file || !maker || !price) {
       return res.status(400).json({ error: " Missing required fields" });
     }
 
@@ -34,9 +34,9 @@ router.post('/', upload.single("image"), async (req, res) => {
 
     const result = await pool.query(
       `
-      INSERT INTO inventory ( name, quantity, category, image)
-      VALUES($1, $2, $3, $4) RETURNING *
-      `, [name, quantity, category, imageUrl]
+      INSERT INTO inventory ( name, quantity, category, image, maker, price)
+      VALUES($1, $2, $3, $4 , $5, $6) RETURNING *
+      `, [name, quantity, category, imageUrl, maker, price]
     )
     res.status(201).json({ message: "Produkt är sparad", product: result.rows[0], image: imageUrl });
 
@@ -50,7 +50,7 @@ router.post('/', upload.single("image"), async (req, res) => {
 router.put('/:id', async (req, res) => {
 
   const { id } = req.params;
-  const { quantity } = req.body;
+  const { quantity, price } = req.body;
 
 
   if (quantity === undefined) {
@@ -59,8 +59,8 @@ router.put('/:id', async (req, res) => {
 
   try {
     const result = await pool.query(
-      "UPDATE inventory SET quantity = $1 WHERE id = $2 RETURNING *",
-      [quantity, id]
+      "UPDATE inventory SET quantity  = $1, price = $2 WHERE id = $3 RETURNING *",
+      [quantity, price, id]
     );
 
     if (result.rowCount === 0) {
