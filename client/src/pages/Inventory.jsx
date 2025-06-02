@@ -2,6 +2,7 @@ import BurgerMenu from "../components/BurgerMenu";
 import { data, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import { EyeClosed } from "lucide-react";
 
 const options = ["Alla", "Virkat", "Stickers", "Pins", "Övrigt"]
 
@@ -53,7 +54,11 @@ export default function Inventory () {
 
     });
 
+    
+
     const handleDelete = async (id) => {
+      const confirmed = confirm("Är du säker att du vill ta bort denna produkt?")
+        if(!confirmed) return;
 
       try{
         const res = await fetch(`${API_BASE_URL}/api/inventory/${id}`, {
@@ -118,6 +123,8 @@ export default function Inventory () {
 
     const totalQuantity = filteredProducts.reduce((sum, item) => sum + item.quantity, 0);
 
+    const totalPrice = filteredProducts.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
     const groupedByMaker = filteredProducts.reduce((acc, product) => {
       if(!acc[product.maker]){
         acc[product.maker] = [];
@@ -128,7 +135,7 @@ export default function Inventory () {
 
     const makers = ["Alla", ...new Set(products.map(p => p.maker))];
   
-  return(
+    return(
    
     <>
     <BurgerMenu/>
@@ -143,11 +150,13 @@ export default function Inventory () {
        
     </div>
   
-    <div className="flex justify-end border border-purple-400 w-fit hidden">
+    <div className="flex flex-col p-1 w-fit ml-2 mt-2 gap-2 ">
+      <label className="text-lg" htmlFor="">Filtrera skapare:</label>
       <select
-    value={selectedMaker}
-    onChange={(e) => setSelectedMaker(e.target.value)}>
-      {makers.map((maker) => (
+        className=" bg-purple-400 rounded-2xl w-fit p-2 appearance-none focus:outline-none"
+        value={selectedMaker}
+        onChange={(e) => setSelectedMaker(e.target.value)}>
+        {makers.map((maker) => (
         <option key={maker} value={maker}>
           {maker}
         </option>
@@ -171,10 +180,16 @@ export default function Inventory () {
         </Listbox>
       </div>
     </div>
-    
-    <h2 className="bg-pink-300 w-fit ml-4 p-2 text-lg font-medium rounded-xl">
-      Lagersaldo: {totalQuantity}
+    <div className="flex justify-between">
+        <h2 className="bg-pink-300 w-fit ml-2 p-2 text-lg font-medium rounded-xl">
+        Lagersaldo: {totalQuantity}
     </h2>
+
+    <h2 className="bg-pink-300 w-fit mr-2 p-2 text-lg font-medium rounded-xl">
+        Lagerpris: {totalPrice}kr
+    </h2>
+    </div>
+    
 
     <div className="p-4 space-y-7">
         {filteredProducts.length === 0 ? (
@@ -183,7 +198,7 @@ export default function Inventory () {
           Object.entries(groupedByMaker).map(([maker, makerProduct]) => (
             <div key={maker} className="mb-10">
 
-              <h2 className="text-center text-3xl bg-pink-300 w-1/2 mx-auto p-2 rounded-2xl pb-2 mb-2">{maker}</h2>
+              <h2 className="text-center text-3xl bg-pink-300 w-1/2 mx-auto p-2 rounded-2xl pb-2 mb-4">{maker}</h2>
 
               {makerProduct.map((product) => (
                 <div key={product.id} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col gap-2 items-start mb-5">
