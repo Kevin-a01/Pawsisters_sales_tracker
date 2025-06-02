@@ -14,6 +14,7 @@ export default function Inventory () {
   const [newQuantity, setNewQuantity] = useState("");
   const [newPrice, setNewPrice] = useState("");
   const [editingProductId, setEditingProductId] = useState(null);
+  const [selectedMaker, setSelectedMaker] = useState("Alla")
 
   const API_BASE_URL = import.meta.env.PROD 
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
@@ -45,8 +46,10 @@ export default function Inventory () {
       // Kontrollera om produktens namn innehåller sökordet (case-insensitive)
       const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-      //Returnerar true bara om båda matchar.
-      return matchesCategory && matchesSearch;
+      const matchesMaker = selectedMaker === "Alla" || p.maker === selectedMaker
+
+      //Returnerar true bara om alla tre matchar.
+      return matchesCategory && matchesSearch && matchesMaker;
 
     });
 
@@ -71,45 +74,6 @@ export default function Inventory () {
       }
 
     };
-
-    /* const handleSaveQuantity = async (id) => {
-
-      const paresedQuantity = parseInt(newQuantity);
-
-      if(isNaN(paresedQuantity)){
-        alert("Skriv in ett giltigt antal");
-        return
-      }
-
-      try{
-        const res = await fetch(`${API_BASE_URL}/api/inventory/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type" : "application/json",
-          },
-          body: JSON.stringify({quantity: Number(paresedQuantity)}),
-        });
-        if(!res.ok) throw new Error("Misslyckades att uppdatera antalet");
-
-        const updated = await res.json();
-
-        if(!updated.product){
-          throw new Error("Produktdata saknas i svaret");
-        }
-
-        setProducts((prev) => 
-        prev.map((p) => (p.id === id ? {...p, quantity: updated.product.quantity} : p)));
-
-        setEditingProductId(null);
-        alert("Antal uppdaterat.");
-
-
-      }catch(err){
-        console.error(err);
-        alert("Kunde inte uppdatera produktens antal");
-      }
-
-    }; */
 
     const handleSave = async ( id ) => {
 
@@ -153,6 +117,16 @@ export default function Inventory () {
   };
 
     const totalQuantity = filteredProducts.reduce((sum, item) => sum + item.quantity, 0);
+
+    const groupedByMaker = filteredProducts.reduce((acc, product) => {
+      if(!acc[product.maker]){
+        acc[product.maker] = [];
+      }
+      acc[product.maker].push(product);
+      return acc;
+    }, {});
+
+    const makers = ["Alla", ...new Set(products.map(p => p.maker))];
   
   return(
    
@@ -167,6 +141,18 @@ export default function Inventory () {
         Add
       </Link>
        
+    </div>
+  
+    <div className="flex justify-end border border-purple-400 w-fit hidden">
+      <select
+    value={selectedMaker}
+    onChange={(e) => setSelectedMaker(e.target.value)}>
+      {makers.map((maker) => (
+        <option key={maker} value={maker}>
+          {maker}
+        </option>
+      ))}
+    </select>
     </div>
 
     <div className="py-3 pl-3 flex justify-between w-full ">
@@ -194,8 +180,13 @@ export default function Inventory () {
         {filteredProducts.length === 0 ? (
           <p className="text-center text-xl">😭 Inga produkter hittades!</p>
         ) : (
-          filteredProducts.map((product) => (
-            <div key={product.id} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col items-start">
+          Object.entries(groupedByMaker).map(([maker, makerProduct]) => (
+            <div key={maker} className="mb-10">
+
+              <h2 className="text-center text-3xl bg-pink-300 w-1/2 mx-auto p-2 rounded-2xl pb-2 mb-2">{maker}</h2>
+
+              {makerProduct.map((product) => (
+                <div key={product.id} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col gap-2 items-start mb-5">
 
                 <div className="flex justify-between w-full mb-3">
                   <button onClick={() => handleDelete(product.id)} className="text-xl">
@@ -209,9 +200,7 @@ export default function Inventory () {
                     <i className="fa-solid fa-pen"></i>
                   </button>
                 </div>
-                  <div className="p-1  rounded-full">
-                  <h3 className="text-lg -mt-1.5 text-center">{product.maker}</h3>
-                  </div>
+  
                   
                 <h2 className="text-2xl p-1 leading-snug font-medium ">
                   {product.name}
@@ -266,6 +255,10 @@ export default function Inventory () {
                 )}
                 <img className="w-15 mx-2 ml-auto -mt-20 " src={product.image} alt={product.name} /> 
             </div>
+              ))}
+               
+            </div>
+           
 
             
           ))
