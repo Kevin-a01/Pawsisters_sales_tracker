@@ -40,7 +40,7 @@ export default function CalendarDetailPage() {
       <BurgerMenu/>
     <div className="w-full ">
       <div className="flex justify-end">
-      <Link to={`/calendar/${date}/add-event`} className="text-2xl mr-2 bg-[#F4538B] w-10 flex justify-center h-10  items-center text-white rounded-full ">
+      <Link to={`/calendar/${date}/add-event`} className="text-2xl mr-2 bg-[#F4538B] w-10 flex justify-center h-10  items-center text-white rounded-full md:mt-3 md:mr-3 ">
       <i className="fa-solid fa-plus"></i>
       </Link>
     </div>

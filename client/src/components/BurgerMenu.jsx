@@ -39,14 +39,14 @@ export default function BurgerMenu() {
             
                    <div className= "flex gap-7 mr-5 ">
                     <div className="">
-                        <a href="" target="_blank" className="text-3xl">
+                        <a href="https://www.instagram.com/pawsisters.shop" target="_blank" className="text-3xl">
                         <i className="fa-brands fa-instagram"></i>
                         </a>
                         
                     </div>
 
                     <div>
-                        <a href="" target="_blank" className="text-3xl"> 
+                        <a href="https://www.tiktok.com/@pawsisters.shop" target="_blank" className="text-3xl"> 
                         <i className="fa-brands fa-tiktok"></i>
                         </a>
                     </div>
@@ -94,14 +94,14 @@ export default function BurgerMenu() {
                 </ul>
                 <div className="absolute bottom-2 p-1 flex gap-35 text-[#F4538B]">
                     <div className="flex ">
-                        <a href="" target="_blank" className="text-4xl">
+                        <a href="https://www.instagram.com/pawsisters.shop" target="_blank" className="text-4xl">
                         <i className="fa-brands fa-instagram"></i>
                         </a>
                         
                     </div>
 
                     <div>
-                        <a href="" target="_blank" className="text-4xl"> 
+                        <a href="https://www.tiktok.com/@pawsisters.shop" target="_blank" className="text-4xl"> 
                         <i className="fa-brands fa-tiktok"></i>
                         </a>
                     </div>

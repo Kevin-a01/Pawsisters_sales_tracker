@@ -85,7 +85,7 @@ export default function Calender() {
       </div>
     </div>
 
-    <div className="mb-4 p-4 m-3 bg-[#FCD4DF] border border-pink-300 rounded-xl shadow-sm shadow-[#F4538B]">
+    <div className="mb-4 p-4 m-3 bg-[#FCD4DF] border border-pink-300 rounded-xl shadow-sm shadow-[#F4538B] md:w-1/2 md:mx-auto">
       <div className="flex flex-row-reverse justify-between">
         <Link to="/add-monthly-note" className="text-2xl -mt-3 -mr-1">
         <i class="fa-solid fa-pen-to-square"></i>
@@ -107,7 +107,7 @@ export default function Calender() {
 
     </div>
 
-  <div ref={scrollRef} className="overflow-x-auto m-3">
+  <div ref={scrollRef} className="m-3 overflow-x-auto md:flex md:justify-center ">
     <div className="flex gap-2 min-w-[700px]  m-2 p-2">
       {daysofWeek.map((day) => {
         const isToday = day.isSame(dayjs(), "day");
