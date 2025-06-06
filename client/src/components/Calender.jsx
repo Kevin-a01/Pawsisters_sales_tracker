@@ -51,7 +51,7 @@ export default function Calender() {
     };
 
     const fetchMonthlyNote = async () => {
-      const res = await fetch(`${API_BASE_URL}/api/calendar/monthly-notes?year=${currentWeekStart.year()}&month=${currentWeekStart.month() + 1}`);
+      const res = await fetch(`${API_BASE_URL}/api/calendar/monthly-note?year=${currentWeekStart.year()}&month=${currentWeekStart.month() + 1}`);
       const data = await res.json();
       setMonthlyNote(data?.note || "");
     }
@@ -86,24 +86,26 @@ export default function Calender() {
     </div>
 
     <div className="mb-4 p-4 m-3 bg-[#FCD4DF] border border-pink-300 rounded-xl shadow-sm shadow-[#F4538B] md:w-1/2 md:mx-auto">
-      <div className="flex flex-row-reverse justify-between">
-        <Link to="/add-monthly-note" className="text-2xl -mt-3 -mr-1">
-        <i class="fa-solid fa-pen-to-square"></i>
-        </Link>
-         <h3 className="font-bold text-xl pb-2 ">Månadsnotis</h3>
+      <div className="flex justify-between">
+         <h3 className="font-bold text-xl pb-2 ">Veckonotis!</h3>
       </div>
+
+        {events.filter(event => dayjs(event.date).isSame(currentWeekStart, "week")).length > 0 ? (
+          <ul className="mt-3 list-disc list-inside text-[#F4538B] font-medium">
       
-     
-      <p className="font-medium">{montlyNote || "Ingen notering denna månad."}</p>
-    <ul className="mt-3 list-disc list-inside text-[#F4538B] font-medium">
-      <h3>Cons:</h3>
-      {events.filter((event) => dayjs(event.date).isSame(currentWeekStart, "month"))
-      .map((event) => (
-        <li key={event.id}>
-          {event.title}
+          {events.filter((event) => dayjs(event.date).isSame(currentWeekStart, "week"))
+          .map((event) => (
+          <li key={event.id}>
+            {event.title}
         </li>
-      ))}
-    </ul>
+        ))}
+        </ul>
+        ) : (
+          <p className="font-medium">Ingen notering denna vecka</p>
+        )}
+     
+      
+    
 
     </div>
 
@@ -118,9 +120,8 @@ export default function Calender() {
       const formattedDate = day.format("D MMMM");
 
       return(
-        <Link to={`/calendar/${day.format('YYYY-MM-DD')}`}>
-        
-        <div key={day.format("YYYY-MM-DD")} className={`p-2 w-45 shrink-0 border rounded-xl flex flex-col justify-between sm:justify-start  cursor-pointer h-36 realtive
+        <Link  key={day.format("YYYY-MM-DD")} to={`/calendar/${day.format('YYYY-MM-DD')}`}>
+        <div className={`p-2 w-45 shrink-0 border rounded-xl flex flex-col justify-between sm:justify-start  cursor-pointer h-36 realtive
         ${isToday ? "bg-[#F4538B]" : "bg-[#FCD4DF] text-gray-400"}
         ${isEventDay ? "border-[#F4538B]" : "border-gray-200"}`}>
 
@@ -132,8 +133,8 @@ export default function Calender() {
             .map((event) => (
               <>
               <div key={event.id} className="text-md">
-                Event: {event.title}
-                <p className="text-sm">
+                {event.title}
+                <p className="text-sm pt-4">
                   {event.description}
                 </p>
               </div>

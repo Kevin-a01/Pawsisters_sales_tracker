@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router-dom"
 import BurgerMenu from "../components/BurgerMenu";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { formats } from "dayjs/locale/sv";
 export default function CalendarDetailPage() {
 
    const API_BASE_URL = import.meta.env.PROD 
@@ -33,16 +33,57 @@ export default function CalendarDetailPage() {
 
     },[date]);
 
+    const navigate = useNavigate();
+
+    const handleDelete = async ( id ) => {
+       console.log("Details i handleDelete:", details);
+
+      if(!details || !Array.isArray(details) ||details.length === 0){
+        alert("Inga detaljer att ta bort!")
+        return;
+      }
+
+    const confirmed = confirm("Är du säker att du vill ta bort detta event?");
+
+    if(!confirmed) return;
+
+    try{
+      const res = await fetch(`${API_BASE_URL}/api/calendar/${id}`, {
+        method: "DELETE"
+      });
+
+      if(res.ok){
+        alert("Event borttaget")
+        setDetails(prev => prev.filter(event => event.id !== id))
+      }else{
+        alert("Något gick fel vid raderingen");
+      }
+      
+    }catch(err){
+      console.error("Fel vid borttagning", err);
+      
+
+    }
+
+    navigate('/')
+
+  }
+
 
  
     return(
       <>
       <BurgerMenu/>
     <div className="w-full ">
-      <div className="flex justify-end">
-      <Link to={`/calendar/${date}/add-event`} className="text-2xl mr-2 bg-[#F4538B] w-10 flex justify-center h-10  items-center text-white rounded-full md:mt-3 md:mr-3 ">
+      <div className="flex justify-between">
+      <button onClick={() => handleDelete(details[0]?.id)} className="text-2xl ml-2 bg-[#F4538B] w-10 flex justify-center h-10  items-center text-white rounded-full md:mt-3 md:mr-3">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+
+      <Link to={`/calendar/${date}/add-event`} className="text-2xl mr-2 bg-[#F4538B] w-10 flex justify-center h-10  items-center text-white rounded-full md:mt-3 md:ml-3 ">
       <i className="fa-solid fa-plus"></i>
       </Link>
+      
     </div>
   </div>
       {/* Details section */}
@@ -59,12 +100,12 @@ export default function CalendarDetailPage() {
       <p className="text-xl">{event.title}</p>
       </div>
 
-      <div className="flex justify-center items-center flex-col text-[#F4548B] bg-[#FEF2F6]  rounded-xl shadow-md p-4  mx-10 mt-5 mb-2">
+      {/* <div className="flex justify-center items-center flex-col text-[#F4548B] bg-[#FEF2F6]  rounded-xl shadow-md p-4  mx-10 mt-5 mb-2">
         <h2 className="text-xl">Beskrivning för {event.title}: </h2>
         <h3> {event.description} </h3>
-      </div>
+      </div> */}
 
-      <div className="bg-fuchsia-400 rounded-xl  mx-10 mt-10 p-10 relative">
+      <div className="bg-[#FEF2F6] rounded-xl shadow-md p-4 mx-10 mt-3 flex justify-center items-center flex-col gap-1 text-[#F4538B] relative">
         <div className="w-full">
         <Link to="/add-task" className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
             <i class="fa-solid fa-circle-plus"></i>
