@@ -191,14 +191,14 @@ export default function Inventory () {
     </div>
     
 
-    <div className="p-4 space-y-7">
+    <div className="p-4 space-y-7 md:w-4/5 md:mx-auto">
         {filteredProducts.length === 0 ? (
           <p className="text-center text-xl">😭 Inga produkter hittades!</p>
         ) : (
           Object.entries(groupedByMaker).map(([maker, makerProduct]) => (
             <div key={maker} className="mb-10">
 
-              <h2 className="text-center text-3xl bg-pink-300 w-1/2 mx-auto p-2 rounded-2xl pb-2 mb-4">{maker}</h2>
+              <h2 className="text-center text-3xl bg-pink-300 w-1/2 mx-auto p-2 rounded-2xl pb-2 mb-4 md:w-1/3">{maker}</h2>
 
               {makerProduct.map((product) => (
                 <div key={product.id} className="p-2 bg-[#FCD4DF] rounded-2xl flex flex-col gap-2 items-start mb-5">
