@@ -128,6 +128,21 @@ router.post('/events', async (req, res) => {
 
 });
 
+router.delete("/:id", async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+    await pool.query(
+      "DELETE FROM calendar_events WHERE id = $1", [id]
+    )
+    res.status(200).json({ message: "Borttagning lyckad!" });
+  } catch (err) {
+    console.error("Misslyckades att ta bort event", err);
+  }
+
+})
+
 
 
 module.exports = router;

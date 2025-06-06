@@ -14,8 +14,11 @@ export default function AddEvent() {
   const [eventText, setEventText] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
 
     try{
       const result = await fetch(`${API_BASE_URL}/api/calendar/events`, {
