@@ -12,6 +12,7 @@ export default function CalendarDetailPage() {
     const {date} = useParams();
 
     const [details, setDetails] = useState(null);
+    const [task, setTask] = useState(null);
 
     useEffect(() => {
       if(!date) return;
@@ -30,6 +31,26 @@ export default function CalendarDetailPage() {
       }
 
       fetchDetails();
+
+    },[date]);
+
+    useEffect(() => {
+
+      const fetchTasks = async (date) => {
+
+        try{
+          const res = await fetch(`${API_BASE_URL}/api/tasks/${date}`);
+          const data = await res.json();
+          console.log("Task API response:", data);
+          
+          setTask(data.task || []);
+        }catch(err){
+          console.error("Error fetching tasks", err);
+        }
+      }
+
+      fetchTasks(date);
+
 
     },[date]);
 
@@ -54,10 +75,25 @@ export default function CalendarDetailPage() {
 
       if(res.ok){
         alert("Event borttaget")
-        setDetails(prev => prev.filter(event => event.id !== id))
+
+        const deleteTask = await fetch(`${API_BASE_URL}/api/tasks/${date}`, {
+          method: "DELETE"
+        });
+
+        if(!deleteTask.ok){
+          console.warn("Event raderat men inte checklistan");
+          
+        }
+
+          setDetails(prev => prev.filter(event => event.id!== id)) 
+          setTask([]);
+
       }else{
-        alert("Något gick fel vid raderingen");
+        alert("Något gick fel vid raderingen av event")
+
       }
+
+
       
     }catch(err){
       console.error("Fel vid borttagning", err);
@@ -68,6 +104,31 @@ export default function CalendarDetailPage() {
     navigate('/')
 
   }
+
+    const toggleTask = async (taskItem) => {
+      try{
+        const res = await fetch(`${API_BASE_URL}/api/tasks/${taskItem.task_id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({completed: !taskItem.completed})
+        });
+
+        if(res.ok){
+          const updatedTask = await res.json();
+          setTask((prev) => 
+          prev.map((t) => (t.task_id === taskItem.task_id ? updatedTask.task: t))
+        );
+        }else{
+          console.error("Misslyckades att uppdatera uppgift");
+        }
+
+      }catch(err){
+        console.error("Fel vid uppdatering av task", err);
+      }
+
+    }
 
 
  
@@ -100,27 +161,33 @@ export default function CalendarDetailPage() {
       <p className="text-xl">{event.title}</p>
       </div>
 
-      {/* <div className="flex justify-center items-center flex-col text-[#F4548B] bg-[#FEF2F6]  rounded-xl shadow-md p-4  mx-10 mt-5 mb-2">
-        <h2 className="text-xl">Beskrivning för {event.title}: </h2>
-        <h3> {event.description} </h3>
-      </div> */}
-
-      <div className="bg-[#FEF2F6] rounded-xl shadow-md p-4 mx-10 mt-3 flex justify-center items-center flex-col gap-1 text-[#F4538B] relative">
+      <div className="bg-[#FEF2F6] rounded-xl shadow-md p-4 mx-10 mb-10 mt-3 flex flex-col gap-1 text-[#F4538B] relative">
         <div className="w-full">
-        <Link to="/add-task" className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
+        <Link to={`/add-task/${date}`} className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
             <i class="fa-solid fa-circle-plus"></i>
         </Link>
         </div>
-        <div className="flex flex-col">
-          <h2 className="text-lg">Checklista: </h2>
-        <ul className="list-disc list-inside space-y-1">
-
-          <li>
-
+        <h2 className="text-lg">Checklista: </h2>
+         <div className="flex flex-col justify-center items-center ">
+        
+        {Array.isArray(task) && task.length > 0 ? (
+          task.map((taskItem) => (
+            <ul key={taskItem.task_id} className="list-disc list-inside space-y-1">
+          <li className={`text-lg cursor-pointer flex items-center gap-2 ${taskItem.completed ? ' text-gray-400' : ''}`}
+          onClick={() => toggleTask(taskItem)}>
+            {taskItem.completed && <span>✅</span> }
+            {taskItem.task}
           </li>
-
         </ul>
+          ))
+        ) : (
+          <p>Inga uppgifter är tillaga ännu.</p>
 
+        )}
+         
+          
+        
+        
         </div>
         
       </div>
