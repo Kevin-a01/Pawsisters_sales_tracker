@@ -131,19 +131,12 @@ export default function Calender() {
             {events
             .filter((event) => dayjs(event.date).isSame(day, "day"))
             .map((event) => (
-              <>
               <div key={event.id} className="text-md">
                 {event.title}
                 <p className="text-sm pt-4">
                   {event.description}
                 </p>
               </div>
-
-              
-
-              
-              </>
-
             ))}
 
             </div>
