@@ -55,6 +55,7 @@ export default function AddTask() {
     <BurgerMenu/>
     <div>
       <h1 className="text-center text-2xl">Lägg till en uppgift att göra!</h1>
+
       <form onSubmit={handleSubmit} className="flex flex-col">
         <label htmlFor="task" className="text-center pt-2 text-xl p-3">
         Uppgift
@@ -70,6 +71,7 @@ export default function AddTask() {
         Lägg till uppgift
       </button>
       </form>
+
       
     </div>
     </>

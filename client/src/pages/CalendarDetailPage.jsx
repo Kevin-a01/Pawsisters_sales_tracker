@@ -148,7 +148,7 @@ export default function CalendarDetailPage() {
     </div>
   </div>
       {/* Details section */}
-    <div>
+    <div className="md:w-10/12 mx-auto">
       <h1 className="text-2xl text-center mb-5">
         Detaljer för {dayjs(date).format("DD MMMM YYYY")}
       </h1>
@@ -161,12 +161,16 @@ export default function CalendarDetailPage() {
       <p className="text-xl">{event.title}</p>
       </div>
 
+
       <div className="bg-[#FEF2F6] rounded-xl shadow-md p-4 mx-10 mb-10 mt-3 flex flex-col gap-1 text-[#F4538B] relative">
+
+     
         <div className="w-full">
         <Link to={`/add-task/${date}`} className="p-2 absolute top-[-6px] right-[-1px] text-2xl rounded-xl ">
             <i class="fa-solid fa-circle-plus"></i>
         </Link>
         </div>
+
         <h2 className="text-lg">Checklista: </h2>
          <div className="flex flex-col justify-center items-center ">
         
@@ -177,6 +181,7 @@ export default function CalendarDetailPage() {
           onClick={() => toggleTask(taskItem)}>
             {taskItem.completed && <span>✅</span> }
             {taskItem.task}
+
           </li>
         </ul>
           ))
