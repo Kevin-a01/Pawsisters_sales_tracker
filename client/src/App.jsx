@@ -30,7 +30,7 @@ function App() {
         <Route path="/calendar/:date" element={<CalendarDetailPage/>}/>
         <Route path="/add-monthly-note" element={<AddMonthlyNotes/>} />
         <Route path="/calendar/:date/add-event" element= {<AddEvent/>}/>
-        <Route path="/add-task" element= {<AddTask/>} />
+        <Route path={`/add-task/:date`} element= {<AddTask/>} />
         <Route path="/add-new-item" element={<AddInvItem/>}/>
       </Routes>
     </Router>
