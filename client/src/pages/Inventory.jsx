@@ -3,6 +3,7 @@ import { data, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { EyeClosed } from "lucide-react";
+import BackToTopButton from "../components/BackToTopButton";
 
 const options = ["Alla", "Virkat", "Stickers", "Pins", "Övrigt"]
 
@@ -279,12 +280,8 @@ export default function Inventory () {
           ))
 
         )}
-
-      
-        
-        
-
     </div>
+    <BackToTopButton/>
     </>
     
     

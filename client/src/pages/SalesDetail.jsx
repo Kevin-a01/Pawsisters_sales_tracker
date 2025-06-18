@@ -10,6 +10,7 @@ import {
     ResponsiveContainer
 } from "recharts"
 import BurgerMenu from "../components/BurgerMenu";
+import BackToTopButton from "../components/BackToTopButton";
 
 
 function SalesDetail() {
@@ -324,6 +325,7 @@ function SalesDetail() {
                     )}
                 </div>
             </div>
+            <BackToTopButton/>
         </>
     );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import DetailCard from "./components/DetailCard";
 import BurgerMenu from "./components/BurgerMenu";
+import BackToTopButton from "./components/BackToTopButton";
 
 function SalesTracker(){
     const {state} = useLocation();
@@ -320,6 +321,7 @@ return(
         )}
     </div>
         <DetailCard refreshTrigger={refreshTrigger}/>
+        <BackToTopButton/>
 
         {showModal && (
             <div className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
@@ -382,8 +384,9 @@ return(
                     </div>
                 </div>
             </div>
-
+            
         )}
+        
     </>
 )
 }
