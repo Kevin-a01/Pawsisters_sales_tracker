@@ -141,7 +141,7 @@ export default function Inventory () {
     <>
     <BurgerMenu/>
     <div className="flex pl-2 gap-1 w-full">
-      <div className="p-1 text-lg">
+      <div className="p-1 text-xl">
         <i class="fa-solid fa-box"></i>
       </div>
       <h2 className="p-1 text-lg">Pawsisters Inventory</h2>
@@ -158,7 +158,7 @@ export default function Inventory () {
         value={selectedMaker}
         onChange={(e) => setSelectedMaker(e.target.value)}>
         {makers.map((maker) => (
-        <option key={maker} value={maker}>
+        <option className="text-center" key={maker} value={maker}>
           {maker}
         </option>
       ))}
@@ -250,11 +250,11 @@ export default function Inventory () {
                      
                      <button
                      onClick={() => handleSave(product.id)}
-                     className="bg-green-500 text-white px-2 py-0.5 mt-1 rounded">
+                     className="bg-pink-400 text-white px-2 py-0.5 mt-1 rounded">
                       Spara
                      </button>
                      <button onClick={() => setEditingProductId(null)}
-                     className="bg-red-500 text-white px-2 py-0.5 mt-1 rounded">
+                     className="bg-pink-800 text-white px-2 py-0.5 mt-1 rounded">
                       Avbryt
                      </button>
                   
@@ -269,7 +269,7 @@ export default function Inventory () {
                   </>
                  
                 )}
-                <img className="w-15 mx-2 ml-auto -mt-20 " src={product.image} alt={product.name} /> 
+                <img className="w-20 rounded-2xl mx-2 ml-auto -mt-20 " src={product.image} alt={product.name} /> 
             </div>
               ))}
                

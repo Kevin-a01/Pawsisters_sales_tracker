@@ -1,4 +1,3 @@
-import React from "react"
 import { useEffect, useState } from "react"
 
 
@@ -20,7 +19,8 @@ export default function BackToTopButton(){
   const scrollUp = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth" 
+      
     })
 
   }
