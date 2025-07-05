@@ -128,7 +128,16 @@ export default function CalendarDetailPage() {
         console.error("Fel vid uppdatering av task", err);
       }
 
+    };
+
+
+    const deleteTask = async (taskItem) => {
+
+      
+
     }
+
+
 
 
  
@@ -149,11 +158,12 @@ export default function CalendarDetailPage() {
   </div>
       {/* Details section */}
     <div className="md:w-10/12 mx-auto">
-      <h1 className="text-2xl text-center mb-5">
-        Detaljer för {dayjs(date).format("DD MMMM YYYY")}
-      </h1>
+      
       {Array.isArray(details) && details.map((event) => (
         <>
+        <h1 className="text-2xl text-center mb-5">
+        Detaljer för {dayjs(date).format("DD MMMM YYYY")}
+      </h1>
       <div key={event.id} className="bg-[#FEF2F6] rounded-xl shadow-md p-4 mx-10 mt-3 flex justify-center items-center flex-col gap-1 text-[#F4538B]">
       <h2 className="">
         Event detta datum:
