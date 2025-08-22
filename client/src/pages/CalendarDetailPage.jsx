@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom"
 import BurgerMenu from "../components/BurgerMenu";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 import dayjs from "dayjs";
 export default function CalendarDetailPage() {
 
@@ -76,7 +77,7 @@ export default function CalendarDetailPage() {
       if(res.ok){
         alert("Event borttaget")
 
-        const deleteTask = await fetch(`${API_BASE_URL}/api/tasks/${date}`, {
+        const deleteTask = await fetch(`${API_BASE_URL}/api/tasks/date/${date}`, {
           method: "DELETE"
         });
 
@@ -131,8 +132,33 @@ export default function CalendarDetailPage() {
     };
 
 
-    const deleteTask = async (taskItem) => {
+    const deleteTasks = async (taskItem) => {
 
+      const confirmed = confirm("Är du säker att du vill ta bort denna uppgift");
+
+      if(!confirmed){
+        return;
+      }
+
+      try{
+        const res = await fetch(`${API_BASE_URL}/api/tasks/${taskItem.task_id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type" : "application/json"
+          },
+        });
+
+        if(!res.ok){
+          throw new Error("Något gick fel vid radering av uppgift.");
+        }
+
+        console.log("Uppgift togs bort!");
+        
+        setTask(prev => prev.filter(t => t.task_id !== taskItem.task_id)); 
+
+      }catch(err){
+        console.error("Fel vid radering", err);
+      }
       
 
     }
@@ -160,7 +186,8 @@ export default function CalendarDetailPage() {
     <div className="md:w-10/12 mx-auto">
       
       {Array.isArray(details) && details.map((event) => (
-        <>
+        <React.Fragment key={event.id}>
+
         <h1 className="text-2xl text-center mb-5">
         Detaljer för {dayjs(date).format("DD MMMM YYYY")}
       </h1>
@@ -192,6 +219,17 @@ export default function CalendarDetailPage() {
             {taskItem.completed && <span>✅</span> }
             {taskItem.task}
 
+            {!taskItem.completed && (
+              <button onClick={() => {
+              deleteTasks(taskItem);
+            }}>
+                <i className="fa-solid fa-trash"></i>
+            </button>
+
+            )}
+            
+            
+
           </li>
         </ul>
           ))
@@ -207,7 +245,7 @@ export default function CalendarDetailPage() {
         
       </div>
 
-      </>
+      </React.Fragment>
 
       ))}
         

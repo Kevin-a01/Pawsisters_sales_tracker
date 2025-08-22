@@ -8,6 +8,17 @@ import { Link } from 'react-router-dom'
 export default function BurgerMenu() {
 
     const [isOpen, setIsOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+
+
+    const handleClosingMenu =  () => {
+        setIsClosing(true)
+        setTimeout(() => {
+            setIsOpen(false)
+            setIsClosing(false)
+        }, 300);
+
+    }
 
     return(
         <nav className="bg-[#FEF2F6]">
@@ -71,7 +82,7 @@ export default function BurgerMenu() {
             
             <div className={`fixed top-0 left-0 h-full w-64 bg-[#FEF2F6] shadow-md p-6 z-[60] transition-transform duration-250 ease-in-out rounded-r-3xl
                 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
-                    <button onClick={() => setIsOpen(false)} className="absolute top-4 right-4 text-[#F4538B] cursor-pointer">
+                    <button onClick={handleClosingMenu} className={`absolute top-4 right-4 text-[#F4538B] cursor-pointer transition-transform duration-300 ${isClosing ? "rotate-90 scale-0" : ""}`}>
                     <X size={32} />
                     </button>
                     <img src="\Narcon_foto.png" className="text-3xl text-pink-500 font-medium w-5/12 rounded-full border border-[#F4538B]">    

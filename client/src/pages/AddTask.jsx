@@ -57,7 +57,7 @@ export default function AddTask() {
       <h1 className="text-center text-2xl">Lägg till en uppgift att göra!</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col">
-        <label htmlFor="task" className="text-center pt-2 text-xl p-3">
+        <label htmlFor="task" className="text-center pt-5 text-xl p-3">
         Uppgift
       </label>
       <input type="text"
@@ -67,7 +67,7 @@ export default function AddTask() {
       className="border p-2 w-1/2 mx-auto rounded-xl border-purple-500 focus:outline-none"
       placeholder="Uppgift..." />
 
-      <button type="submit" className="border border-pink-300 w-fit mx-auto mt-10 p-2 bg-pink-400 rounded-xl">
+      <button type="submit" className="border border-pink-300 w-fit mx-auto mt-7 p-2 bg-pink-400 rounded-xl">
         Lägg till uppgift
       </button>
       </form>
