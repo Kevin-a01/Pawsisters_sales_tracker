@@ -330,7 +330,7 @@ return(
         </>
         ): (
 
-            <h1 className="text-center text-2xl p-3"> 💤 Ingen aktiv försäljning pågår just nu.</h1>
+            <h1 className="text-center text-2xl p-3"> 💤 Ingen aktiv försäljning pågår just nuuuuu.</h1>
 
         )}
     </div>
