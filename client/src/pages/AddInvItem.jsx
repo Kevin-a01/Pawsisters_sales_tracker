@@ -105,46 +105,48 @@ export default function(){
         <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
         <label htmlFor="available-quantity" className="">Tillänglig kvantitet<span className="text-red-500"> *</span></label>
 
-        <input type="text" name="quantity" value={formData.quantity} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} />
+        <input type="tel" inputMode="numeric" name="quantity" value={formData.quantity} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} />
       </div>
 
       <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
         <label htmlFor="product_price" className="">Pris för produkt<span className="text-red-500"> *</span></label>
 
-        <input type="text" name="price" value={formData.price} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} />
+        <input type="tel" inputMode="numeric" name="price" value={formData.price} className="border w-85 p-2 rounded-lg border-pink-300 focus:outline-none" onChange={handleChange} />
       </div>
 
-      <div className="flex flex-col mx-auto w-fit gap-1 mt-4 ">
-        <label htmlFor="product_image" className="">Produkt Bild<span className="text-red-500"> *</span></label>
+      <div className="flex flex-col justify-center items-center mx-auto w-fit gap-1 mt-4 ">
+        <label htmlFor="product_image" className="text-xl">Produkt Bild<span className="text-red-500"> *</span></label>
         <input type="file" id="product_image" name="image" className="hidden" onChange={handleChange} placeholder="Produkt-100" />
 
-        <label htmlFor="product_image" className="cursor-pointer px-4 py-2 bg-pink-300  text-white rounded-lg w-fit text-center">Välj Bild</label>
+        <label htmlFor="product_image" className="cursor-pointer px-4 py-2 mt-2 bg-pink-300  text-white rounded-lg w-fit text-center">Välj Bild...</label>
 
         {formData.image && (
-          <span className="text-md mt-1 text-black">
-            Fil vald: {formData.image.name}
-          </span>
+         <span className="mt-2">
+            <h3 className="text-lg animate-pulse">
+                Vald Fil: {formData.image.name}
+            </h3>
+         </span>
         )}
       </div>
 
        <div className="flex flex-col mx-auto w-full items-center gap-1 mt-4 ">
-        <label htmlFor="product_maker" className="">Skapare<span className="text-red-500"> *</span></label>
+        <label htmlFor="product_maker" className="text-xl mb-2">Skapare<span className="text-red-500"> *</span></label>
 
-        <div className="flex gap-2 flex-col place-items-center w-full">
-          <label className="flex items-center text-lg gap-2" htmlFor="product_maker">
+        <div className="flex gap-3 flex-col items-center justify-center w-full">
+          <label className="flex items-center text-lg gap-3" htmlFor="product_maker">
             T
-           <input type="radio" name="maker" value="T" checked={formData.maker === "T"} onChange={handleMakerChange} />
+           <input type="radio" name="maker" value="T" checked={formData.maker === "T"} onChange={handleMakerChange} className="ml-[12%] w-5 h-5  "  />
           </label>
        
 
-        <label className="flex items-center gap-2 text-lg mr-1.5" htmlFor="product_maker">
+        <label className="flex items-center gap-3 text-lg mr-1.5" htmlFor="product_maker">
           M
-         <input type="radio" name="maker" value="M" checked={formData.maker === "M"} onChange={handleMakerChange} />
+         <input type="radio" name="maker" value="M" checked={formData.maker === "M"} onChange={handleMakerChange} className="ml-[12%] w-5 h-5"  />
         </label>
 
-        <label className="flex items-center text-lg gap-2 mr-7" htmlFor="product_maker">
+        <label className="flex items-center text-lg gap-3 mr-7" htmlFor="product_maker">
           T+M
-         <input type="radio" name="maker" value="T+M" checked={formData.maker === "T+M"} onChange={handleMakerChange} />
+         <input type="radio" name="maker" value="T+M" checked={formData.maker === "T+M"} onChange={handleMakerChange} className="ml-[9%] w-5 h-5" />
         </label>
         
         </div>

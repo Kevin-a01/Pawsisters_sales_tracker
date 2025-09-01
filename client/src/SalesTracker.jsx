@@ -105,7 +105,21 @@ function SalesTracker(){
         const total = products.reduce((sum, product) => sum + Number(product.price), 0);
         setTotalSales(total);
 
-    }, [products])
+    }, [products]);
+
+    useEffect(() => {
+        const handleFocus = () => {
+            setRefreshTrigger((prev) => prev + 1);
+        };
+
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            window.removeEventListener('focus', handleFocus)
+            
+        }
+
+    }, []);
 
     const deleteProduct = async (id) => {
 
@@ -128,7 +142,7 @@ function SalesTracker(){
             console.error("Error deleting product:");
             alert("Error deleting product.")
         }
-
+        
     };
 
     const handleStoreClick = () => {

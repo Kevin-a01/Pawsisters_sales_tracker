@@ -72,7 +72,9 @@ function AddProduct(){
 
   const handleCheckbox = (e) => {
 
-    setForm({...form, payment:{...form.payment, [e.target.name]: e.target.checked},});
+    setForm({...form, payment:{...form.payment, [e.target.name]: e.target.checked
+      
+    },});
   };
   
   const addProduct = async (e) => {
