@@ -11,7 +11,7 @@ const pool = new Pool({
 
 // Kontrollera om anslutningen fungerar och logga resultatet
 pool.on('connect', () => {
-  console.log('');
+  console.log('Connected to the server.');
 });
 
 // Exportera poolen så att den kan användas i andra delar av applikationen
