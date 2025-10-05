@@ -209,7 +209,7 @@ function AddProduct(){
                className="p-2 mt-2 w-full border border-pink-300 focus:outline-none rounded-xl focus:border-purple-500">
 
                 <option value="">Välj ett alternativ</option>
-                <option value="none">Lägg till produkt utan con titel</option>
+                <option value="none">Lägg till produkt (utan nytt event) </option>
                 {activeCons.map((con) => (
                   <option key={con.id} value={con.id}>
                     {con.title}
@@ -242,7 +242,7 @@ function AddProduct(){
             /> 
 
             <datalist id="productOptions">
-            <option value="Mushroom Villager">
+            {/* <option value="Mushroom Villager">
               Mushroom Villager
             </option>
 
@@ -264,7 +264,7 @@ function AddProduct(){
 
             <option value="Mystery Bag">
               Mystery Bag
-            </option>
+            </option> */}
             
             </datalist>
   
