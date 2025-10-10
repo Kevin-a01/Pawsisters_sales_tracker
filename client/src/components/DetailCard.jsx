@@ -1,37 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-
-function DetailCard( {refreshTrigger}){
-
+function DetailCard({ refreshTrigger }) {
   const [cons, setCons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const API_BASE_URL = import.meta.env.PROD 
-  ? "https://pawsisterssalestracker-production-529b.up.railway.app"
-  : "http://localhost:5000";
+  const API_BASE_URL = import.meta.env.PROD
+    ? "https://pawsisterssalestracker-production-529b.up.railway.app"
+    : "http://localhost:5000";
   useEffect(() => {
-    
-
-
     const fetchStoredCons = async () => {
-      try{
-        
-        const response = await fetch(`${API_BASE_URL}/api/stored_products`)
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/stored_products`);
 
-        if(!response){
-          throw new Error("Failed to fetch stored Con title and date.")
+        if (!response) {
+          throw new Error("Failed to fetch stored Con title and date.");
         }
         const data = await response.json();
 
         const uniqueCons = Array.from(
-          new Map(data.map(con => [con.conId, con])).values()
-        )
+          new Map(data.map((con) => [con.conId, con])).values()
+        );
 
         setCons(uniqueCons);
-
-      }catch (error){
+      } catch (error) {
         console.error("Error fetching stored cons:", error);
-      }finally{
+      } finally {
         setLoading(false);
       }
     };
@@ -39,34 +32,37 @@ function DetailCard( {refreshTrigger}){
     fetchStoredCons();
   }, [refreshTrigger]);
 
-  return(
+  return (
     <>
-          <h1 className="text-2xl text-center mt-5">
-            Föregående Cons!
-          </h1>
-          {loading ? (
-            
-            <p className="text-center text-lg mt-5 animate-pulse">🔄 Laddar tidigare Cons...</p>
-            ) : cons.length === 0 ? (
-             <p className="text-center text-lg mt-5">😭 Inga tidigare Cons hittades.</p>
-            ) : (
-          <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto ">
-            {cons.map((con) => (
-              <div key={con.conId} className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-[#FCD4DF]">
-              <Link to={`/sales-details/${con.conId}`} className="text-lg overflow-hidden w-full h-full flex flex-col">
-              <h2 className="text-center font-medium text-lg">{con.title}</h2>
-              <h2 className="text-center text-lg pb-2">{con.date}</h2>
+      <h1 className="text-2xl text-center mt-5">Föregående Cons!</h1>
+      {loading ? (
+        <p className="text-center text-lg mt-5 animate-pulse">
+          🔄 Laddar tidigare Cons...
+        </p>
+      ) : cons.length === 0 ? (
+        <p className="text-center text-lg mt-5">
+          😭 Inga tidigare Cons hittades.
+        </p>
+      ) : (
+        <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto ">
+          {cons.map((con) => (
+            <div
+              key={con.conId}
+              className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-[#FCD4DF]"
+            >
+              <Link
+                to={`/sales-details/${con.conId}`}
+                className="text-lg overflow-hidden w-full h-full flex flex-col"
+              >
+                <h2 className="text-center font-medium text-lg">{con.title}</h2>
+                <h2 className="text-center text-lg pb-2">{con.date}</h2>
               </Link>
             </div>
           ))}
-      </div>
+        </div>
       )}
-    
     </>
-
-
-  )
-
+  );
 }
 
 export default DetailCard;

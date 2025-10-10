@@ -1,12 +1,10 @@
 import BurgerMenu from "../components/BurgerMenu";
 
 export default function AddMonthlyNotes() {
-
-  return(
+  return (
     <>
-    <BurgerMenu/>
-    <div>Add a monthly note</div>
+      <BurgerMenu />
+      <div>Add a monthly note</div>
     </>
-  )
-
+  );
 }
