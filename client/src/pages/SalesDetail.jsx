@@ -20,6 +20,7 @@ function SalesDetail() {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [filterMaker, setFilterMaker] = useState("");
   const [filterPayment, setFilterPayment] = useState("");
+  const [filterDate, setFilterDate] = useState("");
   const [topProducts, setTopProducts] = useState([]);
 
   const COLORS = ["#FF69B4", "#FFB6C1", "#FFC0CB", "#DB7093", "#FF1493"];
@@ -123,6 +124,8 @@ function SalesDetail() {
     }
   };
 
+  const uniqueDates = [...new Set(sales.map((sale) => sale.date))];
+
   const filteredSales = sales.filter((sale) => {
     const pay = sale.payment?.toLowerCase() ?? "";
     const maker = sale.maker?.toLowerCase() ?? "";
@@ -131,7 +134,9 @@ function SalesDetail() {
 
     const makerMatch = filterMaker ? maker === filterMaker.toLowerCase() : true;
 
-    return payMatch && makerMatch;
+    const dateMatch = filterDate ? sale.date === filterDate : true;
+
+    return payMatch && makerMatch && dateMatch;
   });
 
   const groupedSales = filteredSales.reduce((acc, sale) => {
@@ -189,40 +194,59 @@ function SalesDetail() {
         <h1 className="text-2xl lg:text-3xl text-center font-bold font-mono text-pink-300">
           Försäljning för {conTitle}
         </h1>
-        <div className="flex justify-center mt-4">
-          <label className="mr-2 font-medium mt-1 text-xl">
-            Filtrera efter betalning.
-          </label>
-          <select
-            className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300"
-            value={filterPayment}
-            onChange={(e) => setFilterPayment(e.target.value)}
-          >
-            <option value="">Alla betalningar</option>
-            <option value="Swish">Swish</option>
-            <option value="Kort">Kort</option>
-            <option value="Kontant">Kontant</option>
-          </select>
-        </div>
+        <div className="flex mt-5 flex-col justify-center items-center gap-2">
+          <div className="mb-3">
+            <label className=" font-medium mt-1 text-xl mr-2">
+              Filtrera efter betalning.
+            </label>
+            <select
+              className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300 text-lg"
+              value={filterPayment}
+              onChange={(e) => setFilterPayment(e.target.value)}
+            >
+              <option value="">Alla betalningar</option>
+              <option value="Swish">Swish</option>
+              <option value="Kort">Kort</option>
+              <option value="Kontant">Kontant</option>
+            </select>
+          </div>
 
-        <div className="flex justify-center mt-4">
-          <label className="mr-2 font-medium mt-1 text-xl">
-            Filtrera efter skapare.
-          </label>
+          <div className=" mt-2 gap-10">
+            <label className="text-xl font-medium mr-5">Filtrera Datum.</label>
 
-          <select
-            className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300 "
-            onChange={(e) => setFilterMaker(e.target.value)}
-            value={filterMaker}
-          >
-            <option value="">Alla</option>
+            <select
+              className="border-2 p-2 text-lg focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+            >
+              <option value="">Alla Dagar</option>
+              {uniqueDates.map((uniqDate) => (
+                <option className="" key={uniqDate} value={uniqDate}>
+                  {uniqDate}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <option value="T">T</option>
+          <div className=" mt-4">
+            <label className="mr-2 font-medium mt-1 text-xl">
+              Filtrera efter skapare.
+            </label>
 
-            <option value="M">M</option>
+            <select
+              className="border-2 p-2 focus:outline-none focus:ring-0 focus:border-pink-300 appearance-none rounded-xl border-pink-300 text-lg "
+              onChange={(e) => setFilterMaker(e.target.value)}
+              value={filterMaker}
+            >
+              <option value="">Alla</option>
 
-            <option value="T-M">T-M</option>
-          </select>
+              <option value="T">T</option>
+
+              <option value="M">M</option>
+
+              <option value="T-M">T-M</option>
+            </select>
+          </div>
         </div>
 
         <h2 className="text-2xl font-medium mt-4 mb-1 text-pink-400">
