@@ -8,10 +8,10 @@ function SalesTracker() {
   const { state } = useLocation();
   const [products, setProducts] = useState([]);
   const [conId, setConId] = useState(
-    state?.conId || localStorage.getItem("conId") || null
+    state?.conId || localStorage.getItem("conId") || null,
   );
   const [conTitle, setConTitle] = useState(
-    state?.conTitle || localStorage.getItem("conTitle") || ""
+    state?.conTitle || localStorage.getItem("conTitle") || "",
   );
   const [isStoring, setIsStoring] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -30,12 +30,13 @@ function SalesTracker() {
     const fetchStoredCons = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/stored_products/cons`
+          `${API_BASE_URL}/api/stored_products/cons`,
         );
         if (!response.ok) {
           throw new err("Failed to fetch stored cons");
         }
         const data = await response.json();
+
         setStoredCons(data);
       } catch (err) {
         console.error("Error fetching stored cons", err);
@@ -79,6 +80,7 @@ function SalesTracker() {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
+        console.log(data);
         setProducts(data);
       } catch (err) {
         console.error("Error fetching product:", err.message);
@@ -98,7 +100,7 @@ function SalesTracker() {
   useEffect(() => {
     const total = products.reduce(
       (sum, product) => sum + Number(product.price),
-      0
+      0,
     );
     setTotalSales(total);
   }, [products]);
@@ -172,12 +174,12 @@ function SalesTracker() {
                 payment: p.payment,
               })),
             }),
-          }
+          },
         );
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(
-            `Misslyckades att lagra i aktuellt konvent: ${errorText}`
+            `Misslyckades att lagra i aktuellt konvent: ${errorText}`,
           );
         }
       }
@@ -199,7 +201,7 @@ function SalesTracker() {
                 payment: p.payment,
               })),
             }),
-          }
+          },
         );
         if (!response.ok)
           throw new Error(`Misslyckades att lagra i ${con.title}`);
@@ -290,6 +292,9 @@ function SalesTracker() {
                       <th className="border border-pink-300 p-1 text-md w-fit">
                         Betalning
                       </th>
+                      <th className="border border-pink-300 p-1 text-md w-fit">
+                        Tidstämpel
+                      </th>
                       {/* <th className="border border-pink-300 p-1 text-md w-fit ">Action</th> */}
                     </tr>
                   </thead>
@@ -312,6 +317,15 @@ function SalesTracker() {
                           <td className="border border-pink-300 p-2 text-center text-sm font-medium">
                             {product.payment}
                           </td>
+                          <td className="border border-pink-300 p-2 text-center text-sm font-medium">
+                            {new Date(product.created_at).toLocaleTimeString(
+                              "sv-SE",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}
+                          </td>
 
                           <td className="border border-pink-300 p-2 text-center text-sm font-medium bg-[#FCD4DF] ">
                             <button
@@ -319,7 +333,7 @@ function SalesTracker() {
                               onClick={() => {
                                 console.log(
                                   "Delete button clicked for ID:",
-                                  product.id
+                                  product.id,
                                 );
                                 deleteProduct(product.id);
                               }}
@@ -402,7 +416,7 @@ function SalesTracker() {
                         ]);
                       } else {
                         setSelectedCons(
-                          selectedCons.filter((c) => c.id !== con.id)
+                          selectedCons.filter((c) => c.id !== con.id),
                         );
                       }
                     }}
