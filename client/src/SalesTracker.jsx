@@ -293,7 +293,7 @@ function SalesTracker() {
                         Betalning
                       </th>
                       <th className="border border-pink-300 p-1 text-md w-fit">
-                        Tidstämpel
+                        Tid
                       </th>
                       {/* <th className="border border-pink-300 p-1 text-md w-fit ">Action</th> */}
                     </tr>
