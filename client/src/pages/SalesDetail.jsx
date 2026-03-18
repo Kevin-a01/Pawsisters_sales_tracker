@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import BurgerMenu from "../components/BurgerMenu";
 import BackToTopButton from "../components/BackToTopButton";
+import { Link } from "react-router-dom";
 
 function SalesDetail() {
   const { conId } = useParams();
@@ -33,7 +34,7 @@ function SalesDetail() {
     const fetchSales = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/stored_products/${conId}`
+          `${API_BASE_URL}/api/stored_products/${conId}`,
         );
         if (!response.ok) {
           throw new Error("Failed to fetch sales data");
@@ -60,7 +61,7 @@ function SalesDetail() {
     const fetchTopProducts = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/stored_products/top-products/${conId}`
+          `${API_BASE_URL}/api/stored_products/top-products/${conId}`,
         );
 
         if (!response.ok) {
@@ -94,7 +95,7 @@ function SalesDetail() {
         } */
 
     const confirmDelete = window.confirm(
-      "Är du säker att du vill ta bort all försäljningsdata?"
+      "Är du säker att du vill ta bort all försäljningsdata?",
     );
     if (!confirmDelete) return;
 
@@ -107,7 +108,7 @@ function SalesDetail() {
             "Content-Type": "application/json",
           },
           /* body: JSON.stringify({password}), */
-        }
+        },
       );
 
       if (!response.ok) {
@@ -190,6 +191,13 @@ function SalesDetail() {
   return (
     <>
       <BurgerMenu />
+
+      <Link
+        to={`/sales-tracker`}
+        className="underline text-pink-400 font-medium px-2"
+      >
+        Tillbaka till SalesTracker
+      </Link>
       <div className="p-3">
         <h1 className="text-2xl lg:text-3xl text-center font-bold font-mono text-pink-300">
           Försäljning för {conTitle}
