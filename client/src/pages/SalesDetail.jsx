@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, useParams } from "react-router-dom";
+import { data, Form, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
   PieChart,
@@ -23,6 +23,7 @@ function SalesDetail() {
   const [filterPayment, setFilterPayment] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [topProducts, setTopProducts] = useState([]);
+  const [isTax, setIsTax] = useState(0);
 
   const COLORS = ["#FF69B4", "#FFB6C1", "#FFC0CB", "#DB7093", "#FF1493"];
 
@@ -49,6 +50,13 @@ function SalesDetail() {
 
         const total = data.reduce((sum, sale) => sum + Number(sale.price), 0);
         setTotalRevenue(total);
+
+        const totalTax = data.reduce(
+          (sum, sale) => sum + Number(sale.price * 0.3),
+          0,
+        );
+
+        setIsTax(totalTax);
       } catch (error) {
         console.error("Error fetching sales data", error);
       }
@@ -257,10 +265,16 @@ function SalesDetail() {
           </div>
         </div>
 
-        <h2 className="text-2xl font-medium mt-4 mb-1 text-pink-400">
-          Totalen för dagen:{" "}
-          {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
-        </h2>
+        <div>
+          <h2 className="text-2xl font-medium mt-4 mb-1 text-pink-400">
+            Total försäljning:{" "}
+            {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
+          </h2>
+
+          <h2 className="text-lg font-medium mt-5 mb-1 text-pink-400">
+            Total beskattning: {isTax}kr
+          </h2>
+        </div>
 
         {filteredSales.length === 0 ? (
           <p className="text-xl text-center py-5 font-medium">
