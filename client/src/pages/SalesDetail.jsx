@@ -23,7 +23,6 @@ function SalesDetail() {
   const [filterPayment, setFilterPayment] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [topProducts, setTopProducts] = useState([]);
-  const [isTax, setIsTax] = useState(0);
 
   const COLORS = ["#FF69B4", "#FFB6C1", "#FFC0CB", "#DB7093", "#FF1493"];
 
@@ -50,13 +49,6 @@ function SalesDetail() {
 
         const total = data.reduce((sum, sale) => sum + Number(sale.price), 0);
         setTotalRevenue(total);
-
-        const totalTax = data.reduce(
-          (sum, sale) => sum + Number(sale.price * 0.3),
-          0,
-        );
-
-        setIsTax(totalTax);
       } catch (error) {
         console.error("Error fetching sales data", error);
       }
@@ -272,7 +264,12 @@ function SalesDetail() {
           </h2>
 
           <h2 className="text-lg font-medium mt-5 mb-1 text-pink-400">
-            Total beskattning: {isTax}kr
+            Total beskattning:{" "}
+            {filteredSales.reduce(
+              (sum, sale) => sum + Number(sale.price * 0.3),
+              0,
+            )}
+            kr
           </h2>
         </div>
 
