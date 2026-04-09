@@ -263,7 +263,7 @@ function SalesDetail() {
             {filteredSales.reduce((sum, sale) => sum + Number(sale.price), 0)}kr
           </h2>
 
-          <h2 className="text-lg font-medium mt-5 mb-1 text-pink-400">
+          <h2 className="text-lg font-medium mt-5 mb-1 text-purple-500">
             Total beskattning:{" "}
             {filteredSales.reduce(
               (sum, sale) => sum + Number(sale.price * 0.3),
