@@ -53,7 +53,7 @@ router.delete('/date/:date', async (req, res) => {
     } catch (err) {
         console.error("Error deleting tasks", err);
         res.status(500).json({ error: "Internal server error." });
-    }
+    };
 });
 
 
