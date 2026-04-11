@@ -21,12 +21,16 @@ function SalesTracker() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCons, setSelectedCons] = useState([]);
   const [activeCon, setActiveCon] = useState(false);
+  const [storedYears, setStoredYears] = useState([]);
+  const [modalYear, setModalYear] = useState("");
+  const [modalCons, setModalCons] = useState([]);
+  const [recentCons, setRecentCons] = useState([]);
 
   const API_BASE_URL = import.meta.env.PROD
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
     : "http://localhost:5000";
 
-  useEffect(() => {
+  /* useEffect(() => {
     const fetchStoredCons = async () => {
       try {
         const response = await fetch(
@@ -44,11 +48,30 @@ function SalesTracker() {
       }
     };
     fetchStoredCons();
+  }, []); */
+
+  useEffect(() => {
+    const fetchStoredYears = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/stored_products/date`,
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch stored years");
+        }
+        const data = await response.json();
+        setStoredYears(data);
+      } catch (err) {
+        console.error("Error fetching stored years");
+        setStoredYears([]);
+      }
+    };
+    fetchStoredYears();
   }, []);
 
   useEffect(() => {
     if (state?.conId && state?.conTitle) {
-      console.log("Updating conId and conTitle from state", state);
+      /* console.log("Updating conId and conTitle from state", state); */
       setConId(state.conId);
       setConTitle(state.conTitle);
       localStorage.setItem("conId", state.conId);
@@ -71,16 +94,15 @@ function SalesTracker() {
         let url = `${API_BASE_URL}/api/products`;
         if (conId && conId !== "none") {
           url += `?conId=${conId}`;
-          console.log("Fetching products for conId:", conId);
+          /* console.log("Fetching products for conId:", conId); */
         } else {
-          console.log("Fetching all products (no conId)");
+          /* console.log("Fetching all products (no conId)"); */
         }
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
-        console.log(data);
         setProducts(data);
       } catch (err) {
         console.error("Error fetching product:", err.message);
@@ -116,6 +138,38 @@ function SalesTracker() {
       window.removeEventListener("focus", handleFocus);
     };
   }, []);
+
+  useEffect(() => {
+    if (!modalYear) return;
+
+    const fetchModalCons = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/stored_products/cons/year/${modalYear}`,
+        );
+        const data = await response.json();
+        setModalCons(data);
+      } catch (err) {
+        console.error("Kunde inte hämta konvent modalen", err);
+      }
+    };
+    fetchModalCons();
+  }, [modalYear]);
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/stored_products/recent`,
+        );
+        const data = await response.json();
+        setRecentCons(data);
+      } catch (err) {
+        console.error("Kunde inte hämta senaste konventen", err);
+      }
+    };
+    fetchRecent();
+  }, [refreshTrigger]);
 
   const deleteProduct = async (id) => {
     console.log("Attempting to delete product with ID:", id);
@@ -206,25 +260,6 @@ function SalesTracker() {
         if (!response.ok)
           throw new Error(`Misslyckades att lagra i ${con.title}`);
       }
-      /* if(selectedCons.length > 0 && conId){
-                    try{
-                        await fetch(`${API_BASE_URL}/api/products/cons/${conId}` , {
-                            method: "DELETE"
-
-                        })
-
-                        await fetch(`${API_BASE_URL}/api/cons/${conId}`, {
-                            method: "DELETE"
-                        });
-                        console.log(`Deleted conId ${conId} and its products after transferring to another con`);
-                    }catch(error){
-                        console.error('Error cleaning up current conId:', error);
-                        
-
-                    }
-
-                } */
-
       setRefreshTrigger((prev) => prev + 1);
       setProducts([]);
       setConTitle("");
@@ -238,6 +273,20 @@ function SalesTracker() {
       alert("Ett fel uppstod");
     } finally {
       setIsStoring(false);
+    }
+  };
+
+  const handleSelect = (e, con) => {
+    const isChecked = e.target.checked;
+
+    const targetId = con.id || con.conId;
+
+    if (isChecked) {
+      setSelectedCons((prev) => [...prev, { id: targetId, title: con.title }]);
+    } else {
+      setSelectedCons((prev) =>
+        prev.filter((item) => String(item.id) !== String(targetId)),
+      );
     }
   };
 
@@ -369,68 +418,88 @@ function SalesTracker() {
           </h1>
         )}
       </div>
-      <DetailCard refreshTrigger={refreshTrigger} />
+
+      <h2 className="text-center text-2xl">Tidigare Cons!</h2>
+      <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto">
+        {storedYears.map((date) => (
+          <div
+            className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-[#FCD4DF]"
+            key={date.year}
+          >
+            <Link
+              className="text-2xl items-center justify-center overflow-hidden w-full h-full flex flex-col text-center"
+              to={`/year/${date.year}`}
+            >
+              {date.year}
+            </Link>
+          </div>
+        ))}
+      </div>
+
       <BackToTopButton />
 
       {showModal && (
         <div className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
-          <div className="bg-[#FCD4DF] p-6 rounded-xl shadow-lg w-11/12 max-w-md">
+          <div className="bg-[#FCD4DF] p-6 rounded-xl shadow-lg w-11/12 max-w-md ">
             <h3 className="text-2xl text-center font-medium mb-4 text-[#F4538B]">
-              Välj ett konvent att lagra produkter i
+              Välj konvent!
             </h3>
-            <div className="max-h-60 overflow-y-auto">
-              {conId && conTitle !== "" && (
-                <div className="flex items-center gap-3 mb-2">
-                  <input
-                    type="checkbox"
-                    id="current-con"
-                    checked={selectedCons.length === 0 && conId}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedCons([]);
-                      } else {
-                        setSelectedCons([]);
+            <div className="max-h-60 overflow-y-auto  ">
+              {conId &&
+                conId !== "none" &&
+                !recentCons.some(
+                  (r) => String(r.id || r.conId) === String(conId),
+                ) && (
+                  <div className="flex items-center gap-3 p-2 bg-purple-200 rounded-lg my-2">
+                    <input
+                      type="checkbox"
+                      name=""
+                      id="current-con"
+                      checked={selectedCons.some(
+                        (c) => String(c.id) === String(conId),
+                      )}
+                      onChange={(e) =>
+                        handleSelect(e, { id: conId, title: conTitle })
                       }
-                    }}
-                    className="mt-0.5 h-4.5 w-4.5 border-2 "
-                  />
-                  <label
-                    htmlFor="current-con"
-                    className="text-[#F4538B] font-medium"
-                  >
-                    {conTitle} (Aktuellt konvent)
-                  </label>
-                </div>
-              )}
-              {storedCons.map((con) => (
-                <div key={con.id} className="flex items-center gap-3 mb-2">
-                  <input
-                    type="checkbox"
-                    id={`con-${con.id}`}
-                    checked={selectedCons.some((c) => c.id === con.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedCons([
-                          ...selectedCons,
-                          { id: con.id, title: con.title },
-                        ]);
-                      } else {
-                        setSelectedCons(
-                          selectedCons.filter((c) => c.id !== con.id),
-                        );
-                      }
-                    }}
-                    className="h-4.5 w-4.5 "
-                  />
-                  <label
-                    htmlFor={`con-${con.id}`}
-                    className="text-[#F4538B] font-medium"
-                  >
-                    {con.title}
-                  </label>
-                </div>
-              ))}
+                      className="h-4.5 w-4.5 accent-purple-500 "
+                    />
+                    <label
+                      className="text-[#F4538B] text-sm cursor-pointer"
+                      htmlFor="current-con"
+                    >
+                      {conTitle} (Aktuell Con)
+                    </label>
+                  </div>
+                )}
+
+              {recentCons
+                .filter((r) => String(r.id || r.conId) !== String(conId)) // Stäng filter här )
+                .map(
+                  (
+                    con, // Nu kör vi map på resultatet av filtret
+                  ) => (
+                    <div
+                      key={con.conId}
+                      className="flex items-center gap-3 p-2 bg-pink-50 rounded-lg my-2"
+                    >
+                      <input
+                        type="checkbox"
+                        id={`recent-${con.id}`}
+                        checked={selectedCons.some((c) => c.id === con.conId)}
+                        onChange={(e) => handleSelect(e, con)}
+                        className="h-4.5 w-4.5 accent-[#F4538B]"
+                      />
+                      <label
+                        htmlFor={`recent-${con.id}`}
+                        className="text-[#F4538B] text-sm cursor-pointer"
+                      >
+                        {con.title} ({con.date})
+                      </label>
+                    </div>
+                  ),
+                )}
             </div>
+
             <div className="flex justify-end mt-4 gap-2">
               <button
                 className="border-none bg-white p-2 rounded-lg text-[#F4538B]"

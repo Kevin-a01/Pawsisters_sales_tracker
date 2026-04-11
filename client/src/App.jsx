@@ -9,6 +9,7 @@ import AddMonthlyNotes from "./pages/AddMonthlyNotes";
 import AddEvent from "./pages/AddEvent";
 import AddTask from "./pages/AddTask";
 import AddInvItem from "./pages/AddInvItem";
+import ConYear from "./pages/ConYear";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/calendar/:date/add-event" element={<AddEvent />} />
           <Route path={`/add-task/:date`} element={<AddTask />} />
           <Route path="/add-new-item" element={<AddInvItem />} />
+          <Route path={`/year/:year`} element={<ConYear />} />
         </Routes>
       </Router>
     </>

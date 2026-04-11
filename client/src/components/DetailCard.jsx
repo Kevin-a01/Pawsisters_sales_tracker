@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import BurgerMenu from "./BurgerMenu";
 
-function DetailCard({ refreshTrigger }) {
+function DetailCard({ refreshTrigger, year }) {
   const [cons, setCons] = useState([]);
   const [loading, setLoading] = useState(true);
   const API_BASE_URL = import.meta.env.PROD
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
     : "http://localhost:5000";
   useEffect(() => {
+    if (!year) return;
+
     const fetchStoredCons = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/stored_products`);
+        const response = await fetch(
+          `${API_BASE_URL}/api/stored_products/cons/year/${year}`,
+        );
 
         if (!response) {
           throw new Error("Failed to fetch stored Con title and date.");
@@ -18,7 +23,7 @@ function DetailCard({ refreshTrigger }) {
         const data = await response.json();
 
         const uniqueCons = Array.from(
-          new Map(data.map((con) => [con.conId, con])).values()
+          new Map(data.map((con) => [con.conId, con])).values(),
         );
 
         setCons(uniqueCons);
@@ -34,7 +39,7 @@ function DetailCard({ refreshTrigger }) {
 
   return (
     <>
-      <h1 className="text-2xl text-center mt-5">Föregående Cons!</h1>
+      <h1 className="text-3xl text-center mt-5 mb-4">Konvent från: {year}</h1>
       {loading ? (
         <p className="text-center text-lg mt-5 animate-pulse">
           🔄 Laddar tidigare Cons...

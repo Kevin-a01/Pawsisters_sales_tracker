@@ -52,6 +52,7 @@ router.get('/latest', async (req, res) => {
     }
 });
 
+
 router.delete('/:conId', async (req, res) => {
     const conId = parseInt(req.params.conId);
     if (isNaN(conId)) {

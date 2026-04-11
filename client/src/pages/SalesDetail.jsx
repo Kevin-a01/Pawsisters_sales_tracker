@@ -12,6 +12,7 @@ import {
 import BurgerMenu from "../components/BurgerMenu";
 import BackToTopButton from "../components/BackToTopButton";
 import { Link } from "react-router-dom";
+import GoBackButton from "../components/goBackButton";
 
 function SalesDetail() {
   const { conId } = useParams();
@@ -191,13 +192,7 @@ function SalesDetail() {
   return (
     <>
       <BurgerMenu />
-
-      <Link
-        to={`/sales-tracker`}
-        className="underline text-pink-400 font-medium px-2"
-      >
-        Tillbaka till SalesTracker
-      </Link>
+      <GoBackButton />
       <div className="p-3">
         <h1 className="text-2xl lg:text-3xl text-center font-bold font-mono text-pink-300">
           Försäljning för {conTitle}
@@ -370,7 +365,7 @@ function SalesDetail() {
         <div className="flex flex-col">
           {sales.length > 0 && (
             <button
-              className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400 hidden "
+              className="text-md w-5/12 lg:w-1/6 font-bold mt-2 border p-2 rounded-xl border-pink-400 bg-pink-400"
               onClick={handleDelete}
             >
               Ta bort Detalj Data

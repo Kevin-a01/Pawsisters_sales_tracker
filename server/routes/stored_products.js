@@ -84,10 +84,7 @@ router.post('/store', async (req, res) => {
       console.log(`✅ Product ID ${productId} stored successfully`);
     }
 
-    // Attempt to delete from products where conId is provided
-    /* console.log(`Attempting to delete from products where conId = ${conId}`);
-    const deleteProductsResult = await pool.query("DELETE FROM products WHERE conId = $1", [conId]);
-    console.log(`Deleted ${deleteProductsResult.rowCount} rows from products`); */
+
 
     const deleteAllResult = await pool.query("DELETE FROM products");
     console.log(`Deleted ${deleteAllResult.rowCount} rows from products`);
@@ -125,6 +122,61 @@ router.get('/', async (req, res) => {
 
 })
 
+
+
+/* router.get('/cons', async (req, res) => {
+
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT "conId" AS id, title
+      FROM stored_products
+      ORDER BY "conId" DESC
+      `);
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error('Error fetching cons', err);
+    res.status(500).json({ err: 'Failed to fetch stored cons' });
+  }
+}); */
+
+router.get('/cons/year/:year', async (req, res) => {
+  const selectedYear = req.params.year;
+
+  try {
+    const result = await pool.query(`
+        SELECT "conId", title, MIN(date) AS date
+        FROM stored_products
+        WHERE LEFT(date, 4) = $1
+        GROUP BY "conId", title
+        ORDER BY date DESC
+      `, [selectedYear]);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching cons for year', err);
+    res.status(500).json({ err: "Failed to fetch date" })
+  }
+});
+
+router.get('/date', async (req, res) => {
+  try {
+
+    const result = await pool.query(`
+      SELECT DISTINCT EXTRACT(YEAR FROM date::DATE)::INTEGER AS year
+      FROM stored_products
+      ORDER BY year DESC
+      `)
+
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error('Error fetching date', err);
+    res.status(500).json({ err: "Failed to fetch year from date" })
+  }
+});
+
+
 router.get('/top-products/:conId', async (req, res) => {
   try {
     const { conId } = req.params
@@ -158,19 +210,21 @@ router.get('/top-products/:conId', async (req, res) => {
 
 });
 
-router.get('/cons', async (req, res) => {
-
+router.get('/recent', async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT DISTINCT "conId" AS id, title
-      FROM stored_products
-      ORDER BY "conId" DESC
+        SELECT "conId", title, MIN(date) AS date
+        FROM stored_products
+        GROUP BY "conId", title
+        ORDER BY date DESC
+        LIMIT 3
+      
       `);
-    res.json(result.rows);
+    res.json(result.rows)
 
   } catch (err) {
-    console.error('Error fetching cons', err);
-    res.status(500).json({ err: 'Failed to fetch stored cons' });
+    console.error("Error fetching recent cons", err);
+    res.status(500).json({ error: "Failed to fetch recent cons" });
   }
 });
 

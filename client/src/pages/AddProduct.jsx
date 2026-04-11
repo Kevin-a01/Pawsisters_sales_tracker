@@ -11,7 +11,7 @@ function AddProduct() {
   const [conTitle, setConTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [conId, setConId] = useState(
-    () => localStorage.getItem("conId") || null
+    () => localStorage.getItem("conId") || null,
   );
   const [activeCons, setActiveCons] = useState([]);
   const [showNewConInput, setShowNewConInput] = useState(false);
@@ -70,7 +70,7 @@ function AddProduct() {
   const addProduct = async (e) => {
     e.preventDefault();
     const selectedPayments = Object.keys(form.payment).filter(
-      (key) => form.payment[key]
+      (key) => form.payment[key],
     );
 
     if (
@@ -101,7 +101,7 @@ function AddProduct() {
       } else if (conId && conId !== "new" && conId !== "none") {
         currentConId = conId;
         const selectedCon = activeCons.find(
-          (con) => con.id === parseInt(conId)
+          (con) => con.id === parseInt(conId),
         );
         if (selectedCon) {
           currentConTitle = selectedCon.title;
@@ -125,13 +125,13 @@ function AddProduct() {
       });
       const productData = await productResponse.json();
 
-      console.log("Product data received:", productData);
+      /* console.log("Product data received:", productData); */
       const productId = productData.productId;
 
       if (!productId) {
         console.error(
           "Error: productId is missing from the response",
-          productData
+          productData,
         );
         alert("Failed to create product, missing productId.");
         return;
@@ -208,7 +208,7 @@ function AddProduct() {
               >
                 <option value="">Välj ett alternativ</option>
                 <option value="none">
-                  Lägg till produkt (utan nytt event){" "}
+                  Lägg till produkt (senaste konventet){" "}
                 </option>
                 {activeCons.map((con) => (
                   <option key={con.id} value={con.id}>
