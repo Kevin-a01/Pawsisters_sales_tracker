@@ -472,6 +472,9 @@ function SalesTracker() {
                   </div>
                 )}
 
+              <h3 className="text-sm ml-1 mt-3 text-purple-700">
+                Top 3 senaste konventen
+              </h3>
               {recentCons
                 .filter((r) => String(r.id || r.conId) !== String(conId)) // Stäng filter här )
                 .map(
