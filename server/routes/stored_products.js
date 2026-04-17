@@ -54,8 +54,8 @@ router.post('/store', async (req, res) => {
 
     // Insert query for storing products
     const insertStmt = `
-      INSERT INTO stored_products ("productId", "conId", title, date, product, price, payment, maker)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      INSERT INTO stored_products ("productId", "conId", title, date, product, price, payment, maker, end_date)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     `;
 
     // Iterate over the products array and store each product
@@ -80,9 +80,14 @@ router.post('/store', async (req, res) => {
       }
 
       // Insert the product into the stored_products table
-      await pool.query(insertStmt, [productId, conId, title, conDate, productName, price, payment, maker]);
+      await pool.query(insertStmt, [productId, conId, title, conDate, productName, price, payment, maker, date]);
       console.log(`✅ Product ID ${productId} stored successfully`);
+
+      await pool.query('UPDATE stored_products SET end_date = $1 WHERE "conId" = $2', [
+        date, conId
+      ])
     }
+
 
 
 
@@ -145,7 +150,7 @@ router.get('/cons/year/:year', async (req, res) => {
 
   try {
     const result = await pool.query(`
-        SELECT "conId", title, MIN(date) AS date
+        SELECT "conId", title, MIN(date) AS date, MAX(end_date) AS end_date
         FROM stored_products
         WHERE LEFT(date, 4) = $1
         GROUP BY "conId", title
