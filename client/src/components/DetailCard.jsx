@@ -61,8 +61,8 @@ function DetailCard({ refreshTrigger, year }) {
               >
                 <h2 className="text-center font-medium text-lg">{con.title}</h2>
                 <div className="flex items-center justify-center flex-col">
-                  <h2 className="text-sm">{con.date}</h2>
-                  <span>-</span>
+                  <h2 className="text-sm">{con.date} -</h2>
+
                   <h2 className="text-sm">{con.end_date}</h2>
                 </div>
               </Link>
