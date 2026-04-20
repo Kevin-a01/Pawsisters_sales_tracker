@@ -25,6 +25,7 @@ function SalesTracker() {
   const [modalYear, setModalYear] = useState("");
   const [modalCons, setModalCons] = useState([]);
   const [recentCons, setRecentCons] = useState([]);
+  const [viewYear, setViewYear] = useState(new Date().getFullYear().toString());
 
   const API_BASE_URL = import.meta.env.PROD
     ? "https://pawsisterssalestracker-production-529b.up.railway.app"
@@ -420,8 +421,28 @@ function SalesTracker() {
       </div>
 
       <h2 className="text-center text-2xl">Tidigare Cons!</h2>
+      <div>
+        <div className="flex justify-between px-3">
+          <button
+            onClick={() => setViewYear(String(Number(viewYear) - 1))}
+            className="text-xl cursor-pointer bg-pink-400 p-1 rounded-2xl text-white/85"
+          >
+            {viewYear - 1}
+          </button>
+
+          <button
+            onClick={() => setViewYear(String(Number(viewYear) + 1))}
+            className="text-xl cursor-pointer bg-pink-400 p-1 rounded-2xl text-white/85"
+            disabled={Number(viewYear) >= new Date().getFullYear()}
+          >
+            {Number(viewYear) + 1}
+          </button>
+        </div>
+
+        <DetailCard year={viewYear} refreshTrigger={refreshTrigger} />
+      </div>
       <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto">
-        {storedYears.map((date) => (
+        {/* {storedYears.map((date) => (
           <div
             className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-[#FCD4DF]"
             key={date.year}
@@ -433,7 +454,7 @@ function SalesTracker() {
               {date.year}
             </Link>
           </div>
-        ))}
+        ))} */}
       </div>
 
       <BackToTopButton />

@@ -35,7 +35,7 @@ function DetailCard({ refreshTrigger, year }) {
     };
 
     fetchStoredCons();
-  }, [refreshTrigger]);
+  }, [year, refreshTrigger, API_BASE_URL]);
 
   return (
     <>
@@ -49,21 +49,21 @@ function DetailCard({ refreshTrigger, year }) {
           😭 Inga tidigare Cons hittades.
         </p>
       ) : (
-        <div className="grid grid-cols-2 justify-center items-center px-5 p-5 gap-5 lg:w-2/5 lg:mx-auto ">
+        <div className="grid grid-cols-2 justify-center items-center px-2 p-5 gap-5 lg:w-2/5 lg:mx-auto ">
           {cons.map((con) => (
             <div
               key={con.conId}
-              className="border border-transparent w-full h-auto rounded-xl hover:border-purple-500 bg-[#FCD4DF]"
+              className="border border-transparent w-full h-[80px] rounded-xl hover:border-purple-500 bg-[#FCD4DF]"
             >
               <Link
                 to={`/sales-details/${con.conId}`}
-                className="text-lg overflow-hidden w-full h-full flex flex-col"
+                className="text-lg overflow-hidden w-full h-full flex flex-col "
               >
                 <h2 className="text-center font-medium text-lg">{con.title}</h2>
-                <div className="flex items-center justify-center flex-col">
-                  <h2 className="text-sm">{con.date} -</h2>
-
-                  <h2 className="text-sm">{con.end_date}</h2>
+                <div className="flex items-center justify-center flex-col min-w-0">
+                  <h2 className="text-sm ">
+                    {con.date} - {con.end_date}
+                  </h2>
                 </div>
               </Link>
             </div>
