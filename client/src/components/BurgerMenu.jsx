@@ -49,7 +49,7 @@ export default function BurgerMenu() {
                 <a
                   href="https://www.instagram.com/pawsisters.shop"
                   target="_blank"
-                  className="text-4xl"
+                  className="text-3xl"
                 >
                   <i className="fa-brands fa-instagram"></i>
                 </a>
@@ -59,7 +59,7 @@ export default function BurgerMenu() {
                 <a
                   href="https://www.tiktok.com/@pawsisters.shop"
                   target="_blank"
-                  className="text-4xl"
+                  className="text-3xl"
                 >
                   <i className="fa-brands fa-tiktok"></i>
                 </a>
